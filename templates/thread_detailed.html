@@ -1,0 +1,108 @@
+{% extends "base.html" %} {% block title %} CIT Comments {% endblock %} {%
+  block content2 %}
+  <style>
+a {
+    text-decoration: none;
+    color: black;
+}
+h1, h4, ol {
+    margin: 0;
+}
+p {
+    margin: 5px 0;
+}
+textarea {
+    width: 80%;
+    height: 80px;
+}
+button {
+    display: block;
+    margin: 10px 0;
+}
+.top-bar{
+    background-color: skyblue;
+    padding: 0 40px;
+}
+.main {
+    background-color: #F6F6EF;
+    padding: 10px 40px;
+}
+.comments {
+    margin: 40px 0;
+}
+.row {
+    padding: 5px 0;
+}
+.bottom, .top-comment {
+    display: flex;
+    color: grey;
+    font-size: 12px;
+    
+}
+
+.comment{
+    border: 2px solid lightblue;
+    padding: 10px;
+}
+
+.timestamp {
+    padding-right: 15px;
+} 
+
+.comment-ts {
+    margin-left: 15px;
+}
+
+.hero.is-fullheight {
+    min-height: 0vh;
+}
+.bottom {
+    display: flex;
+    color: grey;
+    font-size: 12px;
+  }
+.timestamp {
+    padding-right: 10px;
+  }
+.comment-count {
+    padding-right: 10px;
+  }
+.author {
+    padding-right: 10px;
+}
+
+  </style>
+    <div class="top-bar">
+      <h1>Forum</h1>
+    </div>
+    <div class="main">
+      <h1 class="title" style="color: black;">{{ thread.title }}</h4>
+        <div class="bottom">
+            {% if thread.author.name %}
+            <p class="author">By {{ thread.author.name }}</p>
+            {% else %}
+            <p class="author">By Anonymous</p>
+            {% endif %}
+            <p class="timestamp">{{ thread.date }}</p>
+            <p class="comment-count">{{ thread.count }} comments</p>
+          </div>
+      {% for comment in thread.comments %}
+      <div class="comment">
+        <div class="top-comment">
+        {% if comment.author.name %}
+          <p class="user">{{comment.author.name}}</p>
+        {% else %}
+          <p class="user">Anonymous</p>
+        {% endif %}
+          <p class="comment-ts">{{comment.date}}</p>
+        </div>
+        <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
+      </div>
+      {% endfor %}
+      <form action="{{ url_for('add_comment', thread_id= thread.id ) }}" method="POST">
+        <textarea id="content" name="content"></textarea>
+        <button type="submit">Add Comment</button>
+      </form>
+    </div>
+
+  {% endblock %}

@@ -39,6 +39,12 @@ button {
     display: flex;
     color: grey;
     font-size: 12px;
+    
+}
+
+.comment{
+    border: 2px solid lightblue;
+    padding: 10px;
 }
 
 .timestamp {

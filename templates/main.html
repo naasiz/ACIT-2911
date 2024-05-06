@@ -1,0 +1,77 @@
+{% extends "base.html" %} {% block title %} CIT Coursehub {% endblock %} {%
+block content2 %}
+<style>
+  a {
+    text-decoration: none;
+    color: black;
+  }
+  .hero.is-fullheight {
+    min-height: 0vh;
+  }
+  .hero.is-primary .title {
+    color: black;
+  }
+
+  h1,
+  h4,
+  ol {
+    margin: 0;
+  }
+  p {
+    margin: 5px 0;
+  }
+  .top-bar {
+    background-color: skyblue;
+    padding: 0 40px;
+  }
+  .main {
+    background-color: #f6f6ef;
+    padding: 10px 15px;
+  }
+  .row {
+    padding: 5px;
+  }
+  .bottom {
+    display: flex;
+    color: grey;
+    font-size: 12px;
+  }
+  .timestamp {
+    padding-right: 10px;
+  }
+  .comment-count {
+    padding-right: 10px;
+  }
+  .author {
+    padding-right: 10px;
+  }
+</style>
+<div class="top-bar">
+  <h1>CIT Coursehub {{ user.name }}</h1>
+</div>
+<div class="main">
+  <ol>
+    {% for thread in threads %}
+    <li class="row">
+      <a href="{{ url_for('thread_detailed', thread_id=thread.id)}}">
+        <h4 class="title">{{ thread.title }}</h4>
+        <div class="bottom">
+          {% if thread.author.name %}
+          <p class="author">By {{ thread.author.name }}</p>
+          {% else %}
+          <p class="author">By Anonymous</p>
+          {% endif %}
+          <p class="timestamp">{{ thread.date }}</p>
+          <p class="comment-count">{{ thread.count }} comments</p>
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+  </ol>
+  <form action="{{ url_for('add_thread') }}" method="POST">
+    <textarea id="content" name="content"></textarea>
+    <button type="submit">Add Thread</button>
+  </form>
+</div>
+
+{% endblock %}
