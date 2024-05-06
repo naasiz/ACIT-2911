@@ -13,9 +13,10 @@ h1, h4, ol {
 p {
     margin: 5px 0;
 }
-.top-bar{
-    background-color: skyblue;
+.top-bar > h1{
+    background-color: #fff400;
     padding: 0 40px;
+    font-weight: 600;
 }
 .main {
     background-color: #F6F6EF;

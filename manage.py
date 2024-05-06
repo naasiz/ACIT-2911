@@ -15,7 +15,7 @@ def create_Thread(num):
     db.session.add(Thread(author=user))
     db.session.commit()
     thread = db.get_or_404(Thread, num)
-    thread.title = "What is your favourite course from term 1?"
+    thread.title = "What was your favourite course from term 1?"
     db.session.commit()
     
 def delete_data():
@@ -26,12 +26,9 @@ def create_comment():
     db.session.add(Comment(author=thread.author,thread=thread))
     db.session.commit()
     comment=db.get_or_404(Comment,1)
-    comment.content = "Math is my favourite course!"
+    comment.content = "SysAdmin was my favourite course!"
     db.session.commit()
-    
-    
-    
-    
+      
 if __name__ == "__main__":
     with app.app_context():
         db.drop_all()

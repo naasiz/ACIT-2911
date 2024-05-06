@@ -22,6 +22,7 @@ def load_user(user_id):
     return db.get_or_404(User, user_id)
 
 # Main Routes
+# For rendering all the threads
 @app.route('/')
 def main():
     statement=db.select(Thread).order_by(Thread.id)
@@ -34,19 +35,22 @@ def main():
     except AttributeError:
         return render_template('main.html', threads=results)
 
+# For rending the currently logged in profile page
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html', name=current_user.name)
+    return render_template('profile.html',  user=current_user)
 
+# For rending the thread's comments
 @app.route('/thread_detailed/<int:thread_id>')
 def thread_detailed(thread_id):
     thread = db.get_or_404(Thread, thread_id)
     thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
-    return render_template("thread_detailed.html", thread = thread)
+    return render_template("thread_detailed.html", thread = thread, user=current_user)
     
 
 # Post Routes
+# For adding a thread 
 @app.route('/', methods=["POST"]) 
 def add_thread():
     if request.form["content"] != "":
@@ -57,26 +61,28 @@ def add_thread():
             db.session.add(Thread(title=request.form["content"]))
         db.session.commit()
     return redirect(url_for('main'))
-    
+ 
+# For adding comments   
 @app.route("/thread_detailed/<int:thread_id>", methods=["POST"])
 def add_comment(thread_id):
-    thread = db.get_or_404(Thread, thread_id)
-    try:
-        user = db.get_or_404(User, current_user.id)
-        db.session.add(Comment(author=user, thread=thread, content=request.form["content"]))
-    except:
-        db.session.add(Comment(thread=thread, content=request.form["content"]))
-    db.session.commit()
+    if request.form["content"] != "":
+        thread = db.get_or_404(Thread, thread_id)
+        try:
+            user = db.get_or_404(User, current_user.id)
+            db.session.add(Comment(author=user, thread=thread, content=request.form["content"]))
+        except AttributeError:
+            db.session.add(Comment(thread=thread, content=request.form["content"]))
+        db.session.commit()
     return redirect(url_for('thread_detailed', thread_id=thread_id))
     
 # Auth Routes
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    return render_template('login.html', user=current_user)
 
 @app.route('/signup')
 def signup():
-    return render_template('signup.html')
+    return render_template('signup.html', user=current_user)
 
 @app.route('/logout')
 @login_required
