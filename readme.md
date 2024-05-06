@@ -6,7 +6,7 @@ pip install flask
 ```
 2. Run main.py
 ```
-py app.py
+py main.py
 ```
-3. Copy paste the following URL into your browser
-[text](http://127.0.0.1:8888)
+3. Right click the link below
+[URL to WEBSITE](http://127.0.0.1:8888)
