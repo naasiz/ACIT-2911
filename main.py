@@ -31,9 +31,9 @@ def main():
         thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
     
     try:    
-        return render_template('main.html', threads=results, user=current_user)
+        return render_template('forums.html', threads=results, user=current_user)
     except AttributeError:
-        return render_template('main.html', threads=results)
+        return render_template('forums.html', threads=results)
 
 # For rending the currently logged in profile page
 @app.route('/profile')

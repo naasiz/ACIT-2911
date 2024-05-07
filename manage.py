@@ -16,6 +16,7 @@ def create_Thread(num):
     db.session.commit()
     thread = db.get_or_404(Thread, num)
     thread.title = "What was your favourite course from term 1?"
+    thread.content = "I really enjoyed COMP 1002, it was a great introduction to programming!"
     db.session.commit()
     
 def delete_data():

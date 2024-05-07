@@ -45,22 +45,31 @@
             <div class="subforum-title">
                 <h1>General Information</h1>
             </div>
+            {% for thread in threads %}
             <div class="subforum-row">
                 <div class="subforum-icon subforum-column center">
                     <i class="fa fa-user center"></i>
                 </div>
                 <div class="subforum-description subforum-column">
-                    <h4><a href="#">Description Title</a></h4>
-                    <p>Description Content: let's try to be cool, otherwise,w at 'sthe point in libing together with people youdont' live.</p>
+                    <h4><a href="{{ url_for('thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
+                    <p>{{ thread.content }}</p>
                 </div>
                 <div class="subforum-stats subforum-column center">
-                    <span>24 Posts | 12 Topics</span>
+                    <span>{{ thread.count }}</span>
                 </div>
                 <div class="subforum-info subforum-column">
-                    <b><a href="">Last post</a></b> by <a href="">JustAUser</a> 
-                    <br>on <small>12 Dec 2020</small>
+                    {% if thread.author.name %}
+                    <b><a href="">Last post</a></b> by <a href="">{{ thread.author.name }}</a> 
+                    {% else %}
+                    <b><a href="">Last post</a></b> by <a href="">Anonymous</a> 
+                    {% endif %}
+
+
+                    <br>on <small>{{ thread.date }}</small>
                 </div>
             </div>
+            {% endfor %}
+            
         </div>
         <!--More-->
         
