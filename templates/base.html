@@ -38,6 +38,7 @@
                 </h1>
               </div>
               <div class="navbar-end">
+                <a href="{{ url_for('toHome') }}" class="navbar-item">Go to Homepage</a>
                 <a href="{{ url_for('main') }}" class="navbar-item"> Threads </a>
                 {% if current_user.is_authenticated %}
                 <a href="{{ url_for('profile') }}" class="navbar-item">

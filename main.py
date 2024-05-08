@@ -130,5 +130,11 @@ def signup_post():
     db.session.commit()
     return redirect(url_for('login'))
 
+@app.route('/homepage')
+def toHome():
+    return render_template('homepage file/homepage.html')
+
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=8888)
