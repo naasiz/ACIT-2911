@@ -132,7 +132,32 @@ def signup_post():
 
 @app.route('/homepage')
 def toHome():
-    return render_template('homepage file/homepage.html')
+    return render_template('homepage-file/homepage.html')
+
+
+@app.route('/posts')
+def posts():
+    threads = db.session.query(Thread).order_by(Thread.id).all()
+    for thread in threads:
+        thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
+    user = current_user if current_user.is_authenticated else None  # Assuming you're using Flask-Login
+    return render_template('homepage-file/posts.html', threads=threads, user=user)
+
+@app.route('/add_comment/<int:thread_id>', methods=["POST"])
+def add_posts(thread_id):
+    content = request.form["content"]
+    if content:
+        try:
+            user = db.get_or_404(User, current_user.id)
+            thread = db.session.query(Thread).get(thread_id)
+            db.session.add(Comment(author=user, thread=thread, content=content))
+        except:
+            thread = db.session.query(Thread).get(thread_id)
+            db.session.add(Comment(thread=thread, content=content))
+        db.session.commit()
+    return redirect(url_for('posts'))
+
+
 
 
 
