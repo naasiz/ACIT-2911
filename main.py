@@ -23,7 +23,7 @@ def load_user(user_id):
 
 # Main Routes
 # For rendering all the threads
-@app.route('/')
+@app.route('/', endpoint='main')
 def main():
     statement=db.select(Thread).order_by(Thread.id)
     results=list(db.session.execute(statement).scalars())
