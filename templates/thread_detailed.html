@@ -1,80 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forum</title>
-    <link rel="stylesheet" href="../../static/homepage.css">
-    <link rel="stylesheet" href="../../static/styles2.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
-  </head>
-  
-  <body>
-  <script>
-    //NavBar
-function hideIconBar(){
-  var iconBar = document.getElementById("iconBar");
-  var navigation = document.getElementById("navigation");
-  iconBar.setAttribute("style", "display:none;");
-  navigation.classList.remove("hide");
-}
-
-function showIconBar(){
-  var iconBar = document.getElementById("iconBar");
-  var navigation = document.getElementById("navigation");
-  iconBar.setAttribute("style", "display:block;");
-  navigation.classList.add("hide");
-}
-
-//Comment
-function showComment(){
-  var commentArea = document.getElementById("comment-area");
-  commentArea.classList.remove("hide");
-}
-
-//Reply
-function showReply(){
-  var replyArea = document.getElementById("reply-area");
-  replyArea.classList.remove("hide");
-}
-  </script>
-    <header>
-        <!--NavBar Section-->
-        <div class="navbar">
-            <nav class="navigation hide" id="navigation">
-                <span class="close-icon" id="close-icon" onclick="showIconBar()"><i class="fa fa-close"></i></span>
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="{{ url_for('main') }}">Threads</a></li>
-                    <li class="nav-item"><a href="posts.html">Post</a></li>
-                    <li class="nav-item"><a href="course detail.html">Course Detail</a></li>
-                </ul>
-            </nav>
-            <a class="bar-icon" id="iconBar" onclick="hideIconBar()"><i class="fa fa-bars"></i></a>
-            <div class="brand"><a href="forums.html" class="brand">
-            CIT Course Hub
-            <img class="logo" src="/static/logo.svg" alt="logo" width="64px" height="65px" alt="bcit logo">
-            </a>
-            </div>
-        </div>
-        <!--SearchBox Section-->
-        <div class="search-box">
-            <div>
-                <select name="" id="">
-                    <option value="Everything">Everything</option>
-                    <option value="Titles">Titles</option>
-                    <option value="Descriptions">Descriptions</option>
-                </select>
-                <input type="text" name="q" placeholder="search ...">
-                <button><i class="fa fa-search"></i></button>
-            </div>
-        </div>
-    </header>
-    <div class="container">
-        <!--Navigation-->
-        <div class="navigate">
-            <span><a href="forums.html">CIT Course Hub - Threads</a> >> <a href="posts.html">Post</a></span>
-        </div>
+{% extends "base.html" %} {% block content %}
         
 
 <!--starts here-->
@@ -182,4 +106,4 @@ function showReply(){
 
     <script src="{{url_for("static", filename="homepage.js")}}"></script>
 </body>
-</htm>
+{% endblock %}
