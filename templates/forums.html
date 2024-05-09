@@ -4,6 +4,10 @@
             <div class="subforum-title">
                 <h1>General Information</h1>
             </div>
+            <button> <a href="{{ url_for('add_page')}}">
+               Add Thread
+            </a> 
+        </button>
             {% for thread in threads %}
             <div class="subforum-row">
                 <div class="subforum-icon subforum-column center">
@@ -37,13 +41,6 @@
             {% endfor %}
             
         </div>
-        <!--More-->
-        <form action="{{ url_for('add_thread') }}" method="POST">
-            <textarea id="content" name="content"></textarea>
-            <button type="submit">Add Thread</button>
-          </form>
-        
-        <!---->
     </div>
 
     <!-- Forum Info -->

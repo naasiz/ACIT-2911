@@ -48,20 +48,35 @@ def thread_detailed(thread_id):
     thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
     return render_template("thread_detailed.html", thread = thread, user=current_user)
     
+# For rending the add page
+@app.route('/add')
+def add_page():
+    return render_template("add_thread.html")
 
 # Post Routes
 # For adding a thread 
 @app.route('/', methods=["POST"]) 
 def add_thread():
-    if request.form["content"] != "":
+    if request.form["content"] != "" and request.form["title"] != "":
         try:
             user = db.get_or_404(User, current_user.id)
-            db.session.add(Thread(author=user, title=request.form["content"]))
+            db.session.add(Thread(author=user, title=request.form["title"], content=request.form["content"]))
         except:
-            db.session.add(Thread(title=request.form["content"]))
+            db.session.add(Thread(title=request.form["title"], content=request.form["content"]))
         db.session.commit()
-    return redirect(url_for('main'))
+        return redirect(url_for('main'))
+    else: 
+        flash('Please check your title and content are not empty and try again.')    
+        return redirect(url_for('add_page'))
  
+# For deleting thread
+@app.route("/thread_detailed/delete/<int:thread_id>", methods=["POST"])
+def del_thread(thread_id):
+    thread=db.get_or_404(Thread, thread_id)
+    db.session.delete(thread)
+    db.session.commit()
+    return redirect(url_for('main'))
+
 # For adding comments   
 @app.route("/thread_detailed/<int:thread_id>", methods=["POST"])
 def add_comment(thread_id):
@@ -76,16 +91,6 @@ def add_comment(thread_id):
     return redirect(url_for('thread_detailed', thread_id=thread_id))
     
 
-# For deleting thread
-@app.route("/thread_detailed/delete/<int:thread_id>", methods=["POST"])
-def del_thread(thread_id):
-    thread=db.get_or_404(Thread, thread_id)
-    db.session.delete(thread)
-    db.session.commit()
-    return redirect(url_for('main'))
-
-    # print(thread_id)
-    # return jsonify(thread_id)
         
 # Auth Routes
 @app.route('/login')
