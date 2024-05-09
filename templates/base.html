@@ -6,15 +6,15 @@
     <title>Forum</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='homepage.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
- 
-   
-   
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login-signup-styles.css')}}">
+    <script src="{{ url_for('static', filename='homepage.js')}}" defer></script>   
 </head>
 
 <body>
-    <header>
+    <header class="column is-fullwidth">
         <!--NavBar Section-->
-        <div class="navbar">
+        <div class="navbar is-fullwidth">
             <nav class="navigation hide" id="navigation">
                 <span class="close-icon" id="close-icon" onclick="showIconBar()"><i class="fa fa-close"></i></span>
                 <ul class="nav-list">
@@ -23,25 +23,28 @@
                 </ul>
             </nav>
             <a class="bar-icon" id="iconBar" onclick="hideIconBar()"><i class="fa fa-bars"></i></a>
-            <div class="brand"><a href="forums.html" class="brand">
-            CIT Course Hub
-            <img class="logo" src="{{ url_for('static', filename='logo.svg')}}" alt="logo" width="64px" height="65px" alt="bcit logo">
-        </a>
-            </div>
+                <div class="brand"><a href="{{ url_for('main') }}" class="brand">
+                    CIT Course Hub
+                    <img class="logo" src="{{ url_for('static', filename='logo.svg')}}" alt="logo" width="64px" height="65px" alt="bcit logo">
+                </div>
+            </a>
         </div>
-        <!--SearchBox Section-->
-        <div class="search-box">
-            <div>
-                <select name="" id="">
-                    <option value="Everything">Everything</option>
-                    <option value="Titles">Titles</option>
-                    <option value="Descriptions">Descriptions</option>
-                </select>
-                <input type="text" name="q" placeholder="search ...">
-                <button><i class="fa fa-search"></i></button>
-            </div>
+    
+    {% block searchbar %}
+    <!--SearchBox Section-->
+    <div class="search-box">
+        <div>
+            <select name="" id="">
+                <option value="Everything">Everything</option>
+                <option value="Titles">Titles</option>
+                <option value="Descriptions">Descriptions</option>
+            </select>
+            <input type="text" name="q" placeholder="search ...">
+            <button><i class="fa fa-search"></i></button>
         </div>
-    </header>
-    <body>
-      {% block content %}{% endblock %}
+    </div>
+    {% endblock %}
+</header>
+<body>
+    {% block content %}{% endblock %}
     </body>
