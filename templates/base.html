@@ -26,7 +26,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
                         <a href="{{ url_for('profile') }}" >
-                          Profile
+                          {{ user.name }}
                         </a>
                     </li>
                     {% endif %} {% if not current_user.is_authenticated %}
