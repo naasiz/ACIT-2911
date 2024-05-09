@@ -24,8 +24,8 @@ class Thread(db.Model):
     title = db.Column(db.String(100))
     author = relationship("User", back_populates="threads")
     date = db.Column(DateTime(timezone=True), server_default=func.now())
-    comments = relationship("Comment")
-    contetn = db.Column(db.String(1000))
+    comments = relationship("Comment", cascade="all, delete")
+    content = db.Column(db.String(1000))
     
     # def to_json(self):
     #     return {

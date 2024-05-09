@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 from db import db
@@ -23,7 +23,7 @@ def load_user(user_id):
 
 # Main Routes
 # For rendering all the threads
-@app.route('/', endpoint='main')
+@app.route('/')
 def main():
     statement=db.select(Thread).order_by(Thread.id)
     results=list(db.session.execute(statement).scalars())
@@ -39,7 +39,7 @@ def main():
 @app.route('/profile')
 @login_required
 def profile():
-    return render_template('profile.html',  user=current_user)
+    return render_template('/auth/profile.html',  user=current_user)
 
 # For rending the thread's comments
 @app.route('/thread_detailed/<int:thread_id>')
@@ -75,14 +75,26 @@ def add_comment(thread_id):
         db.session.commit()
     return redirect(url_for('thread_detailed', thread_id=thread_id))
     
+
+# For deleting thread
+@app.route("/thread_detailed/delete/<int:thread_id>", methods=["POST"])
+def del_thread(thread_id):
+    thread=db.get_or_404(Thread, thread_id)
+    db.session.delete(thread)
+    db.session.commit()
+    return redirect(url_for('main'))
+
+    # print(thread_id)
+    # return jsonify(thread_id)
+        
 # Auth Routes
 @app.route('/login')
 def login():
-    return render_template('login.html', user=current_user)
+    return render_template('/auth/login.html', user=current_user)
 
 @app.route('/signup')
 def signup():
-    return render_template('signup.html', user=current_user)
+    return render_template('/auth/signup.html', user=current_user)
 
 @app.route('/logout')
 @login_required
@@ -134,7 +146,6 @@ def signup_post():
 def toHome():
     return render_template('homepage-file/homepage.html')
 
-
 @app.route('/posts')
 def posts():
     threads = db.session.query(Thread).order_by(Thread.id).all()
@@ -156,10 +167,6 @@ def add_posts(thread_id):
             db.session.add(Comment(thread=thread, content=content))
         db.session.commit()
     return redirect(url_for('posts'))
-
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True, port=8888)
