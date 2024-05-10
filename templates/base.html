@@ -13,31 +13,6 @@
     <script src="{{ url_for('static', filename='homepage.js')}}" defer></script>   
 </head>
 <body>
-    <style>
-        /* 
-        a.navbar-item.brand {
-            margin-left: 20px;
-        }
-        a.navbar-burger {
-            border: 1.5px solid #000;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .navbar-burger span {
-            height: 3px;
-            position: relative;
-            width: 27px;
-        }
-         */
-         .navbar-brand {
-            align-items: center;
-        }  
-        .navbar-item img {
-            max-height: none;
-        }
-    </style>
     <header class="column is-fullwidth">
         <!--NavBar Section-->
         <section class="navbar" role="navigation">
@@ -49,12 +24,13 @@
               <a role="button" class="navbar-burger"
               onclick="toggleNavbar()"
               data-target="navbarBasicExample">
+              <!-- The Burger -->
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
               </a>
             </div>
-        
+            <!-- This item is hidden, can just use for phone -->
             <div id="navbarBasicExample" class="navbar-menu">
               <div class="navbar-end">
                 <a class="navbar-item" href="{{ url_for('main') }}">Threads</a>
