@@ -6,6 +6,7 @@
   align-items: center;
   flex-direction: column;
   height: 100vh;
+  width: 100%;
 }
 .has-background-purple {
   background-color: #6c74f4;

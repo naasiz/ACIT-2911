@@ -7,7 +7,7 @@
 
 .navbar-brand {
     display: flex;
-    align-items: center;
+    align-items: center !important;
 }
 
 html, body{
@@ -137,8 +137,6 @@ div#navbarBasicExample.navbar-menu {
     align-items: center;
 }
 
-
-
 .navbar-brand {
     align-items: center;
 }  
@@ -181,8 +179,11 @@ a.navbar-burger {
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 .logo{
+    margin-top: 2px;
     margin-left: 1rem;
+    max-height: none !important;
 }
+
 
 /* Adjustments for smaller screens */
 /* Navbar style for phone */
