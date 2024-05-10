@@ -51,7 +51,7 @@ def thread_detailed(thread_id):
 # For rending the add page
 @app.route('/add')
 def add_page():
-    return render_template("add_thread.html")
+    return render_template("add_thread.html", user=current_user)
 
 # Post Routes
 # For adding a thread 
