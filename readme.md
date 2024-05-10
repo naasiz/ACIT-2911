@@ -10,3 +10,5 @@ py main.py
 ```
 3. Right click the link below
 [URL to WEBSITE](http://127.0.0.1:8888)
+
+Check the pushing.
