@@ -12,23 +12,57 @@
 </head>
 
 <body>
+    <style>
+        /* 
+        a.navbar-item.brand {
+            margin-left: 20px;
+        }
+        a.navbar-burger {
+            border: 1.5px solid #000;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .navbar-burger span {
+            height: 3px;
+            position: relative;
+            width: 27px;
+        }
+         */
+         .navbar-brand {
+            align-items: center;
+        }  
+        .navbar-item img {
+            max-height: none;
+        }
+    </style>
     <header class="column is-fullwidth">
         <!--NavBar Section-->
-        <div class="navbar is-fullwidth">
-            <nav class="navigation hide" id="navigation">
-                <span class="close-icon" id="close-icon" onclick="showIconBar()"><i class="fa fa-close"></i></span>
-                <ul class="nav-list">
-                    <li class="nav-item"><a href="{{ url_for('main') }}">Threads</a></li>
-                    <li class="nav-item"><a href="{{ url_for('login') }}">Course Detail</a></li>
-                </ul>
-            </nav>
-            <a class="bar-icon" id="iconBar" onclick="hideIconBar()"><i class="fa fa-bars"></i></a>
-                <div class="brand"><a href="{{ url_for('main') }}" class="brand">
-                    CIT Course Hub
-                    <img class="logo" src="{{ url_for('static', filename='logo.svg')}}" alt="logo" width="64px" height="65px" alt="bcit logo">
-                </div>
-            </a>
-        </div>
+        <section class="navbar" role="navigation">
+            <div class="navbar-brand">
+              <a class="navbar-item brand" href="{{ url_for('main') }}">
+                CIT Course Hub
+                <img class="logo" src="{{ url_for('static', filename='logo.svg')}}" alt="logo" width="64px" height="65px" alt="bcit logo">
+              </a>
+              <a role="button" class="navbar-burger"
+              onclick="toggleNavbar()"
+              data-target="navbarBasicExample">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+              </a>
+            </div>
+        
+            <div id="navbarBasicExample" class="navbar-menu">
+              <div class="navbar-end">
+                <a class="navbar-item" href="{{ url_for('main') }}">Threads</a>
+                <a class="navbar-item" href="{{ url_for('login') }}">Login</a>
+                <a class="navbar-item" href="{{ url_for('signup') }}">Signup</a>
+                <a class="navbar-item" href="{{ url_for('profile') }}">Profile</a>
+              </div>
+            </div>
+        </section>
     
     {% block searchbar %}
     <!--SearchBox Section-->

@@ -5,7 +5,10 @@
     box-sizing: border-box;
 }
 
-
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
 
 html, body{
     margin: 0;
@@ -15,7 +18,7 @@ html, body{
     height: 100vh;
 }
 
-a{
+a {
     color: #003c71;
     font-weight: bolder;
     text-decoration: none;
@@ -130,102 +133,43 @@ h1{
   }
 
   /* Nav Bar styles */
-.navbar{
-    display:flex;
-    align-items: center;
-}
-.navigation{
-    padding: 10px;
-    width: 65%;
-    display: inline-block;
-    border-radius: 5px;
-    max-height: 80px;
-    margin-right:10px;
-}
-
-.close-icon i{
-    font-size:60px;
-    float: left;
-    cursor: pointer;
-}
-
-.nav-list{
-    list-style-type:none;
-    overflow: hidden;
-}
-
-.nav-item a{
-    float: left;
-    display:block;
-    text-align: center;
-    margin-inline: 10px;
+.navbar-item {
     font-size: 20px;
-    padding: 10px;
-    color:#003c71;
+    margin-right: 20px;
 }
 
-.nav-item a:hover{
-    background-color: rgb(0,0,0,0.1);
-    
+.navbar-item:last-child {
+    margin-right: 25px;
 }
-
-.hide{
-    display: none;
-}
-
-.bar-icon{
-    font-size: 60px;
-    display: inline-block;
-    margin-right:10px;
-    color: #003c71;
-    cursor: pointer;
-}
-
-
 
 .brand{
     font-size: 50px;
-    display: flex;
-    align-items: center;
 }
 
-.brand a:hover {
-    color: grey; 
+a.navbar-item.brand {
+    margin-left: 20px;
 }
 
+
+a.navbar-burger {
+    border: 1.5px solid #000;
+    border-radius: 10px;
+    margin-right: 5px;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center; */
+}
+/* .navbar-burger span {
+    height: 3px;
+    position: relative;
+    width: 27px;
+} */
 
 
 .logo{
     margin-left: 1rem;
 }
 
-/*Navbar for the smartphones*/
-@media screen and (max-width: 460px){
-    .navigation{
-        max-height: auto;
-    }
-    
-    .close-icon i{
-        font-size:30px;
-    }
-    
-    .nav-item a{
-        float:left;
-        display:inline;
-        margin-inline: 3px;
-        font-size: 10px;
-        padding: 5px;
-    }
-    
-    
-    .bar-icon{
-        font-size: 30px;
-    }
- 
-    .brand{
-        font-size:20px;
-    }
-}
 
   /* Search Box styles */
 .search-box{
@@ -386,6 +330,8 @@ footer{
 
 .content{
     flex: 80%;
+    margin-top: 60px;  
+    /* need to adjust */
 }
 
 .body{
