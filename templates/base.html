@@ -58,7 +58,7 @@
                 <div class="navbar-end">
                     <a class="navbar-item" href="{{ url_for('main') }}">Threads</a>
                     {% if current_user.is_authenticated %} 
-                    <a class="navbar-item" href="{{ url_for('profile') }}">Profile</a>
+                    <a class="navbar-item" href="{{ url_for('profile') }}">{{user.name}}</a>
                     <a class="navbar-item" href="{{ url_for('logout') }}">Log Out</a>
                     {% else %}
                     <a class="navbar-item" href="{{ url_for('login') }}">Login</a>
