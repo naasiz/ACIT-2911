@@ -89,9 +89,7 @@ def add_comment(thread_id):
             db.session.add(Comment(thread=thread, content=request.form["content"]))
         db.session.commit()
     return redirect(url_for('thread_detailed', thread_id=thread_id))
-    
-
-        
+            
 # Auth Routes
 @app.route('/login')
 def login():

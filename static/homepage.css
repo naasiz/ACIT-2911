@@ -175,8 +175,7 @@ a.navbar-burger {
 .search-box{
     border: solid 1px black;
     margin-top: 20px;
-    padding: 40px;
-    display:flex;
+    padding: 20px;
     justify-content: center;
     box-shadow:1px 2px 3px black;
 }
