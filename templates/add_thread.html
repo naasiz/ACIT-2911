@@ -10,6 +10,14 @@
         {% endif %} {% endwith %}
 
         <div>
+          <select name="subheading" id="subheading">
+            {% for subheading in subheadings %}
+            <option value="{{subheading.id}}">{{subheading.title}}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
           <label for="title" class="formbold-form-label"> Title</label>
           <textarea
           rows="6"

@@ -51,18 +51,21 @@ def thread_detailed(thread_id):
 # For rending the add page
 @app.route('/add')
 def add_page():
-    return render_template("add_thread.html", user=current_user)
+    stmt = db.select(Subheading).order_by(Subheading.id)
+    results=list(db.session.execute(stmt).scalars())
+    return render_template("add_thread.html", user=current_user, subheadings=results)
 
 # Post Routes
 # For adding a thread 
 @app.route('/', methods=["POST"]) 
 def add_thread():
     if request.form["content"] != "" and request.form["title"] != "":
+        subheading = db.get_or_404(Subheading, int(request.form["subheading"]))
         try:
             user = db.get_or_404(User, current_user.id)
-            db.session.add(Thread(author=user, title=request.form["title"], content=request.form["content"]))
+            db.session.add(Thread(author=user, subheading=subheading, title=request.form["title"], content=request.form["content"]))
         except:
-            db.session.add(Thread(title=request.form["title"], content=request.form["content"]))
+            db.session.add(Thread(title=request.form["title"], subheading=subheading, content=request.form["content"]))
         db.session.commit()
         return redirect(url_for('main'))
     else: 
