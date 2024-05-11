@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request, flash, jso
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 from db import db
-from models import User, Thread, Comment
+from models import User, Thread, Comment, Subheading
 
 app = Flask(__name__)
 
@@ -25,15 +25,15 @@ def load_user(user_id):
 # For rendering all the threads
 @app.route('/')
 def main():
-    statement=db.select(Thread).order_by(Thread.id)
+    statement=db.select(Subheading).order_by(Subheading.id)
     results=list(db.session.execute(statement).scalars())
-    for thread in results:
-        thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
-    
+    for subheading in results:
+        for thread in subheading.threads:
+            thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
     try:    
-        return render_template('forums.html', threads=results, user=current_user)
+        return render_template('forums.html', subheadings=results, user=current_user)
     except AttributeError:
-        return render_template('forums.html', threads=results)
+        return render_template('forums.html', subheadings=results)
 
 # For rending the currently logged in profile page
 @app.route('/profile')
