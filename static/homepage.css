@@ -188,16 +188,69 @@ a.navbar-burger {
 /* Adjustments for smaller screens */
 /* Navbar style for phone */
 
+@media screen and (max-width: 1087px) {
+    a.navbar-item:not(.brand),
+    a.navbar-item:not(.brand):hover,
+    div.navbar-end {
+    border-bottom: none;
+    font-size: 1.1rem;
+    overflow: hidden;
+    max-height: 0;
+    animation: slideUp 0.5s ease;
+    display: block !important;
+    }
+    
+    .navbar-menu {
+    display: block !important;
+    }
+    
+    .is-active .navbar-item:not(.brand),
+    .is-active .navbar-item:not(.brand):hover,
+    .is-active div.navbar-end {
+    max-height: 200px;
+    overflow: hidden;
+    animation: slideDown 0.5s ease;
+    border-bottom: none;
+    font-size: 1.1rem;
+    }
+    
+    @keyframes slideUp {
+    0% {
+    max-height: 200px;
+    }
+    100% {
+    max-height: 0;
+    display: none;
+    }
+    }
+
+    @keyframes slideDown {    
+    0% {
+    max-height: 0;
+    }
+    100% {
+    max-height: 200px;
+    }
+    }
+
+    .navbar-item.brand,
+    .navbar-item.brand:hover {
+    border-bottom: none;
+    }
+
+}
+
 @media screen and (max-width: 767px) {
-    a.navbar-item:hover {
-        border-bottom: transparent;
+    .navbar-item.brand,
+    .navbar-item.brand:hover {
+    font-size: 1.75rem;
+    border-bottom: none;
     }
-    .navbar-item.brand {
-      font-size: 1.75rem;
-    }
+
     a.navbar-item.brand {
-        margin: 0;
+    margin: 0;
     }
+
     .navbar-burger span {
       height: 2px;
       width: 20px;
