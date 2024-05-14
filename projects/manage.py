@@ -1,6 +1,6 @@
 from main import app
-from projects.db.db import db
-from projects.models.models import User, Thread, Comment, Subheading
+from db.db import db
+from models.models import User, Thread, Comment, Subheading
 from werkzeug.security import generate_password_hash, check_password_hash
 import random
 
