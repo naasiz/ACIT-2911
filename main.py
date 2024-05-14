@@ -174,8 +174,27 @@ def add_posts(thread_id):
         db.session.commit()
     return redirect(url_for('posts'))
 
-# if __name__ == "__main__":
-#     app.run(debug=True, port=80)
+
+@app.route('/upvote', methods=['POST'])
+def upvote():
+    thread_id = request.form.get('thread_id')
+    # Update the upvote count in the database for the specified thread_id
+    # Return the updated count
+    return jsonify({'upvotes': 5})
+
+@app.route('/downvote', methods=['POST'])
+def downvote():
+    thread_id = request.form.get('thread_id')
+    # Update the downvote count in the database for the specified thread_id
+    # Return the updated count
+    return jsonify({'downvotes': 5})
+
+
+
+
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=4000)
+    app.run(debug=True)
+
+# if __name__ == "__main__":
+#     app.run(host='0.0.0.0', port=4000)~
