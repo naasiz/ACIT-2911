@@ -1,0 +1,57 @@
+
+body {
+    margin: 10px 60px;
+}
+
+a {
+    text-decoration: none;
+    color: #003c71;
+}
+
+h1, h4, ol {
+    margin: 0;
+}
+p {
+    margin: 5px 0;
+}
+textarea {
+    width: 80%;
+    height: 80px;
+}
+button {
+    display: block;
+    margin: 10px 0;
+}
+.top-bar{
+    background-color: skyblue;
+    padding: 0 40px;
+}
+.main {
+    background-color: #F6F6EF;
+    padding: 10px 40px;
+}
+.comments {
+    margin: 40px 0;
+}
+.row {
+    padding: 5px 0;
+}
+.bottom, .top-comment {
+    display: flex;
+    color: grey;
+    font-size: 12px;
+    
+}
+
+.comment{
+    border: 2px solid lightblue;
+    padding: 10px;
+}
+
+.timestamp {
+    padding-right: 15px;
+} 
+
+.comment-ts {
+    margin-left: 15px;
+}
