@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 {% block searchbar %}{% endblock %}
 {% block content %}
-<body class="centered-box">
-  <section class="has-background-purple centered-box">
-    <h1 class="title">
-      Welcome, {{ user.name }}!
-    </h1>
-  </section>
-</body>
+{% for message in get_flashed_messages() %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+{%endfor%}
+  <h1>DashBoard</h1><br>
+  <p>You are logged in</p>
+  <a href="{{ url_for('logout')}}">Log out</a>
+  <br>
+
+
+  <strong>User Name: </strong> {{ current_user.name }}<br>
+  <strong>User ID: </strong>{{ current_user.id }}<br>
+  <strong>Email: </strong>{{ current_user.email }}<br>
+
 {% endblock %}

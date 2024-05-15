@@ -8,7 +8,7 @@
               <i class="fa fa-user center"></i>
           </div>
           <div class="subforum-description subforum-column">
-              <h4><a href="{{ url_for('thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
+              <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
               <p>{{ thread.content }}</p>
           </div>
           {% if thread.count == 1  %}
@@ -30,7 +30,7 @@
               
           </div>
       </div>
-        <form action="{{ url_for('del_thread', thread_id=thread.id) }}" method="POST">
+        <form action="{{ url_for('main.del_thread', thread_id=thread.id) }}" method="POST">
           <button type="submit">Delete Thread</button>
         </form>
         {% for comment in thread.comments %}
@@ -46,7 +46,7 @@
           <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
         </div>
         {% endfor %}
-        <form action="{{ url_for('add_comment', thread_id= thread.id ) }}" method="POST">
+        <form action="{{ url_for('main.add_comment', thread_id= thread.id ) }}" method="POST">
           <textarea id="content" name="content"></textarea>
           <button type="submit">Add Comment</button>
         </form>

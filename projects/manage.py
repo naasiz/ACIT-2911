@@ -37,9 +37,7 @@ def create_comment():
     comment=db.get_or_404(Comment,1)
     comment.content = "SysAdmin was my favourite course!"
     db.session.commit()
-
-
-      
+     
 if __name__ == "__main__":
     with app.app_context():
         db.drop_all()
