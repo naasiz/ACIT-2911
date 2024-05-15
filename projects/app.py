@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_login import LoginManager
-from flask_sqlalchemy import SQLAlchemy
 from db.db import db
 
 # init SQLAlchemy so we can use it later in our models
