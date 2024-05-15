@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
 
-<button> <a href="{{ url_for('add_page')}}">
+<button> <a href="{{ url_for('main.add_page')}}">
         Add Thread
     </a>
 </button>
@@ -16,7 +16,7 @@
                 <i class="fa fa-user center"></i>
             </div>
             <div class="subforum-description subforum-column">
-                <h4><a href="{{ url_for('thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
+                <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
                 <p>{{ thread.content }}</p>
                 <div class="subforum-upvote-downvote">
                     <span class="upvote-btn" data-thread-id="{{ thread.id }}">
