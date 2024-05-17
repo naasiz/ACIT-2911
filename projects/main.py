@@ -1,15 +1,12 @@
-from flask import Blueprint, Flask, render_template, redirect, url_for, request, flash, jsonify
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, login_required, current_user, login_user, logout_user
+from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask_login import login_required, current_user 
 from db.db import db
 from models.models import User, Thread, Comment, Subheading
 
-
 main = Blueprint('main', __name__)
 
-
 # Main Routes
-# For rendering all the threads
+# For rendering forums.html
 @main.route('/')
 def index():
     statement=db.select(Subheading).order_by(Subheading.id)
@@ -22,13 +19,13 @@ def index():
     except AttributeError:
         return render_template('forums.html', subheadings=results)
 
-# For rending the currently logged in profile page
+# For rendering profile.html
 @main.route('/profile')
 @login_required
 def profile():
     return render_template('/auth/profile.html',  user=current_user)
 
-# For rending the thread's comments
+# For rendering the thread_detailed.html
 @main.route('/thread_detailed/<int:thread_id>')
 def thread_detailed(thread_id):
     thread = db.get_or_404(Thread, thread_id)
@@ -40,19 +37,8 @@ def thread_edit(thread_id):
     thread = db.get_or_404(Thread, thread_id)
     thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
     return render_template("thread_detailed.html", thread = thread, user=current_user, edit = True)
-
-# For editing the thread 
-@main.route("/thread_detailed/editing/<int:thread_id>", methods=["POST"])
-def thread_update(thread_id):
-    thread=db.get_or_404(Thread, thread_id)
-    if request.form["title"] == "":
-        return redirect(url_for('main.thread_detailed', thread_id=thread.id))
-    thread.title=request.form["title"] 
-    thread.content=request.form["content"] 
-    db.session.commit()
-    return redirect(url_for('main.thread_detailed', thread_id=thread.id))
-    
-# For rending the add page
+   
+# For rendering the add_thread.html
 @main.route('/add')
 def add_page():
     stmt = db.select(Subheading).order_by(Subheading.id)
@@ -84,6 +70,17 @@ def del_thread(thread_id):
     db.session.commit()
     return redirect(url_for('main.index'))
 
+# For editing the thread 
+@main.route("/thread_detailed/editing/<int:thread_id>", methods=["POST"])
+def thread_update(thread_id):
+    thread=db.get_or_404(Thread, thread_id)
+    if request.form["title"] == "":
+        return redirect(url_for('main.thread_detailed', thread_id=thread.id))
+    thread.title=request.form["title"] 
+    thread.content=request.form["content"] 
+    db.session.commit()
+    return redirect(url_for('main.thread_detailed', thread_id=thread.id))
+
 # For adding comments   
 @main.route("/thread_detailed/<int:thread_id>", methods=["POST"])
 def add_comment(thread_id):
@@ -96,34 +93,6 @@ def add_comment(thread_id):
             db.session.add(Comment(thread=thread, content=request.form["content"]))
         db.session.commit()
     return redirect(url_for('main.thread_detailed', thread_id=thread_id))
-            
-@main.route('/add_comment/<int:thread_id>', methods=["POST"])
-def add_posts(thread_id):
-    content = request.form["content"]
-    if content:
-        try:
-            user = db.get_or_404(User, current_user.id)
-            thread = db.session.query(Thread).get(thread_id)
-            db.session.add(Comment(author=user, thread=thread, content=content))
-        except:
-            thread = db.session.query(Thread).get(thread_id)
-            db.session.add(Comment(thread=thread, content=content))
-        db.session.commit()
-    return redirect(url_for('main.posts'))
-
-
-# @main.route('/upvote', methods=['POST'])
-# def upvote():
-#     thread_id = request.form.get('thread_id')
-#     # Update the upvote count in the database for the specified thread_id
-#     # Return the updated count
-#     return jsonify({'upvotes': 5})
-
-# @main.route('/downvote', methods=['POST'])
-# def downvote():
-#     thread_id = request.form.get('thread_id')
-#     # Update the downvote count in the database for the specified thread_id
-#     # Return the updated count
-#     return jsonify({'downvotes': 5})
+        
 
 

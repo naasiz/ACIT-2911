@@ -1,8 +1,4 @@
-from app import create_app
-from db.db import db
-from flask import session
 import manage
-
 # Test the index route 
 def test_index_success(client):
     # Send a GET request to the index endpoint

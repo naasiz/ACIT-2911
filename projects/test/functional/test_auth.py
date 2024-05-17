@@ -1,11 +1,5 @@
-from app import create_app
-from db.db import db
-from flask import session
-
 # Test login post
-def test_login_post_success(app, client):
-    # Create an application context
-    with app.app_context():
+def test_login_post_success(client):
         # Send a POST request to the login endpoint with form data
         response = client.post("/login", data={
             'email': 'tristanjames3131@gmail.com',
@@ -16,9 +10,7 @@ def test_login_post_success(app, client):
         # Verify that the response location is '/profile'
         assert response.location == '/profile'
 
-def test_login_post_fail(app, client):
-    # Create an application context
-    with app.app_context():
+def test_login_post_fail(client):
         # Send a POST request to the login endpoint with form data
         # email and password are not in database
         response = client.post("/login", data={

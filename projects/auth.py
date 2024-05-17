@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, login_required, current_user, login_user, logout_user
+from flask_login import  login_required, current_user, login_user, logout_user
 from db.db import db
-from models.models import User, Thread, Comment, Subheading
+from models.models import User
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login')
