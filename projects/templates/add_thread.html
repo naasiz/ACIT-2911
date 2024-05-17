@@ -8,7 +8,6 @@
         {% with messages = get_flashed_messages() %} {% if messages %}
         <div class="notification is-danger">{{ messages[0] }}</div>
         {% endif %} {% endwith %}
-
         <div>
           <select name="subheading" id="subheading">
             {% for subheading in subheadings %}
