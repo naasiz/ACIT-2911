@@ -1,4 +1,4 @@
-from main import app
+from app import create_app 
 from db.db import db
 from models.models import User, Thread, Comment, Subheading
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -18,12 +18,22 @@ def create_Thread():
     db.session.add(Subheading(title="MATH1200"))                              
     db.session.add(Subheading(title="COMM1430"))                              
     db.session.commit()
+    def thread_return(i, user, subhead):
+        if i == 0:
+           thread = Thread(author=user, subheading=subhead, title="What was your favourite course from term 1?", content="I really enjoyed COMP 1002, it was a great introduction to programming!")
+        elif i == 1:
+           thread = Thread(author=user, subheading=subhead, title="Favourite project??", content="I really enjoyed COMP 1002, it was a great introduction to programming!")
+        elif i == 2:
+           thread = Thread(author=user, subheading=subhead, title="MATH1200 is pretty easy!", content="I really enjoyed COMP 1002, it was a great introduction to programming!")
+        elif i == 3:
+           thread = Thread(author=user, subheading=subhead, title="Headings, Bulleted Lists Blah Blah", content="I really enjoyed COMP 1002, it was a great introduction to programming!")
+        
+        return thread
+    
     for i in range(1, 5):
         user =db.get_or_404(User, random.randint(1,2))
         subheading =db.get_or_404(Subheading, i)
-        thread = Thread(author=user, subheading=subheading, title="What was your favourite course from term 1?", content="I really enjoyed COMP 1002, it was a great introduction to programming!")
-        db.session.add(thread)
-        thread = Thread(author=user, subheading=subheading, title="What was your favourite course from term 1?", content="I really enjoyed COMP 1002, it was a great introduction to programming!")
+        thread = thread_return(i-1,user, subheading)
         db.session.add(thread)
         db.session.commit()
     
@@ -37,11 +47,14 @@ def create_comment():
     comment=db.get_or_404(Comment,1)
     comment.content = "SysAdmin was my favourite course!"
     db.session.commit()
-     
-if __name__ == "__main__":
-    with app.app_context():
+
+def run():
+    with create_app().app_context():
         db.drop_all()
         db.create_all()
         create_User()
         create_Thread()
-        create_comment()
+        create_comment()     
+        
+if __name__ == "__main__":
+    run()

@@ -44,6 +44,10 @@ def signup_post():
     email = request.form.get('email')
     name = request.form.get('name')
     password = request.form.get('password')
+    if email == "" or name == "" or password =="":
+        flash("Do not leave form blank")
+        return redirect(url_for('auth.signup'))
+     
 
     # user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
     user = db.session.execute(db.select(User).where(User.email == email)).scalar()
