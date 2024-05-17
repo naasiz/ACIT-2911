@@ -1,7 +1,7 @@
 from app import create_app 
 from db.db import db
 from models.models import User, Thread, Comment, Subheading
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 import random
 
 
@@ -37,9 +37,6 @@ def create_Thread():
         db.session.add(thread)
         db.session.commit()
     
-def delete_data():
-    db.drop_all()
-
 def create_comment():
     thread=db.get_or_404(Thread, 1)
     db.session.add(Comment(author=thread.author,thread=thread))

@@ -1,9 +1,10 @@
 {% extends "base.html" %} {% block content %}
-
+{% if current_user.is_authenticated %}
 <button> <a href="{{ url_for('main.add_page')}}">
         Add Thread
     </a>
 </button>
+{% endif %}
 <div class="container">
     {% for subheading in subheadings %}
     <div class="subforum">

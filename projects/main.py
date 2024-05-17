@@ -30,7 +30,15 @@ def profile():
 def thread_detailed(thread_id):
     thread = db.get_or_404(Thread, thread_id)
     thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
-    return render_template("thread_detailed.html", thread = thread, user=current_user, edit = False)
+    try:
+        if int(thread.author.id) == int(current_user.id):
+            print(thread.author.id)
+            print(current_user.id)
+            return render_template("thread_detailed.html", thread = thread, user=current_user, edit = False, own = True)
+        else:
+            return render_template("thread_detailed.html", thread = thread, user=current_user, edit = False, own = False)
+    except:
+        return render_template("thread_detailed.html", thread = thread, user=current_user, edit = False, own = False)
 
 @main.route('/thread_detailed/edit/<int:thread_id>')
 def thread_edit(thread_id):

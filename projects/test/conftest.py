@@ -1,7 +1,31 @@
 import pytest
 from models.models import User, Subheading, Thread, Comment 
 from werkzeug.security import generate_password_hash
+from app import create_app
 
+# Functional Test
+@pytest.fixture()
+def app():
+    app = create_app()
+    app.config.update({
+        "TESTING": True,
+    })
+
+    # other setup can go here
+
+    yield app
+
+    # clean up / reset resources here
+
+@pytest.fixture
+def client(app):
+    return app.test_client()
+
+@pytest.fixture
+def runner(app):
+    return app.test_cli_runner()
+
+# Unit Test
 @pytest.fixture
 def user_john():
     return User(email="john@my.bcit.ca", password=generate_password_hash("password", method='pbkdf2:sha256'), name="John")
