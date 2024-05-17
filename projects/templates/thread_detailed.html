@@ -17,7 +17,6 @@
                   <button class="formbold-btn" type="submit"><a>Delete Thread</a></button>
                 </form>
               </div>
-
           </div>
           {% elif not edit and not own%}
           <div class="subforum-description subforum-column">
@@ -71,7 +70,7 @@
               <b><a href="">Last post</a></b> by <a href="">Anonymous</a> 
               {% endif %}
               <br>on <small>{{ thread.date }}</small>
-              
+
           </div>
       </div>
         {% for comment in thread.comments %}

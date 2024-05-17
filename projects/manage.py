@@ -8,8 +8,6 @@ import random
 def create_User():
     db.session.add(User(email="tristanjames3131@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Tristan James Torres"))
     db.session.add(User(email="mmangilin22@my.bcit.ca", password=generate_password_hash('@Meriel2002', method='pbkdf2:sha256'), name="Meriel Mangilin"))
-    user=User(email="tristanjames3131@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Tristan James Torres")
-    print(dir(user))
     db.session.commit()
 
 def create_Thread():
@@ -55,3 +53,4 @@ def run():
         
 if __name__ == "__main__":
     run()
+    print('manage.py completed')
