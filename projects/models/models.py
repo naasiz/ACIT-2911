@@ -2,6 +2,9 @@ from db.db import db
 from sqlalchemy import Integer, String, ForeignKey, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_login import UserMixin
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True) 
@@ -35,6 +38,12 @@ class Comment(db.Model):
     thread = relationship("Thread", back_populates="comments")
     date = db.Column(DateTime(timezone=True), server_default=func.now())
     content = db.Column(db.String(1000))
+
+# Create a class Form
+class Form(FlaskForm):
+    name = StringField("Name", validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired()])
+    submit = SubmitField("Submit")
     
 
 

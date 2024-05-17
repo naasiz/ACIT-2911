@@ -84,7 +84,7 @@ h1{
 
 
 /* For the smartphones */
-@media screen and (max-width: 460px) {
+@media screen and (max-width: 790px) {
     .container{
         margin: 10px;
         padding: 10px;
@@ -108,7 +108,7 @@ h1{
   }
 
 /* For the tablets */
-@media screen and (min-width: 460px) and (max-width: 1024px) {
+@media screen and (min-width: 800px) and (max-width: 1024px) {
     .container{
         margin: 15px;
         padding: 15px;
@@ -188,8 +188,7 @@ a.navbar-burger {
 
 /* Adjustments for smaller screens */
 /* Navbar style for phone */
-
-@media screen and (max-width: 1087px) {
+@media screen and (max-width: 1023px) {
     a.navbar-item:not(.brand),
     a.navbar-item:not(.brand):hover,
     div.navbar-end {
@@ -283,6 +282,7 @@ a.navbar-burger {
 
 .search-box input{
     padding: 10px;
+    width: 70%;
 }
 
 .search-box button{
@@ -298,7 +298,7 @@ a.navbar-burger {
 }
 
 /* search box for smrtphones */
-@media screen and (max-width: 460px){
+@media screen and (max-width: 320px){
     .search-box input, .search-box button, .search-box select{
         min-width: 300px;
         margin-top: 5px;

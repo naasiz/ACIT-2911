@@ -16,3 +16,7 @@ def test_index(client):
     response.content_type == 'text/html; charset=utf-8'
     print(response.data)
     assert response.status_code == 200
+    
+
+    
+    

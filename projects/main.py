@@ -2,7 +2,10 @@ from flask import Blueprint, Flask, render_template, redirect, url_for, request,
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_required, current_user, login_user, logout_user
 from db.db import db
-from models.models import User, Thread, Comment, Subheading
+from models.models import User, Thread, Comment, Subheading, Form
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, validators
+from wtforms.validators import DataRequired
 
 main = Blueprint('main', __name__)
 
@@ -22,7 +25,7 @@ def index():
         return render_template('forums.html', subheadings=results)
 
 # For rending the currently logged in profile page
-@main.route('/profile')
+@main.route('/profile', methods=['GET','POST'])
 @login_required
 def profile():
     return render_template('/auth/profile.html',  user=current_user)
@@ -175,6 +178,46 @@ def downvote():
     # Return the updated count
     return jsonify({'downvotes': 5})
 
+# Update database record
+
+@main.route('/update<int:id>', methods=['GET', 'POST'])
+@login_required
+def update(id):
+    form = Form()
+    name_to_update = db.get_or_404(User, id)
+    if request.method == "POST":
+        # print(form)
+        # print(form.name)
+        # print(form.email)
+        print(request.form['name'])
+        print(request.form['email'])
+        name_to_update.name = request.form['name']
+        name_to_update.email =request.form['email']
+        try:
+            db.session.commit()
+            # flash("User Updated Successfully")
+            # return render_template("update.html", form=form, name_to_update=name_to_update, user=current_user)
+            return redirect(url_for('main.profile'))        
+        except:
+            db.session.commit()
+            # flash("Error, there are problems, try again")
+            return render_template("update.html", form=form, name_to_update=name_to_update,id=id, user=current_user)
+    else:
+        return render_template("update.html", form=form, name_to_update=name_to_update,id=id, user=current_user)
+
+
+
+
+
+# @main.route('/update', methods=['GET', 'POST'])
+# def update():
+#     name = None
+#     form = Form()
+#     # Validate form
+#     if form.validate_on_submit():
+#         name = form.name.data
+#         form.name.data = ""
+#     return render_template("update.html", name = name, form = form, user = current__user)
 if __name__ == "__main__":
     main.run(debug=True)
 
