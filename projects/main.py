@@ -1,17 +1,12 @@
-from flask import Blueprint, Flask, render_template, redirect, url_for, request, flash, jsonify
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import LoginManager, login_required, current_user, login_user, logout_user
+from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask_login import login_required, current_user 
 from db.db import db
 from models.models import User, Thread, Comment, Subheading, Form
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, validators
-from wtforms.validators import DataRequired
 
 main = Blueprint('main', __name__)
 
-
 # Main Routes
-# For rendering all the threads
+# For rendering forums.html
 @main.route('/')
 def index():
     statement=db.select(Subheading).order_by(Subheading.id)
@@ -24,20 +19,34 @@ def index():
     except AttributeError:
         return render_template('forums.html', subheadings=results)
 
-# For rending the currently logged in profile page
-@main.route('/profile', methods=['GET','POST'])
+# For rendering profile.html
+@main.route('/profile')
 @login_required
 def profile():
     return render_template('/auth/profile.html',  user=current_user)
 
-# For rending the thread's comments
+# For rendering the thread_detailed.html
 @main.route('/thread_detailed/<int:thread_id>')
 def thread_detailed(thread_id):
     thread = db.get_or_404(Thread, thread_id)
     thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
-    return render_template("thread_detailed.html", thread = thread, user=current_user)
-    
-# For rending the add page
+    try:
+        if int(thread.author.id) == int(current_user.id):
+            print(thread.author.id)
+            print(current_user.id)
+            return render_template("thread_detailed.html", thread = thread, user=current_user, edit = False, own = True)
+        else:
+            return render_template("thread_detailed.html", thread = thread, user=current_user, edit = False, own = False)
+    except:
+        return render_template("thread_detailed.html", thread = thread, user=current_user, edit = False, own = False)
+
+@main.route('/thread_detailed/edit/<int:thread_id>')
+def thread_edit(thread_id):
+    thread = db.get_or_404(Thread, thread_id)
+    thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
+    return render_template("thread_detailed.html", thread = thread, user=current_user, edit = True)
+   
+# For rendering the add_thread.html
 @main.route('/add')
 def add_page():
     stmt = db.select(Subheading).order_by(Subheading.id)
@@ -69,6 +78,17 @@ def del_thread(thread_id):
     db.session.commit()
     return redirect(url_for('main.index'))
 
+# For editing the thread 
+@main.route("/thread_detailed/editing/<int:thread_id>", methods=["POST"])
+def thread_update(thread_id):
+    thread=db.get_or_404(Thread, thread_id)
+    if request.form["title"] == "":
+        return redirect(url_for('main.thread_detailed', thread_id=thread.id))
+    thread.title=request.form["title"] 
+    thread.content=request.form["content"] 
+    db.session.commit()
+    return redirect(url_for('main.thread_detailed', thread_id=thread.id))
+
 # For adding comments   
 @main.route("/thread_detailed/<int:thread_id>", methods=["POST"])
 def add_comment(thread_id):
@@ -81,8 +101,7 @@ def add_comment(thread_id):
             db.session.add(Comment(thread=thread, content=request.form["content"]))
         db.session.commit()
     return redirect(url_for('main.thread_detailed', thread_id=thread_id))
-            
-# For updating user information
+
 @main.route('/update<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
@@ -95,7 +114,7 @@ def update(id):
         print(request.form['name'])
         print(request.form['email'])
         name_to_update.name = request.form['name']
-        name_to_update.email = request.form['email']
+        name_to_update.email =request.form['email']
         try:
             db.session.commit()
             # flash("User Updated Successfully")
@@ -107,22 +126,3 @@ def update(id):
             return render_template("update.html", form=form, name_to_update=name_to_update,id=id, user=current_user)
     else:
         return render_template("update.html", form=form, name_to_update=name_to_update,id=id, user=current_user)
-
-
-
-
-
-# @main.route('/update', methods=['GET', 'POST'])
-# def update():
-#     name = None
-#     form = Form()
-#     # Validate form
-#     if form.validate_on_submit():
-#         name = form.name.data
-#         form.name.data = ""
-#     return render_template("update.html", name = name, form = form, user = current__user)
-if __name__ == "__main__":
-    main.run(debug=True)
-
-# if __name__ == "__main__":
-#     main.run(host='0.0.0.0', port=4000)
