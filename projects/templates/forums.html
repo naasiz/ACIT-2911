@@ -1,9 +1,10 @@
 {% extends "base.html" %} {% block content %}
 {% if current_user.is_authenticated %}
-<button> <a href="{{ url_for('main.add_page')}}">
+<div style="display: flex; justify-content: center;">
+    <a href="{{ url_for('main.add_page')}}" class="button" style="font-size: 0.9rem; color: #3273dc; box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; width: 80%; margin-top: 40px;">
         Add Thread
     </a>
-</button>
+</div>
 {% endif %}
 <div class="container">
     {% for subheading in subheadings %}
@@ -67,6 +68,7 @@
     <span>&copy; BCIT | All Rights Reserved</span>
 </footer>
 <style>
+
 /* Style the upvote arrow */
 .upvote-btn i {
     cursor: pointer; /* Change cursor to pointer on hover */

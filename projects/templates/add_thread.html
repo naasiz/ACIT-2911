@@ -1,11 +1,12 @@
 {% extends "base.html" %} {% block content %}
 {% block searchbar %} {% endblock %}
-<body class="centered-box">
+<body class="Star-background" style="display: flex; flex-direction: column;">
+  <canvas id="canvas"></canvas>
   <form action="{{ url_for('main.add_thread') }}" method="POST" class="centered-box">
-    <div class="formbold-main-wrapper">
+    <div class="box formbold-main-wrapper has-background-light">
       <!-- Author: FormBold Team -->
       <!-- Learn More: https://formbold.com -->
-      <div class="formbold-form-wrapper" style="background-color:#F6F6EF;">
+      <div class="box formbold-form-wrapper" style="background-color:#F6F6EF;">
           {% with messages = get_flashed_messages() %} {% if messages %}
           <div class="notification is-danger">{{ messages[0] }}</div>
           {% endif %} {% endwith %}
@@ -54,14 +55,16 @@
         /* display: flex;
         align-items: center;
         justify-content: center; */
-        width: 60%;
-        padding: 10px;
+        width: 55%;
+        min-width: 320px;
+        margin: 30px 10px;
         border: 1px solid #000;
+        border-radius: 10px;
       }
   
       .formbold-form-wrapper {
         margin: 0 auto;
-        max-width: 550px;
+        /* max-width: 550px; */
         width: 100%;
         background: white;
       }
@@ -113,7 +116,8 @@
       .formbold-radio-label
         .formbold-input-radio:checked
         ~ .formbold-radio-checkmark {
-        background-color: #6a64f1;
+        background-color:#003c71;
+        /* background-color: #6a64f1; */
       }
       .formbold-radio-checkmark:after {
         content: "";
@@ -153,15 +157,18 @@
         color: #536387;
       }
       .formbold-form-input:focus {
-        border-color: #6a64f1;
+        /* border-color: #6a64f1; */
+        border-color: #3273dc;
         box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.05);
       }
       .formbold-form-label {
         color: #07074d;
         font-size: 14px;
+        font-weight: bold;
         line-height: 24px;
         display: block;
-        margin-bottom: 10px;
+        /* margin-bottom: 10px; */
+        margin-top: 10px;
       }
   
       .formbold-btn {
@@ -172,7 +179,8 @@
         padding: 14px 25px;
         border: none;
         font-weight: 500;
-        background-color: #6a64f1;
+        /* background-color: #6a64f1; */
+        background-color:#003c71;
         color: white;
         cursor: pointer;
         margin-top: 25px;
