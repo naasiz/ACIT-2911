@@ -405,56 +405,6 @@ footer{
     font-weight: bolder;
 }
 
-
-
-
-
-/*            Couse detail.html                      */
-
-
-.head{
-    display: flex;
-    background-color: #e6e6de;
-    padding: 5px;
-    font-weight: bold;
-    font-size: 15px;
-}
-
-.authors{
-    flex: 20%;
-}
-
-.content{
-    flex: 80%;
-    margin-top: 60px;  
-    /* need to adjust */
-}
-
-.body{
-    display: flex;
-    background-color: #e6e6de;
-    padding: 10px;
-    margin-top: 5px;
-}
-
-.body .authors .username{
-    font-size: 20px;
-}
-
-.body .authors img{
-    max-width: 50px;
-    max-height: 80px;
-}
-
-.body .content .comment button{
-    border:none;
-    padding:10px;
-    font-weight: bolder;
-    box-shadow: 4px 6px #fff;
-    cursor: pointer;
-    float: right;
-}
-
 /* comment section */
 .comment-area{
     margin-bottom:50px;
@@ -518,7 +468,9 @@ body {
     background-color: #F1F1F1;
   }
 
-
+form {
+    z-index: 100;
+}
 
 
 
