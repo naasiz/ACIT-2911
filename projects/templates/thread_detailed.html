@@ -1,18 +1,18 @@
 {% extends "base.html" %} {% block content %}
-        
-
 <!--starts here-->
       <div class="main">
         <div class="subforum-row">
           <div class="subforum-icon subforum-column center">
               <i class="fa fa-user center"></i>
           </div>
-            {% if not edit and own %}
+            {% if (not edit and own) or (not edit and current_user.id==1) %}
           <div class="subforum-description subforum-column">
               <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
               <p>{{ thread.content }}</p>
               <div style="display: flex;">
+                {% if current_user.id != 1 and own %}
                 <button class="formbold-btn"><a href="{{ url_for('main.thread_edit', thread_id=thread.id)}}">Edit Thread</a></button>
+                {% endif %}
                 <form action="{{ url_for('main.del_thread', thread_id=thread.id) }}" method="POST">
                   <button class="formbold-btn" type="submit"><a>Delete Thread</a></button>
                 </form>
@@ -84,6 +84,11 @@
             <p class="comment-ts">{{comment.date}}</p>
           </div>
           <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
+          {% if (comment.author.id == current_user.id) or(current_user.id == 1) %}
+          <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
+            <button type="submit">Delete Comment</button>
+          </form>
+          {% endif %}
         </div>
         {% endfor %}
         <form action="{{ url_for('main.add_comment', thread_id= thread.id ) }}" method="POST">

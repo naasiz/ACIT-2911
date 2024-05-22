@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import  login_required, current_user, login_user, logout_user
+from flask_login import login_required, current_user, login_user, logout_user
 from db.db import db
 from models.models import User
 auth = Blueprint('auth', __name__)
@@ -62,3 +62,17 @@ def signup_post():
     db.session.add(new_user)
     db.session.commit()
     return redirect(url_for('auth.login'))
+
+@auth.route('/users')
+@login_required
+def users():
+    stmt=db.select(User).where(User.id != 1)
+    results=db.session.execute(stmt).scalars()
+    return render_template('/auth/list_users.html', users=results, user=current_user)
+
+@auth.route('/users/delete/<int:id>', methods=["POST"])
+def del_user(id):
+    user=db.get_or_404(User, id)
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('auth.users'))

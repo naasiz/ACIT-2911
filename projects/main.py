@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user 
+from flask_admin import Admin
 from db.db import db
 from models.models import User, Thread, Comment, Subheading, Form
 from datetime import datetime, date
@@ -103,19 +104,30 @@ def add_comment(thread_id):
         db.session.commit()
     return redirect(url_for('main.thread_detailed', thread_id=thread_id))
 
+@main.route('/del/subheading/<int:subheading_id>', methods=["POST"])
+def del_subheading(subheading_id):
+    subheading=db.get_or_404(Subheading, subheading_id)
+    db.session.delete(subheading)
+    db.session.commit()
+    return redirect(url_for('main.index'))
+
+@main.route('/del/comment/<int:comment_id>', methods=["POST"])
+def del_comment(comment_id):
+    comment=db.get_or_404(Comment, comment_id)
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(url_for('main.thread_detailed', thread_id=comment.thread_id))
+
 @main.route('/update<int:id>', methods=['GET', 'POST'])
 @login_required
 def update(id):
     form = Form()
     name_to_update = db.get_or_404(User, id)
     if request.method == "POST":
-        
         dateofbirth=request.form['date_of_birth'].split('-')
         year=int(dateofbirth[0])
         month=int(dateofbirth[1])
         day=int(dateofbirth[2])
-  
-    
         print(request.form['name'])
         print(request.form['email'])
         name_to_update.name = request.form['name']

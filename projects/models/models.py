@@ -8,13 +8,13 @@ from wtforms.validators import DataRequired
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True) 
-    email = db.Column(db.String(100), unique=True)
+    email = db.Column(db.String(100), unique=True, nullable=True)
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
     description = db.Column(db.String(1000))
     date_of_birth = db.Column(db.Date)
-    threads = relationship("Thread")
-    comments = relationship("Comment")
+    threads = relationship("Thread", cascade="all, delete")
+    comments = relationship("Comment", cascade="all, delete")
     
 class Subheading(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -44,10 +44,16 @@ def create_comment():
     comment.content = "SysAdmin was my favourite course!"
     db.session.commit()
 
+def create_admin():
+    admin=User(name="Admin", email="Admin@gmail.com", password=generate_password_hash('Admin@', method='pbkdf2:sha256'))
+    db.session.add(admin)
+    db.session.commit()
+    
 def run():
     with create_app().app_context():
         db.drop_all()
         db.create_all()
+        create_admin()
         create_User()
         create_Thread()
         create_comment()     
