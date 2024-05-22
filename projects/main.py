@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from flask_login import login_required, current_user 
-from flask_admin import Admin
 from db.db import db
 from models.models import User, Thread, Comment, Subheading, Form
 from datetime import datetime, date
@@ -128,15 +127,10 @@ def update(id):
         year=int(dateofbirth[0])
         month=int(dateofbirth[1])
         day=int(dateofbirth[2])
-        print(request.form['name'])
-        print(request.form['email'])
         name_to_update.name = request.form['name']
         name_to_update.email =request.form['email']
         name_to_update.description =request.form['description']
         name_to_update.date_of_birth = datetime(year, month, day).date()
-
-        print(name_to_update.description)
-        print(f"{type(name_to_update.date_of_birth)} {name_to_update.date_of_birth}")
         try:
             db.session.commit()
             # flash("User Updated Successfully")
