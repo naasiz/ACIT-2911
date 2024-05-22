@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block searchbar %} {% endblock %}
+{% block content %} 
+<body class="centered-box">
+    <style>
+        .label:not(:last-child) {
+            margin-bottom: 0;
+            margin-top: .5em;
+        }
+        .field {
+            padding: 15px;
+        }
+        form {
+            border: 1px solid #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .headpage {
+            color: #000;
+        }
+        </style>
+   
+   {% if id == current_user.id %}
+
+   <div class="centered-box">
+        <div class="headpage">
+            <h1 class="is-size-2" style="color: #000; font-weight: bolder;">Update User</h1>
+        </div>
+        <form action="{{ url_for('main.update', id = current_user.id) }}" method="POST" style="width: 70%" >
+            <div class="field has-background-light">
+                <div>
+                    <h1 class="is-size-3 has-text-centered"  style="color: #000;">Update Your Profile</h1> <br>
+                </div>
+                {{ form.hidden_tag() }}
+                {{ form.name.label(class="label is-size-5") }}
+                {{ form.name(style="width: 100%", class='input is-medium') }}<br>
+                {{ form.email.label(class="label is-size-5") }}
+                {{ form.email(style="width: 100%", class='input is-medium') }}<br><br>
+                {{ form.submit() }}
+            </div>
+        </form>
+    </div>
+    {% else %}
+    Sorry! You cannot update this profile, authentication is wrong.
+    {% endif %}
+
+</body>
+{% endblock %}

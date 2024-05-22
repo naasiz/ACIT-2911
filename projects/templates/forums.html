@@ -1,9 +1,10 @@
 {% extends "base.html" %} {% block content %}
-
-<button> <a href="{{ url_for('add_page')}}">
+{% if current_user.is_authenticated %}
+<button> <a href="{{ url_for('main.add_page')}}">
         Add Thread
     </a>
 </button>
+{% endif %}
 <div class="container">
     {% for subheading in subheadings %}
     <div class="subforum">
@@ -16,7 +17,7 @@
                 <i class="fa fa-user center"></i>
             </div>
             <div class="subforum-description subforum-column">
-                <h4><a href="{{ url_for('thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
+                <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
                 <p>{{ thread.content }}</p>
                 <div class="subforum-upvote-downvote">
                     <span class="upvote-btn" data-thread-id="{{ thread.id }}">
@@ -28,12 +29,7 @@
                     </span>
                     <span class="downvote-count">{{ thread.downvotes }}</span>
                 </div>
-                
-                
             </div>
-            
-        
-
             {% if thread.count == 1 %}
             <div class="subforum-stats subforum-column center">
                 <span>{{ thread.count }} Comment </span>
@@ -50,7 +46,6 @@
                 <b><a href="">Last post</a></b> by <a href="">Anonymous</a>
                 {% endif %}
                 <br>on <small>{{ thread.date }}</small>
-
             </div>
         </div>
         {% endfor %}
@@ -58,10 +53,6 @@
 
     </div>
 </div>
-
-
-
-
 <!-- Forum Info -->
 <div class="forum-info">
     <div class="chart">
@@ -75,8 +66,6 @@
 <footer>
     <span>&copy; BCIT | All Rights Reserved</span>
 </footer>
-
-
 <style>
 /* Style the upvote arrow */
 .upvote-btn i {
@@ -98,10 +87,7 @@
     color: rgb(0, 234, 255); /* Set the color to blue */
 }
 
-
-
 </style>
-
 <script>
     $(document).ready(function() {
         $('.upvote-btn').click(function() {
@@ -149,15 +135,5 @@
         });
     });
 </script>
-
-
-
-
-
-
-
-
-
-
 </body>
 {% endblock %}

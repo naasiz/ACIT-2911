@@ -21,6 +21,10 @@
 *.zip
 __pycache__/
 instance/
+.vscode/
+.pytest_cache/
+projects/__pycache__/
+projects/.pytest_cache/
 
 # Logs and databases #
 ######################

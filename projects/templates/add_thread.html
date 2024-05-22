@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block content %}
 {% block searchbar %} {% endblock %}
-<form action="{{ url_for('add_thread') }}" method="POST">
+<form action="{{ url_for('main.add_thread') }}" method="POST">
   <div class="formbold-main-wrapper">
     <!-- Author: FormBold Team -->
     <!-- Learn More: https://formbold.com -->
@@ -8,7 +8,6 @@
         {% with messages = get_flashed_messages() %} {% if messages %}
         <div class="notification is-danger">{{ messages[0] }}</div>
         {% endif %} {% endwith %}
-
         <div>
           <select name="subheading" id="subheading">
             {% for subheading in subheadings %}

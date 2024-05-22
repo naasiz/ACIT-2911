@@ -1,11 +1,24 @@
 {% extends "base.html" %}
 {% block searchbar %}{% endblock %}
 {% block content %}
-<body class="centered-box">
-  <section class="has-background-purple centered-box">
-    <h1 class="title">
-      Welcome, {{ user.name }}!
-    </h1>
-  </section>
+{% for message in get_flashed_messages() %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+{%endfor%}
+<body>  
+  <div class="card-content">
+    <h5 class="card-header-title is-size-3">Welcome to users dashboard {{ current_user.name }} </h5>
+    <p class="is-size-5">
+      <strong>User Name: </strong> {{ current_user.name }}<br>
+      <strong>User ID: </strong>{{ current_user.id }}<br>
+      <strong>Email: </strong>{{ current_user.email }}<br>
+    </p><br>
+    <a class="button is-dark" href="{{ url_for('auth.logout')}}">Log out</a>
+    <a class="button is-dark" href="{{ url_for('main.update', id = current_user.id)}}">Edit Profile</a>
+  </div><br>
 </body>
+
+
 {% endblock %}
