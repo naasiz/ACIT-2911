@@ -43,9 +43,9 @@
             {% endif %}
             <div class="subforum-info subforum-column">
                 {% if thread.author.name %}
-                <b><a href="">Last post</a></b> by <a href="">{{ thread.author.name }}</a>
+                <b><a href=""></a></b> by <a href="">{{ thread.author.name }}</a>
                 {% else %}
-                <b><a href="">Last post</a></b> by <a href="">Anonymous</a>
+                <b><a href=""></a></b> by <a href="">Anonymous</a>
                 {% endif %}
                 <br>on <small>{{ thread.date }}</small>
             </div>
@@ -93,14 +93,6 @@
                     <span>{{ thread.count }} Comments </span>
                 </div>
                 {% endif %}
-                <div class="subforum-info subforum-column">
-                    {% if thread.author.name %}
-                    <b><a href="">Last post</a></b> by <a href="">{{ thread.author.name }}</a>
-                    {% else %}
-                    <b><a href="">Last post</a></b> by <a href="">Anonymous</a>
-                    {% endif %}
-                    <br>on <small>{{ thread.date }}</small>
-                </div>
             </div>
             
             {% endfor %}
