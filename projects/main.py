@@ -115,6 +115,8 @@ def update(id):
         print(request.form['email'])
         name_to_update.name = request.form['name']
         name_to_update.email =request.form['email']
+        name_to_update.description =request.form['description']
+        print(name_to_update.description)
         try:
             db.session.commit()
             # flash("User Updated Successfully")

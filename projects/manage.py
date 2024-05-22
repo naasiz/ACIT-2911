@@ -6,8 +6,8 @@ import random
 
 
 def create_User():
-    db.session.add(User(email="tristanjames3131@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Tristan James Torres"))
-    db.session.add(User(email="mmangilin22@my.bcit.ca", password=generate_password_hash('@Meriel2002', method='pbkdf2:sha256'), name="Meriel Mangilin"))
+    db.session.add(User(email="tristanjames3131@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Tristan James Torres", description="I am a student at BCIT studying Computer Systems Technology."))
+    db.session.add(User(email="mmangilin22@my.bcit.ca", password=generate_password_hash('@Meriel2002', method='pbkdf2:sha256'), name="Meriel Mangilin", description="I am a student at BCIT studying Computer Systems Technology."))
     db.session.commit()
 
 def create_Thread():
