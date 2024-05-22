@@ -3,7 +3,7 @@ from sqlalchemy import Integer, String, ForeignKey, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from flask_login import UserMixin
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField
+from wtforms import StringField, SubmitField, TextAreaField, DateField
 from wtforms.validators import DataRequired
 
 class User(UserMixin, db.Model):
@@ -12,6 +12,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100))
     name = db.Column(db.String(1000))
     description = db.Column(db.String(1000))
+    date_of_birth = db.Column(db.Date)
     threads = relationship("Thread")
     comments = relationship("Comment")
     
@@ -45,7 +46,7 @@ class Form(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
     description = TextAreaField("Description")
-    
+    date_of_birth = DateField("Date of Birth")
     submit = SubmitField("Submit")
     
 
