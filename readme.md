@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ```bash
 py app.py
 ```
-4. Click the [link](http://127.0.0.1:8888).
+4. Click the [link](http://127.0.0.1:5000).
 
 ## Contributors
 Tristan James Torres
