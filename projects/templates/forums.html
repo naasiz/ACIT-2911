@@ -106,6 +106,7 @@
             /* Set the color to blue */
         }
     </style>
+    {% if current_user.is_authenticated %}
     <script>
         $(document).ready(function() {
             $('.upvote-btn').click(function() {
@@ -182,6 +183,6 @@
             });
         });
     </script>
-
+    {% endif %}
     </body>
     {% endblock %}

@@ -4,249 +4,157 @@ from db.db import db
 from models.models import User, Thread, Comment, Subheading, Form, User_Thread_Upvotes
 from datetime import datetime, date
 
-main = Blueprint('main', __name__)
+main = Blueprint('main', __name__)  # Create a Blueprint object named 'main'
 
 # Main Routes
 
-# For rendering forums.html
-@main.route('/')
+@main.route('/')  # Route decorator for the index route
 def index():
-    # Query the database to get all subheadings and order them by id
-    statement = db.select(Subheading).order_by(Subheading.id)
-    # Execute the query and convert the results to a list
-    results = list(db.session.execute(statement).scalars())
-    # Iterate over each subheading
-    for subheading in results:
-        # Iterate over each thread in the subheading
-        for thread in subheading.threads:
-            # Count the number of comments for each thread
-            thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
+    statement = db.select(Subheading).order_by(Subheading.id)  # Query the database to get all subheadings and order them by id
+    results = list(db.session.execute(statement).scalars())  # Execute the query and convert the results to a list
+    for subheading in results:  # Iterate over each subheading
+        for thread in subheading.threads:  # Iterate over each thread in the subheading
+            thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()  # Count the number of comments for each thread
             try:
-                thread.upvotes = db.session.query(User_Thread_Upvotes).filter(User_Thread_Upvotes.thread_id == thread.id).count()
-                thread.upvoted = db.session.query(User_Thread_Upvotes).filter(User_Thread_Upvotes.thread_id == thread.id).filter(User_Thread_Upvotes.user_id == current_user.id).count()
-                print(thread.upvoted)
-                print(type(thread.upvoted))
-                # print(thread.upvotes)
-                # print(type(thread.upvotes))
+                thread.upvotes = db.session.query(User_Thread_Upvotes).filter(User_Thread_Upvotes.thread_id == thread.id).count()  # Count the number of upvotes for each thread
+                thread.upvoted = db.session.query(User_Thread_Upvotes).filter(User_Thread_Upvotes.thread_id == thread.id).filter(User_Thread_Upvotes.user_id == current_user.id).count()  # Check if the current user has upvoted the thread
             except:
-                thread.upvotes = 0
+                thread.upvotes = db.session.query(User_Thread_Upvotes).filter(User_Thread_Upvotes.thread_id == thread.id).count()  # Count the number of upvotes for each thread
     try:
-        # Render the forums.html template with the subheadings and current user
-        return render_template('forums.html', subheadings=results, user=current_user)
+        return render_template('forums.html', subheadings=results, user=current_user)  # Render the forums.html template with the subheadings and current user
     except AttributeError:
-        # If there is no current user, render the forums.html template without the user
-        return render_template('forums.html', subheadings=results)
+        return render_template('forums.html', subheadings=results)  # If there is no current user, render the forums.html template without the user
 
-# For rendering profile.html
-@main.route('/profile')
-@login_required
+@main.route('/profile')  # Route decorator for the profile route
+@login_required  # Require login to access the profile route
 def profile():
-    # Render the profile.html template with the current user
-    return render_template('/auth/profile.html', user=current_user)
+    return render_template('/auth/profile.html', user=current_user)  # Render the profile.html template with the current user
 
-# For rendering the thread_detailed.html
-@main.route('/thread_detailed/<int:thread_id>')
+@main.route('/thread_detailed/<int:thread_id>')  # Route decorator for the thread_detailed route
 def thread_detailed(thread_id):
-    # Get the thread with the specified thread_id from the database
-    thread = db.get_or_404(Thread, thread_id)
-    # Count the number of comments for the thread
-    thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
+    thread = db.get_or_404(Thread, thread_id)  # Get the thread with the specified thread_id from the database
+    thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()  # Count the number of comments for the thread
     try:
-        # Check if the current user is the author of the thread
-        if int(thread.author.id) == int(current_user.id):
-            # Render the thread_detailed.html template with the thread, current user, and edit and own flags
-            return render_template("thread_detailed.html", thread=thread, user=current_user, edit=False, own=True)
+        if int(thread.author.id) == int(current_user.id):  # Check if the current user is the author of the thread
+            return render_template("thread_detailed.html", thread=thread, user=current_user, edit=False, own=True)  # Render the thread_detailed.html template with the thread, current user, and edit and own flags
         else:
-            # Render the thread_detailed.html template with the thread, current user, and edit and own flags
-            return render_template("thread_detailed.html", thread=thread, user=current_user, edit=False, own=False)
+            return render_template("thread_detailed.html", thread=thread, user=current_user, edit=False, own=False)  # Render the thread_detailed.html template with the thread, current user, and edit and own flags
     except:
-        # Render the thread_detailed.html template with the thread, current user, and edit and own flags
-        return render_template("thread_detailed.html", thread=thread, user=current_user, edit=False, own=False)
+        return render_template("thread_detailed.html", thread=thread, user=current_user, edit=False, own=False)  # Render the thread_detailed.html template with the thread, current user, and edit and own flags
 
-@main.route('/thread_detailed/edit/<int:thread_id>')
+@main.route('/thread_detailed/edit/<int:thread_id>')  # Route decorator for the thread_edit route
 def thread_edit(thread_id):
-    # Get the thread with the specified thread_id from the database
-    thread = db.get_or_404(Thread, thread_id)
-    # Count the number of comments for the thread
-    thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
-    # Render the thread_detailed.html template with the thread, current user, and edit flag
-    return render_template("thread_detailed.html", thread=thread, user=current_user, edit=True)
+    thread = db.get_or_404(Thread, thread_id)  # Get the thread with the specified thread_id from the database
+    thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()  # Count the number of comments for the thread
+    return render_template("thread_detailed.html", thread=thread, user=current_user, edit=True)  # Render the thread_detailed.html template with the thread, current user, and edit flag
 
-# For rendering the add_thread.html
-@main.route('/add')
+@main.route('/add')  # Route decorator for the add_page route
 def add_page():
-    # Query the database to get all subheadings and order them by id
-    stmt = db.select(Subheading).order_by(Subheading.id)
-    # Execute the query and convert the results to a list
-    results = list(db.session.execute(stmt).scalars())
-    # Render the add_thread.html template with the current user and subheadings
-    return render_template("add_thread.html", user=current_user, subheadings=results)
+    stmt = db.select(Subheading).order_by(Subheading.id)  # Query the database to get all subheadings and order them by id
+    results = list(db.session.execute(stmt).scalars())  # Execute the query and convert the results to a list
+    return render_template("add_thread.html", user=current_user, subheadings=results)  # Render the add_thread.html template with the current user and subheadings
 
 # Post Routes
-# For adding a thread
-@main.route('/', methods=["POST"])
+
+@main.route('/', methods=["POST"])  # Route decorator for the add_thread route
 def add_thread():
-    # Check if the content and title fields are not empty
-    if request.form["content"] != "" and request.form["title"] != "":
-        # Get the subheading with the specified subheading_id from the database
-        subheading = db.get_or_404(Subheading, int(request.form["subheading"]))
+    if request.form["content"] != "" and request.form["title"] != "":  # Check if the content and title fields are not empty
+        subheading = db.get_or_404(Subheading, int(request.form["subheading"]))  # Get the subheading with the specified subheading_id from the database
         try:
-            # Check if there is a current user
-            user = db.get_or_404(User, current_user.id)
-            # Create a new thread with the author, subheading, title, and content
-            db.session.add(Thread(author=user, subheading=subheading, title=request.form["title"], content=request.form["content"]))
+            user = db.get_or_404(User, current_user.id)  # Check if there is a current user
+            db.session.add(Thread(author=user, subheading=subheading, title=request.form["title"], content=request.form["content"]))  # Create a new thread with the author, subheading, title, and content
         except:
-            # Create a new thread with the subheading, title, and content
-            db.session.add(Thread(title=request.form["title"], subheading=subheading, content=request.form["content"]))
-        # Commit the changes to the database
-        db.session.commit()
-        # Redirect to the index route
-        return redirect(url_for('main.index'))
+            db.session.add(Thread(title=request.form["title"], subheading=subheading, content=request.form["content"]))  # Create a new thread with the subheading, title, and content
+        db.session.commit()  # Commit the changes to the database
+        return redirect(url_for('main.index'))  # Redirect to the index route
     else:
-        # Flash an error message and redirect to the add_page route
-        flash('Please check your title and content are not empty and try again.')
-        return redirect(url_for('main.add_page'))
+        flash('Please check your title and content are not empty and try again.')  # Flash an error message
+        return redirect(url_for('main.add_page'))  # Redirect to the add_page route
 
-# For deleting thread
-@main.route("/thread_detailed/delete/<int:thread_id>", methods=["POST"])
+@main.route("/thread_detailed/delete/<int:thread_id>", methods=["POST"])  # Route decorator for the del_thread route
 def del_thread(thread_id):
-    # Get the thread with the specified thread_id from the database
-    thread = db.get_or_404(Thread, thread_id)
-    # Delete the thread from the database
-    db.session.delete(thread)
-    # Commit the changes to the database
-    db.session.commit()
-    # Redirect to the index route
-    return redirect(url_for('main.index'))
+    thread = db.get_or_404(Thread, thread_id)  # Get the thread with the specified thread_id from the database
+    db.session.delete(thread)  # Delete the thread from the database
+    db.session.commit()  # Commit the changes to the database
+    return redirect(url_for('main.index'))  # Redirect to the index route
 
-# For editing the thread
-@main.route("/thread_detailed/editing/<int:thread_id>", methods=["POST"])
+@main.route("/thread_detailed/editing/<int:thread_id>", methods=["POST"])  # Route decorator for the thread_update route
 def thread_update(thread_id):
-    # Get the thread with the specified thread_id from the database
-    thread = db.get_or_404(Thread, thread_id)
-    # Check if the title field is not empty
-    if request.form["title"] == "":
-        # Redirect to the thread_detailed route
-        return redirect(url_for('main.thread_detailed', thread_id=thread.id))
-    # Update the title and content of the thread
-    thread.title = request.form["title"]
+    thread = db.get_or_404(Thread, thread_id)  # Get the thread with the specified thread_id from the database
+    if request.form["title"] == "":  # Check if the title field is not empty
+        return redirect(url_for('main.thread_detailed', thread_id=thread.id))  # Redirect to the thread_detailed route
+    thread.title = request.form["title"]  # Update the title and content of the thread
     thread.content = request.form["content"]
-    # Commit the changes to the database
-    db.session.commit()
-    # Redirect to the thread_detailed route
-    return redirect(url_for('main.thread_detailed', thread_id=thread.id))
+    db.session.commit()  # Commit the changes to the database
+    return redirect(url_for('main.thread_detailed', thread_id=thread.id))  # Redirect to the thread_detailed route
 
-# For adding comments
-@main.route("/thread_detailed/<int:thread_id>", methods=["POST"])
+@main.route("/thread_detailed/<int:thread_id>", methods=["POST"])  # Route decorator for the add_comment route
 def add_comment(thread_id):
-    # Check if the content field is not empty
-    if request.form["content"] != "":
-        # Get the thread with the specified thread_id from the database
-        thread = db.get_or_404(Thread, thread_id)
+    if request.form["content"] != "":  # Check if the content field is not empty
+        thread = db.get_or_404(Thread, thread_id)  # Get the thread with the specified thread_id from the database
         try:
-            # Check if there is a current user
-            user = db.get_or_404(User, current_user.id)
-            # Create a new comment with the author, thread, and content
-            db.session.add(Comment(author=user, thread=thread, content=request.form["content"]))
+            user = db.get_or_404(User, current_user.id)  # Check if there is a current user
+            db.session.add(Comment(author=user, thread=thread, content=request.form["content"]))  # Create a new comment with the author, thread, and content
         except AttributeError:
-            # Create a new comment with the thread and content
-            db.session.add(Comment(thread=thread, content=request.form["content"]))
-        # Commit the changes to the database
-        db.session.commit()
-    # Redirect to the thread_detailed route
-    return redirect(url_for('main.thread_detailed', thread_id=thread_id))
+            db.session.add(Comment(thread=thread, content=request.form["content"]))  # Create a new comment with the thread and content
+        db.session.commit()  # Commit the changes to the database
+    return redirect(url_for('main.thread_detailed', thread_id=thread_id))  # Redirect to the thread_detailed route
 
-@main.route('/del/subheading/<int:subheading_id>', methods=["POST"])
+@main.route('/del/subheading/<int:subheading_id>', methods=["POST"])  # Route decorator for the del_subheading route
 def del_subheading(subheading_id):
-    # Get the subheading with the specified subheading_id from the database
-    subheading = db.get_or_404(Subheading, subheading_id)
-    # Delete the subheading from the database
-    db.session.delete(subheading)
-    # Commit the changes to the database
-    db.session.commit()
-    # Redirect to the index route
-    return redirect(url_for('main.index'))
+    subheading = db.get_or_404(Subheading, subheading_id)  # Get the subheading with the specified subheading_id from the database
+    db.session.delete(subheading)  # Delete the subheading from the database
+    db.session.commit()  # Commit the changes to the database
+    return redirect(url_for('main.index'))  # Redirect to the index route
 
-@main.route('/del/comment/<int:comment_id>', methods=["POST"])
+@main.route('/del/comment/<int:comment_id>', methods=["POST"])  # Route decorator for the del_comment route
 def del_comment(comment_id):
-    # Get the comment with the specified comment_id from the database
-    comment = db.get_or_404(Comment, comment_id)
-    # Delete the comment from the database
-    db.session.delete(comment)
-    # Commit the changes to the database
-    db.session.commit()
-    # Redirect to the thread_detailed route
-    return redirect(url_for('main.thread_detailed', thread_id=comment.thread_id))
+    comment = db.get_or_404(Comment, comment_id)  # Get the comment with the specified comment_id from the database
+    db.session.delete(comment)  # Delete the comment from the database
+    db.session.commit()  # Commit the changes to the database
+    return redirect(url_for('main.thread_detailed', thread_id=comment.thread_id))  # Redirect to the thread_detailed route
 
-@main.route('/update<int:id>', methods=['GET', 'POST'])
-@login_required
+@main.route('/update<int:id>', methods=['GET', 'POST'])  # Route decorator for the update route
+@login_required  # Require login to access the update route
 def update(id):
-    # Create a new instance of the Form class
-    form = Form()
-    # Get the user with the specified id from the database
-    name_to_update = db.get_or_404(User, id)
+    form = Form()  # Create a new instance of the Form class
+    name_to_update = db.get_or_404(User, id)  # Get the user with the specified id from the database
     if request.method == "POST":
-        # Split the date_of_birth string into year, month, and day
-        dateofbirth = request.form['date_of_birth'].split('-')
+        dateofbirth = request.form['date_of_birth'].split('-')  # Split the date_of_birth string into year, month, and day
         year = int(dateofbirth[0])
         month = int(dateofbirth[1])
         day = int(dateofbirth[2])
-        # Update the name, email, description, and date_of_birth of the user
-        name_to_update.name = request.form['name']
+        name_to_update.name = request.form['name']  # Update the name, email, description, and date_of_birth of the user
         name_to_update.email = request.form['email']
         name_to_update.description = request.form['description']
         name_to_update.date_of_birth = datetime(year, month, day).date()
         try:
-            # Commit the changes to the database
-            db.session.commit()
-            # Redirect to the profile route
-            return redirect(url_for('main.profile'))
+            db.session.commit()  # Commit the changes to the database
+            return redirect(url_for('main.profile'))  # Redirect to the profile route
         except:
             db.session.commit()
-            # Render the update.html template with the form, name_to_update, id, and current user
-            return render_template("update.html", form=form, name_to_update=name_to_update, id=id, user=current_user)
+            return render_template("update.html", form=form, name_to_update=name_to_update, id=id, user=current_user)  # Render the update.html template with the form, name_to_update, id, and current user
     else:
-        # Render the update.html template with the form, name_to_update, id, and current user
-        return render_template("update.html", form=form, name_to_update=name_to_update, id=id, user=current_user)
-    
-@main.route('/upvote', methods=['POST'])
+        return render_template("update.html", form=form, name_to_update=name_to_update, id=id, user=current_user)  # Render the update.html template with the form, name_to_update, id, and current user
+
+@main.route('/upvote', methods=['POST'])  # Route decorator for the upvote route
 def upvote():
     data = request.get_json()
     thread_id = data.get('thread_id')
     if thread_id:
-        # Adding upvote to the thread
-        stmt = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id).where(User_Thread_Upvotes.user_id == current_user.id)
+        stmt = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id).where(User_Thread_Upvotes.user_id == current_user.id)  # Check if the current user has upvoted the thread
         result = db.session.execute(stmt).scalar()
         if result is None:
-            db.session.add(User_Thread_Upvotes(thread_id=thread_id, user_id=current_user.id))
+            db.session.add(User_Thread_Upvotes(thread_id=thread_id, user_id=current_user.id))  # Add upvote to the thread
             db.session.commit()
         else:
-            db.session.delete(result)
+            db.session.delete(result)  # Remove upvote from the thread
             db.session.commit()
         
-        statement = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id)
+        statement = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id)  # Query the database to get all upvotes for the thread
         resultt = db.session.execute(statement).scalars()
-        count = len(list(resultt))
-        return jsonify({'status': 'success',"upvotes": count})
+        count = len(list(resultt))  # Count the number of upvotes
+        return jsonify({'status': 'success', "upvotes": count})  # Return success status and the number of upvotes
     else:
-        return jsonify({'status': 'error', 'message': 'No thread_id provided'}), 400
-# @main.route('/upvote', methods=['POST'])
-# def upvote():
-#     data = request.get_json()
-#     thread_id = data.get('thread_id')
-#     if thread_id:
-#         stmt = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id).where(User_Thread_Upvotes.user_id == current_user.id)
-#         result = db.session.execute(stmt).scalar()
-#         if result is None:
-#             db.session.add(User_Thread_Upvotes(thread_id=thread_id, user_id=current_user.id))
-#             action = 'added'
-#         else:
-#             db.session.delete(result)
-#             action = 'deleted'
-#         db.session.commit()
-#         statement = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id)
-#         resultt = db.session.execute(statement).scalars()
-#         count = len(list(resultt))
-#         return jsonify({'status': 'success', 'action': action, "upvotes": count})
-#     else:
-#         return jsonify({'status': 'error', 'message': 'No thread_id provided'}), 400
+        return jsonify({'status': 'error', 'message': 'No thread_id provided'}), 400  # Return error status if no thread_id is provided
+

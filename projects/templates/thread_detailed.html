@@ -92,10 +92,12 @@
         {% endif %}
       </div>
       {% endfor %}
+      {% if current_user.is_authenticated %}
       <form action="{{ url_for('main.add_comment', thread_id= thread.id ) }}" method="POST">
         <textarea id="content" name="content"></textarea>
         <button type="submit" class="button" style="font-size: smaller ;font-weight: bold; color: #3273dc; box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;">Add Comment</button>
       </form>
+      {% endif %}
     </div>
     <footer>
         <span>&copy;  BCIT | All Rights Reserved</span>
