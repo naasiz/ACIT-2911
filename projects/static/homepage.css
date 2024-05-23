@@ -35,15 +35,21 @@ h1{
 /*           Forums.html                       */
 
 .container{
-    margin: 20px;
-    padding: 20px;
+    margin: 20px 20px 0px 20px !important;
+    padding: 20px 20px 0px 20px;
+    min-width: 100dvw !important;
+
 }
+
 
 .subforum{
     margin-top:20px;
 }
 
 .subforum-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color:#003c71;
     padding: 5px;
     border-radius: 5px;
@@ -84,7 +90,7 @@ h1{
 
 
 /* For the smartphones */
-@media screen and (max-width: 790px) {
+@media screen and (max-width: 1024px) {
     .container{
         margin: 10px;
         padding: 10px;
@@ -93,7 +99,7 @@ h1{
     .subforum-row{
         display: grid;
         grid-template-columns: 25% 75%;
-        grid-template-rows: 65% 35%;
+        grid-template-rows: 65% 45%;
     }
 
     .subforum-devider{
@@ -108,7 +114,7 @@ h1{
   }
 
 /* For the tablets */
-@media screen and (min-width: 800px) and (max-width: 1024px) {
+/* @media screen and (min-width: 800px) and (max-width: 1024px) {
     .container{
         margin: 15px;
         padding: 15px;
@@ -131,7 +137,7 @@ h1{
         font-size: 16px;
     }
 
-  }
+  } */
 
   /* Nav Bar styles */
 div#navbarBasicExample.navbar-menu {
@@ -308,6 +314,7 @@ a.navbar-burger {
 
 /* forum info Styling */
 .forum-info{
+    margin-top: 25px;
     padding: 20px;
     color: white;
     background-color: #003c71;
@@ -319,12 +326,20 @@ a.navbar-burger {
 }
 /* Footer Styling */
 
+.page-container {
+    min-height: calc(100dvh - 219.89px);
+    display: grid;
+    place-content: center;
+    width: 100%;
+}
+
 footer{
     padding: 20px;
     color: white;
     background-color:  #003c71;
     display: block;
     text-align: center;
+    margin-top: auto;
 }
 
 
@@ -472,6 +487,16 @@ form {
     z-index: 100;
 }
 
+.admin-btns {
+    background: none; border: none; font-size: medium; font-weight: bold; text-decoration: underline; color: #fff;
+}
 
+.element-btns {
+    background: none; border: none; font-size: medium; text-decoration: underline; color: #3273dc; margin-top: 10px;
+}
+
+.comment-btns {
+    background: none; border: none; font-size: medium; font-weight: bold; text-decoration: underline; color: #000; margin-top: 10px;
+}
 
 
