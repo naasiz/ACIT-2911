@@ -33,15 +33,6 @@ def create_app():
 
     return app
 
-# def get_data():
-#     client=create_app().test_client()
-#     response = client.get('/')
-#     response.content_type == 'text/html; charset=utf-8'
-#     print(response.data)
-
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
-
-# if __name__ == '__main__':
-#     get_data()

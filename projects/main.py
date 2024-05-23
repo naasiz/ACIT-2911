@@ -1,12 +1,13 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_required, current_user 
 from db.db import db
-from models.models import User, Thread, Comment, Subheading, Form
+from models.models import User, Thread, Comment, Subheading, Form, User_Thread_Upvotes
 from datetime import datetime, date
 
 main = Blueprint('main', __name__)
 
 # Main Routes
+
 # For rendering forums.html
 @main.route('/')
 def index():
@@ -20,6 +21,10 @@ def index():
         for thread in subheading.threads:
             # Count the number of comments for each thread
             thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
+            try:
+                thread.upvotes = db.session.query(User_Thread_Upvotes).filter(User_Thread_Upvotes.thread_id == thread.id).count()
+            except:
+                thread.upvotes = 0
     try:
         # Render the forums.html template with the subheadings and current user
         return render_template('forums.html', subheadings=results, user=current_user)
@@ -198,3 +203,40 @@ def update(id):
     else:
         # Render the update.html template with the form, name_to_update, id, and current user
         return render_template("update.html", form=form, name_to_update=name_to_update, id=id, user=current_user)
+    
+@main.route('/upvote', methods=['POST'])
+def upvote():
+    data = request.get_json()
+    thread_id = data.get('thread_id')
+    if thread_id:
+        stmt = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id).where(User_Thread_Upvotes.user_id == current_user.id)
+        result = db.session.execute(stmt).scalar()
+        db.session.add(User_Thread_Upvotes(thread_id=thread_id, user_id=current_user.id))
+        action = 'added'
+        db.session.commit()
+        statement = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id)
+        resultt = db.session.execute(statement).scalars()
+        count = len(list(resultt))
+        return jsonify({'status': 'success', 'action': action, "upvotes": count})
+    else:
+        return jsonify({'status': 'error', 'message': 'No thread_id provided'}), 400
+# @main.route('/upvote', methods=['POST'])
+# def upvote():
+#     data = request.get_json()
+#     thread_id = data.get('thread_id')
+#     if thread_id:
+#         stmt = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id).where(User_Thread_Upvotes.user_id == current_user.id)
+#         result = db.session.execute(stmt).scalar()
+#         if result is None:
+#             db.session.add(User_Thread_Upvotes(thread_id=thread_id, user_id=current_user.id))
+#             action = 'added'
+#         else:
+#             db.session.delete(result)
+#             action = 'deleted'
+#         db.session.commit()
+#         statement = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id)
+#         resultt = db.session.execute(statement).scalars()
+#         count = len(list(resultt))
+#         return jsonify({'status': 'success', 'action': action, "upvotes": count})
+#     else:
+#         return jsonify({'status': 'error', 'message': 'No thread_id provided'}), 400

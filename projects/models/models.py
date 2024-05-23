@@ -41,6 +41,13 @@ class Comment(db.Model):
     date = db.Column(DateTime(timezone=True), server_default=func.now())
     content = db.Column(db.String(1000))
 
+class User_Thread_Upvotes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = mapped_column(Integer, ForeignKey(User.id), nullable=True)
+    thread_id = mapped_column(Integer, ForeignKey(Thread.id), nullable=True)
+    user = relationship("User")
+    thread = relationship("Thread")
+
 # Create a class Form
 class Form(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
@@ -49,5 +56,4 @@ class Form(FlaskForm):
     date_of_birth = DateField("Date of Birth")
     submit = SubmitField("Submit")
     
-
 
