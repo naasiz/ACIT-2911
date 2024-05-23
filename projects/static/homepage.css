@@ -91,10 +91,10 @@ h1{
 
 /* For the smartphones */
 @media screen and (max-width: 1024px) {
-    .container{
+    /* .container{
         margin: 10px;
         padding: 10px;
-    }
+    } */
 
     .subforum-row{
         display: grid;
@@ -102,6 +102,10 @@ h1{
         grid-template-rows: 65% 45%;
     }
 
+    .subforum-row:not(:nth-child(2)) {
+        margin-top: 20px;
+    }
+    
     .subforum-devider{
         display: block;
         border: 0;
