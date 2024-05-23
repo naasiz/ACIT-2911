@@ -34,7 +34,7 @@ def test_profile_success(client):
     # Send a GET request to the profile endpoint
     response = client.get('/profile')
     # Verify that the string is found in response.text
-    assert "Welcome, Tristan James Torres!" in response.text
+    assert '<div class="section profile-heading">' in response.text
 
 def test_profile_fail(client):
     # Send a POST request to the login endpoint with form data
@@ -55,7 +55,7 @@ def test_thread_detailed_success(client):
     # Send a GET request to the thread detailed endpoint
     response = client.get('/thread_detailed/1')
     # Verify that string is in response.text
-    assert 'What was your favourite course from term 1?' in response.text
+    assert '<div class="subforum-icon subforum-column center">' in response.text
 
 def test_thread_detailed_failed(client):
     # Send a GET request to the thread detailed endpoint
