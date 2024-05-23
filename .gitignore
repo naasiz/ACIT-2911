@@ -26,6 +26,7 @@ instance/
 projects/__pycache__/
 projects/.pytest_cache/
 projects/instance/
+.coverage
 
 # Logs and databases #
 ######################
