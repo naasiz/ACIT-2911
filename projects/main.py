@@ -23,6 +23,11 @@ def index():
             thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
             try:
                 thread.upvotes = db.session.query(User_Thread_Upvotes).filter(User_Thread_Upvotes.thread_id == thread.id).count()
+                thread.upvoted = db.session.query(User_Thread_Upvotes).filter(User_Thread_Upvotes.thread_id == thread.id).filter(User_Thread_Upvotes.user_id == current_user.id).count()
+                print(thread.upvoted)
+                print(type(thread.upvoted))
+                # print(thread.upvotes)
+                # print(type(thread.upvotes))
             except:
                 thread.upvotes = 0
     try:
@@ -209,15 +214,20 @@ def upvote():
     data = request.get_json()
     thread_id = data.get('thread_id')
     if thread_id:
+        # Adding upvote to the thread
         stmt = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id).where(User_Thread_Upvotes.user_id == current_user.id)
         result = db.session.execute(stmt).scalar()
-        db.session.add(User_Thread_Upvotes(thread_id=thread_id, user_id=current_user.id))
-        action = 'added'
-        db.session.commit()
+        if result is None:
+            db.session.add(User_Thread_Upvotes(thread_id=thread_id, user_id=current_user.id))
+            db.session.commit()
+        else:
+            db.session.delete(result)
+            db.session.commit()
+        
         statement = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.thread_id == thread_id)
         resultt = db.session.execute(statement).scalars()
         count = len(list(resultt))
-        return jsonify({'status': 'success', 'action': action, "upvotes": count})
+        return jsonify({'status': 'success',"upvotes": count})
     else:
         return jsonify({'status': 'error', 'message': 'No thread_id provided'}), 400
 # @main.route('/upvote', methods=['POST'])
