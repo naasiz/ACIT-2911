@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forum</title>
+    {% if request.path == '/' %}
+    <link rel="stylesheet" href="../static/styles3.css">
+    {% endif %}
+    <Link rel="preconnect" href="https://fonts.gstatis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='homepage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
@@ -15,6 +20,16 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    {% if request.path == '/' %}
+    <div class="intro">
+        <h1 class="logo-header"> 
+            <span class="logo">
+            <img src="../static/logo.svg" alt="logo" width= "108.8px" height= "91.8px" />
+            </span>
+            <span class="logo">CIT Course Hub</span>
+        </h1>
+    </div>
+    {% endif %}
     <header class="column is-fullwidth">
         <!--NavBar Section-->
         <section class="navbar" role="navigation">
@@ -68,4 +83,33 @@
 </header>
 <body>
     {% block content %}{% endblock %}
+    <script>
+        let intro = document.querySelector('.intro');
+        let logo = document.querySelector('.logo-header');
+        let logoSpan = document.querySelectorAll('.logo');
+        
+        window.addEventListener('DOMContentLoaded', ()=>{
+        
+            setTimeout(()=>{
+                logoSpan.forEach((span, idx)=>{
+                    setTimeout(()=>{
+                        span.classList.add('active');
+                    }, (idx + 1) * 400)
+                });
+            }, 0); 
+        
+            setTimeout(()=>{
+                logoSpan.forEach((span, idx)=>{
+                    setTimeout(()=>{
+                        span.classList.remove('active');
+                        span.classList.add('fade');
+                    }, (idx + 1) * 50)
+                });
+            }, 2000);
+        
+            setTimeout(()=>{
+                intro.style.top = '-100vh'; 
+            }, 2300)
+        });
+        </script>
     </body>
