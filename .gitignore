@@ -25,6 +25,7 @@ instance/
 .pytest_cache/
 projects/__pycache__/
 projects/.pytest_cache/
+projects/instance/
 
 # Logs and databases #
 ######################
