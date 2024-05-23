@@ -1,7 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
 from db.db import db
-from flask_admin import Admin
 
 def create_app():
     app = Flask(__name__)
