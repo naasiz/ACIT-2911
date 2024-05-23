@@ -1,6 +1,103 @@
 {% extends "base.html" %}
+{% block searchbar %}{% endblock %}
 {% block content %}
-<h1 class="title">
-  Welcome, {{ user.name }}!
-</h1>
+{% for message in get_flashed_messages() %}
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+{%endfor%}
+<body>
+  <div class="columns">
+    <div class="container profile">
+      <!-- Edit Preferences Modal End -->
+      <div class="section profile-heading">
+        <div class="columns is-mobile is-multiline">
+          <div class="column is-2">
+            <span class="header-icon user-profile-image">
+              <img src="{{ url_for('static', filename='Default-user-icon.svg') }}" alt="">
+            </span>
+          </div>
+          <div class="column is-4-tablet is-10-mobile name">
+            <p>
+              <span class="title is-bold" style="margin-bottom: 10px;">{{ current_user.name }}</span>
+              <br>
+              <a id="edit-preferences" class="button is-primary is-outlined" href=" {{ url_for('main.update', id = current_user.id) }} " style="margin: 10px 0">Edit Preferences</a>
+              <a class="button is-primary is-outlined" href="{{ url_for('auth.logout')}}" style="margin: 10px 0">Log out</a>
+              <br>
+            </p>
+            <p class="tagline">
+              {{ current_user.description }}
+            </p>
+          </div>
+          <div class="column is-3-tablet is-6-mobile has-text-centered">
+            <p class="stat-val">{{posts}}</p>
+            <p class="stat-key">Post</p>
+          </div>
+          <div class="column is-3-tablet is-6-mobile has-text-centered">
+            <p class="stat-val">{{comments}}</p>
+            {% if comments == 1 %}
+            <p class="stat-key">Comment</p>
+            {% else %}
+            <p class="stat-key">Comments</p>
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+      <div class="profile-options is-fullwidth">
+        <div class="tabs is-fullwidth is-medium">
+          <ul>
+            <li class="link">
+              <a>
+                <span class="icon">
+                  <i class="fa fa-list"></i>
+                </span>
+                <span>Information</span>
+              </a>
+            </li>
+            <li class="link is-active">
+              <a>
+                <span class="icon">
+                  <i class="fa fa-thumbs-up"></i>
+                </span>
+                <span>My Post</span>
+              </a>
+            </li>
+            <li class="link">
+              <a>
+                <span class="icon">
+                  <i class="fa fa-thumbs-up"></i>
+                </span>
+                <span>My Like</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="box" style="border-radius: 0px;">
+        <!-- Main container -->
+        <div class="columns">
+          <div class="column is-2-tablet user-property-count has-text-centered">
+            <p class="subtitle is-5">
+              <strong>
+              123
+              </strong>
+              <br>
+              properties
+            </p>
+          </div>
+          <div class="column is-10">
+            <p class="control has-addons" style="display: flex;">
+              <input class="input" type="text" placeholder="Search your liked properties" style="width: 100% !important">
+              <button class="button">
+                Search
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
 {% endblock %}

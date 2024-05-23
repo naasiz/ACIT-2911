@@ -8,62 +8,49 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.0/css/bulma.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='login-signup-styles.css')}}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico')}}" type="image/x-icon">
     <script src="{{ url_for('static', filename='homepage.js')}}" defer></script>   
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <style>
-        /* 
-        a.navbar-item.brand {
-            margin-left: 20px;
-        }
-        a.navbar-burger {
-            border: 1.5px solid #000;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .navbar-burger span {
-            height: 3px;
-            position: relative;
-            width: 27px;
-        }
-         */
-         .navbar-brand {
-            align-items: center;
-        }  
-        .navbar-item img {
-            max-height: none;
-        }
-    </style>
     <header class="column is-fullwidth">
         <!--NavBar Section-->
         <section class="navbar" role="navigation">
             <div class="navbar-brand">
-              <a class="navbar-item brand" href="{{ url_for('main') }}">
+              <a class="navbar-item brand" href="{{ url_for('main.index') }}">
                 CIT Course Hub
                 <img class="logo" src="{{ url_for('static', filename='logo.svg')}}" alt="logo" width="64px" height="65px" alt="bcit logo">
               </a>
               <a role="button" class="navbar-burger"
               onclick="toggleNavbar()"
               data-target="navbarBasicExample">
+              <!-- The Burger -->
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
                 <span aria-hidden="true"></span>
               </a>
             </div>
+            <!-- This item is hidden, can just use for phone -->
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-end">
-                    <a class="navbar-item" href="{{ url_for('main') }}">Threads</a>
-                    {% if current_user.is_authenticated %} 
-                    <a class="navbar-item" href="{{ url_for('profile') }}">{{user.name}}</a>
-                    <a class="navbar-item" href="{{ url_for('logout') }}">Log Out</a>
+                    <a class="navbar-item" href="{{ url_for('main.index') }}">Threads</a>
+
+                    {% if current_user.is_authenticated and current_user.id != 1%} 
+                    <a class="navbar-item" href="{{ url_for('main.update', id = current_user.id) }}">Update</a>
+                    <a class="navbar-item" href="{{ url_for('main.profile') }}">{{user.name}}</a>
+                    <a class="navbar-item" href="{{ url_for('auth.logout') }}">Log Out</a>
+                    
+                    
+                    {% elif current_user.id == 1%}
+                    <p class="navbar-item" >Admin</p>
+                    <a class="navbar-item" href="{{ url_for('auth.users') }}">List of Users</a>
+                    <a class="navbar-item" href="{{ url_for('auth.logout') }}">Log Out</a>
+
                     {% else %}
-                    <a class="navbar-item" href="{{ url_for('login') }}">Login</a>
-                    <a class="navbar-item" href="{{ url_for('signup') }}">Signup</a>
+                    <a class="navbar-item" href="{{ url_for('auth.login') }}">Login</a>
+                    <a class="navbar-item" href="{{ url_for('auth.signup') }}">Signup</a>
                     {% endif %}
               </div>
             </div>
@@ -72,8 +59,8 @@
     {% block searchbar %}
     <!--SearchBox Section-->
     <div class="search-box">
-        <div style="display:flex">
-            <input type="text" name="q" placeholder="search ...">
+        <div style="display:flex; justify-content: center; align-items: center;">
+            <input type="text" name="q" placeholder="search ..." class="is-fullwidth">
             <button><i class="fa fa-search"></i></button>
         </div>
     </div>

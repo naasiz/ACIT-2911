@@ -61,10 +61,7 @@ h1, h4, ol {
 p {
     margin: 5px 0;
 }
-textarea {
-    width: 80%;
-    height: 80px;
-}
+
 button {
     display: block;
     margin: 10px 0;
@@ -90,13 +87,16 @@ button {
 .bottom, .top-comment {
     display: flex;
     color: grey;
-    font-size: 12px;
+    font-size: 15px;
     
 }
 
 .comment{
     border: 2px solid lightblue;
     padding: 10px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: hsl(205, 100%, 90%);
 }
 
 .timestamp {
@@ -123,4 +123,10 @@ button {
   }
 .author {
     padding-right: 10px;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
 }

@@ -7,7 +7,7 @@
 
 .navbar-brand {
     display: flex;
-    align-items: center;
+    align-items: center !important;
 }
 
 html, body{
@@ -35,15 +35,21 @@ h1{
 /*           Forums.html                       */
 
 .container{
-    margin: 20px;
-    padding: 20px;
+    margin: 20px 20px 0px 20px !important;
+    padding: 20px 20px 0px 20px;
+    min-width: 100dvw !important;
+
 }
+
 
 .subforum{
     margin-top:20px;
 }
 
 .subforum-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color:#003c71;
     padding: 5px;
     border-radius: 5px;
@@ -84,7 +90,7 @@ h1{
 
 
 /* For the smartphones */
-@media screen and (max-width: 460px) {
+@media screen and (max-width: 1024px) {
     .container{
         margin: 10px;
         padding: 10px;
@@ -93,7 +99,7 @@ h1{
     .subforum-row{
         display: grid;
         grid-template-columns: 25% 75%;
-        grid-template-rows: 65% 35%;
+        grid-template-rows: 65% 45%;
     }
 
     .subforum-devider{
@@ -108,7 +114,7 @@ h1{
   }
 
 /* For the tablets */
-@media screen and (min-width: 460px) and (max-width: 1024px) {
+/* @media screen and (min-width: 800px) and (max-width: 1024px) {
     .container{
         margin: 15px;
         padding: 15px;
@@ -131,45 +137,140 @@ h1{
         font-size: 16px;
     }
 
-  }
+  } */
 
   /* Nav Bar styles */
+div#navbarBasicExample.navbar-menu {
+    align-items: center;
+}
+
+.navbar-brand {
+    align-items: center;
+}  
+
 .navbar-item {
     font-size: 20px;
     margin-right: 20px;
+}
+
+a.navbar-item {
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s ease-in-out;
+}
+
+a.navbar-item:hover {
+    border-bottom: 2px solid #ff0;
+    transition: border-bottom 0.3s ease-in-out;
 }
 
 .navbar-item:last-child {
     margin-right: 25px;
 }
 
-.brand{
+.navbar-item.brand {
     font-size: 50px;
+}
+
+.navbar-item.brand:hover {
+    border-bottom: 2px solid transparent;
 }
 
 a.navbar-item.brand {
     margin-left: 20px;
 }
 
-
 a.navbar-burger {
     border: 1.5px solid #000;
     border-radius: 10px;
-    margin-right: 5px;
-    /* display: flex;
-    flex-direction: column;
-    justify-content: center; */
+    margin-right: 10px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
-/* .navbar-burger span {
-    height: 3px;
-    position: relative;
-    width: 27px;
-} */
-
-
 .logo{
+    margin-top: 2px;
     margin-left: 1rem;
+    max-height: none !important;
 }
+
+
+/* Adjustments for smaller screens */
+/* Navbar style for phone */
+@media screen and (max-width: 1023px) {
+    a.navbar-item:not(.brand),
+    a.navbar-item:not(.brand):hover,
+    div.navbar-end {
+    border-bottom: none;
+    font-size: 1.1rem;
+    overflow: hidden;
+    max-height: 0;
+    animation: slideUp 0.5s ease;
+    display: block !important;
+    }
+    
+    .navbar-menu {
+    display: block !important;
+    }
+    
+    .is-active .navbar-item:not(.brand),
+    .is-active .navbar-item:not(.brand):hover,
+    .is-active div.navbar-end {
+    max-height: 200px;
+    overflow: hidden;
+    animation: slideDown 0.5s ease;
+    border-bottom: none;
+    font-size: 1.1rem;
+    }
+    
+    @keyframes slideUp {
+    0% {
+    max-height: 200px;
+    }
+    100% {
+    max-height: 0;
+    display: none;
+    }
+    }
+
+    @keyframes slideDown {    
+    0% {
+    max-height: 0;
+    }
+    100% {
+    max-height: 200px;
+    }
+    }
+
+    .navbar-item.brand,
+    .navbar-item.brand:hover {
+    border-bottom: none;
+    }
+
+}
+
+@media screen and (max-width: 767px) {
+    .navbar-item.brand,
+    .navbar-item.brand:hover {
+    font-size: 1.75rem;
+    border-bottom: none;
+    }
+
+    a.navbar-item.brand {
+    margin: 0;
+    }
+
+    .navbar-burger span {
+      height: 2px;
+      width: 20px;
+    }
+    a.navbar-burger {
+        height: 40px;
+        width: 40px;
+    }
+    .logo {
+        margin-left: 0.5rem;
+        height: 32px;
+        width: 32.5px;
+    }
+  }
 
 
   /* Search Box styles */
@@ -185,6 +286,7 @@ a.navbar-burger {
 
 .search-box input{
     padding: 10px;
+    width: 70%;
 }
 
 .search-box button{
@@ -200,7 +302,7 @@ a.navbar-burger {
 }
 
 /* search box for smrtphones */
-@media screen and (max-width: 460px){
+@media screen and (max-width: 320px){
     .search-box input, .search-box button, .search-box select{
         min-width: 300px;
         margin-top: 5px;
@@ -210,6 +312,7 @@ a.navbar-burger {
 
 /* forum info Styling */
 .forum-info{
+    margin-top: 25px;
     padding: 20px;
     color: white;
     background-color: #003c71;
@@ -221,12 +324,20 @@ a.navbar-burger {
 }
 /* Footer Styling */
 
+.page-container {
+    min-height: calc(100dvh - 219.89px);
+    display: grid;
+    place-content: center;
+    width: 100%;
+}
+
 footer{
     padding: 20px;
     color: white;
     background-color:  #003c71;
     display: block;
     text-align: center;
+    margin-top: auto;
 }
 
 
@@ -307,56 +418,6 @@ footer{
     font-weight: bolder;
 }
 
-
-
-
-
-/*            Couse detail.html                      */
-
-
-.head{
-    display: flex;
-    background-color: #e6e6de;
-    padding: 5px;
-    font-weight: bold;
-    font-size: 15px;
-}
-
-.authors{
-    flex: 20%;
-}
-
-.content{
-    flex: 80%;
-    margin-top: 60px;  
-    /* need to adjust */
-}
-
-.body{
-    display: flex;
-    background-color: #e6e6de;
-    padding: 10px;
-    margin-top: 5px;
-}
-
-.body .authors .username{
-    font-size: 20px;
-}
-
-.body .authors img{
-    max-width: 50px;
-    max-height: 80px;
-}
-
-.body .content .comment button{
-    border:none;
-    padding:10px;
-    font-weight: bolder;
-    box-shadow: 4px 6px #fff;
-    cursor: pointer;
-    float: right;
-}
-
 /* comment section */
 .comment-area{
     margin-bottom:50px;
@@ -380,9 +441,60 @@ footer{
     border: solid 1px #000000;
 }
 
+/* Profile.html */ 
+body {
+    background: #F5F7FA
+  }
+  
+  .stat-val {
+    font-size: 3em;
+    padding-top: 20px;
+    font-weight: bold;
+  }
+  
+  .stat-key {
+    font-size: 1.4em;
+    font-weight: 200
+  }
+  
+  .section.profile-heading .column.is-2-tablet.has-text-centered + .has-text-centered {
+    border-left: 1px dotted rgba(0, 0, 0, .2);
+  }
+  
+  .container.profile {
+    margin-top: 1%;
+  }
+  
+  .control.is-pulled-left span.select {
+    margin-right: 5px;
+    border-radius: 2px;
+  }
+  
+  .modal-card .content h1 {
+    padding: 40px 10px 10px;
+    border-bottom: 1px solid #dadada
+  }
+  
+  .container.profile .profile-options .tabs ul li.link a {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #F1F1F1;
+  }
 
+form {
+    z-index: 100;
+}
 
+.admin-btns {
+    background: none; border: none; font-size: medium; font-weight: bold; text-decoration: underline; color: #fff;
+}
 
+.element-btns {
+    background: none; border: none; font-size: medium; text-decoration: underline; color: #3273dc; margin-top: 10px;
+}
 
+.comment-btns {
+    background: none; border: none; font-size: medium; font-weight: bold; text-decoration: underline; color: #000; margin-top: 10px;
+}
 
 

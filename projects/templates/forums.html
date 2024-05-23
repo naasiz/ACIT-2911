@@ -1,163 +1,188 @@
 {% extends "base.html" %} {% block content %}
+{% if current_user.is_authenticated %}
+<div class="page-container">
+    <div style="display: flex; justify-content: center;">
+        <a href="{{ url_for('main.add_page')}}" class="button" style="font-size: 1.25rem; color: #3273dc; box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; width: 80%; margin-top: 40px;">
+            Add Thread
+        </a>
+    </div>
+{% endif %}
 
-<button> <a href="{{ url_for('add_page')}}">
-        Add Thread
-    </a>
-</button>
-<div class="container">
-    {% for subheading in subheadings %}
-    <div class="subforum">
-        <div class="subforum-title">
-            <h1>{{subheading.title}}</h1>
-        </div>
-        {% for thread in subheading.threads %}          
-        <div class="subforum-row">
-            <div class="subforum-icon subforum-column center">
-                <i class="fa fa-user center"></i>
-            </div>
-            <div class="subforum-description subforum-column">
-                <h4><a href="{{ url_for('thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
-                <p>{{ thread.content }}</p>
-                <div class="subforum-upvote-downvote">
-                    <span class="upvote-btn" data-thread-id="{{ thread.id }}">
-                        <i class="fa fa-arrow-up"></i>
-                    </span>
-                    <span class="upvote-count">{{ thread.upvotes }}</span>
-                    <span class="downvote-btn" data-thread-id="{{ thread.id }}">
-                        <i class="fa fa-arrow-down"></i>
-                    </span>
-                    <span class="downvote-count">{{ thread.downvotes }}</span>
-                </div>
-                
-                
-            </div>
-            
-        
-
-            {% if thread.count == 1 %}
-            <div class="subforum-stats subforum-column center">
-                <span>{{ thread.count }} Comment </span>
-            </div>
-            {% endif %} {% if thread.count > 1 or thread.count == 0 %}
-            <div class="subforum-stats subforum-column center">
-                <span>{{ thread.count }} Comments </span>
-            </div>
-            {% endif %}
-            <div class="subforum-info subforum-column">
-                {% if thread.author.name %}
-                <b><a href="">Last post</a></b> by <a href="">{{ thread.author.name }}</a>
-                {% else %}
-                <b><a href="">Last post</a></b> by <a href="">Anonymous</a>
+    <div class="container">
+        {% for subheading in subheadings %}
+        <div class="subforum">
+            <div class="subforum-title">
+                <h1>{{subheading.title}}</h1>
+                {% if current_user.id == 1 %}
+                <form action="{{ url_for('main.del_subheading', subheading_id=subheading.id)}}" method="POST">
+                    <button type="submit" class="admin-btns">Delete</button>
+                </form>
                 {% endif %}
-                <br>on <small>{{ thread.date }}</small>
-
             </div>
+            {% for thread in subheading.threads %}
+            <div class="subforum-row">
+                <div class="subforum-icon subforum-column center">
+                    <i class="fa fa-user center"></i>
+                </div>
+                <div class="subforum-description subforum-column">
+                    <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
+                    <p>{{ thread.content }}</p>
+                    <div class="subforum-upvote-downvote">
+                    {% if thread.upvoted == 1 %}
+                        <span class="upvote-btn clicked" data-thread-id="{{ thread.id }}">
+                            <i class="fa fa-arrow-up"></i>
+                        </span>
+                        {% elif thread.upvoted != 1 %}    
+                        <span class="upvote-btn" data-thread-id="{{ thread.id }}">
+                            <i class="fa fa-arrow-up"></i>
+                        </span>
+                        {% endif %}
+                        <span class="upvote-count">{{ thread.upvotes }}</span>
+                        <span class="downvote-btn" data-thread-id="{{ thread.id }}">
+                            <i class="fa fa-arrow-down"></i>
+                        </span>
+                        <span class="downvote-count">{{ thread.downvotes }}</span>
+                    </div>
+                </div>
+                <div class="subforum-stats subforum-column center">
+                    {% if thread.count == 1 %}
+                    <span>{{ thread.count }} Comment </span>
+                    {% else %}
+                    <span>{{ thread.count }} Comments </span>
+                    {% endif %}
+                </div>
+                <div class="subforum-info subforum-column">
+                    {% if thread.author.name %}
+                    by <a href="">{{ thread.author.name }}</a>
+                    {% else %}
+                    by <a href="">Anonymous</a>
+                    {% endif %}
+                    <br>on <small>{{ thread.date }}</small>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         {% endfor %}
-        {% endfor %}
-
     </div>
-</div>
-
-
-
-
-<!-- Forum Info -->
-<div class="forum-info">
-    <div class="chart">
-        MyForum - Stats &nbsp;<i class="fa fa-bar-chart"></i>
+    
+        </div>
     </div>
-    <span><u>5,369</u> Posts in <u>48</u> Topics by <u>8,124</u> Members.</span><br>
-    <span>Latest post: <b><a href="">Random post</a></b> on Dec 15 2021 By <a href="">RandomUser</a></span>.<br>
-    <span>Check <a href="">the latest posts</a> .</span><br>
+    <!-- Forum Info -->
+    <div class="forum-info">
+        <div class="chart">
+            MyForum - Stats &nbsp;<i class="fa fa-bar-chart"></i>
+        </div>
+        <span><u>5,369</u> Posts in <u>48</u> Topics by <u>8,124</u> Members.</span><br>
+        <span>Latest post: <b><a href="">Random post</a></b> on Dec 15 2021 By <a href="">RandomUser</a></span>.<br>
+        <span>Check <a href="">the latest posts</a> .</span><br>
+    </div>
+    
+    <footer>
+        <span>&copy; BCIT | All Rights Reserved</span>
+    </footer>
 </div>
-
-<footer>
-    <span>&copy; BCIT | All Rights Reserved</span>
-</footer>
-
-
 <style>
+
 /* Style the upvote arrow */
 .upvote-btn i {
     cursor: pointer; /* Change cursor to pointer on hover */
 }
 
-/* Style the downvote arrow */
-.downvote-btn i {
-    cursor: pointer; /* Change cursor to pointer on hover */
-}
+        /* Style the downvote arrow */
+        .downvote-btn i {
+            cursor: pointer;
+            /* Change cursor to pointer on hover */
+        }
 
-/* Style the upvote arrow when clicked */
-.upvote-btn.clicked i {
-    color: orange; /* Set the color to orange */
-}
+        /* Style the upvote arrow when clicked */
+        .upvote-btn.clicked i {
+            color: orange;
+            /* Set the color to orange */
+        }
 
-/* Style the downvote arrow when clicked */
-.downvote-btn.clicked i {
-    color: rgb(0, 234, 255); /* Set the color to blue */
-}
+        /* Style the downvote arrow when clicked */
+        .downvote-btn.clicked i {
+            color: rgb(0, 234, 255);
+            /* Set the color to blue */
+        }
+    </style>
+    {% if current_user.is_authenticated %}
+    <script>
+        $(document).ready(function() {
+            $('.upvote-btn').click(function() {
+                var upvoteButton = $(this);
+                var upvoteCount = $(this).siblings('.upvote-count');
+                var downvoteButton = $(this).siblings('.downvote-btn');
+                var downvoteCount = $(this).siblings('.downvote-count');
 
-
-
-</style>
-
-<script>
-    $(document).ready(function() {
-        $('.upvote-btn').click(function() {
-            var upvoteButton = $(this);
-            var upvoteCount = $(this).siblings('.upvote-count');
-            var downvoteButton = $(this).siblings('.downvote-btn');
-            var downvoteCount = $(this).siblings('.downvote-count');
-
-            if (!upvoteButton.hasClass('clicked')) {
-                // If upvote is not clicked, but downvote is clicked
-                if (downvoteButton.hasClass('clicked')) {
-                    var downvotes = parseInt(downvoteCount.text() || 0);
-                    downvoteCount.text(downvotes > 0 ? downvotes - 1 : '');
+                if (!upvoteButton.hasClass('clicked')) {
+                    // If upvote is not clicked, but downvote is clicked
+                    if (downvoteButton.hasClass('clicked')) {
+                        var downvotes = parseInt(downvoteCount.text() || 0);
+                        downvoteCount.text(downvotes > 0 ? downvotes - 1 : '');
+                    }
+                    upvoteButton.toggleClass('clicked');
+                    downvoteButton.removeClass('clicked');
+                    downvoteCount.text('');
+                } else { // If upvote is already clicked, undo upvote
+                    upvoteCount.text('');
+                    upvoteButton.toggleClass('clicked');
                 }
-                upvoteCount.text('1');
-                upvoteButton.addClass('clicked');
-                downvoteButton.removeClass('clicked');
-                downvoteCount.text('');
-            } else { // If upvote is already clicked, undo upvote
-                upvoteCount.text('');
-                upvoteButton.removeClass('clicked');
-            }
+            });
+
+            $('.downvote-btn').click(function() {
+                var downvoteButton = $(this);
+                var downvoteCount = $(this).siblings('.downvote-count');
+                var upvoteButton = $(this).siblings('.upvote-btn');
+                var upvoteCount = $(this).siblings('.upvote-count');
+
+                if (!downvoteButton.hasClass('clicked')) {
+                    // If downvote is not clicked, but upvote is clicked
+                    if (upvoteButton.hasClass('clicked')) {
+                        var upvotes = parseInt(upvoteCount.text() || 0);
+                        upvoteCount.text(upvotes > 0 ? upvotes - 1 : '');
+                    }
+                    downvoteCount.text('1');
+                    downvoteButton.toggleClass('clicked');
+                    upvoteButton.removeClass('clicked');
+                    upvoteCount.text('');
+                } else { // If downvote is already clicked, undo downvote
+                    downvoteCount.text('');
+                    downvoteButton.toggleClass('clicked');
+                }
+            });
         });
 
-        $('.downvote-btn').click(function() {
-            var downvoteButton = $(this);
-            var downvoteCount = $(this).siblings('.downvote-count');
-            var upvoteButton = $(this).siblings('.upvote-btn');
-            var upvoteCount = $(this).siblings('.upvote-count');
-
-            if (!downvoteButton.hasClass('clicked')) {
-                // If downvote is not clicked, but upvote is clicked
-                if (upvoteButton.hasClass('clicked')) {
-                    var upvotes = parseInt(upvoteCount.text() || 0);
-                    upvoteCount.text(upvotes > 0 ? upvotes - 1 : '');
+        const likebuttons = document.getElementsByClassName('upvote-btn');
+        Array.from(likebuttons).forEach(likebutton => {
+            likebutton.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/upvote', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            thread_id: likebutton.dataset.threadId
+                        })
+                    });
+        
+                    if (response.ok) {
+                        const data = await response.json();
+                        likebutton.nextElementSibling.innerHTML = data.upvotes;
+                    } else {
+                        console.error('Response not OK');
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
-                downvoteCount.text('1');
-                downvoteButton.addClass('clicked');
-                upvoteButton.removeClass('clicked');
-                upvoteCount.text('');
-            } else { // If downvote is already clicked, undo downvote
-                downvoteCount.text('');
-                downvoteButton.removeClass('clicked');
-            }
+            });
+        
+            likebutton.addEventListener('click', async () => {
+                console.log('clicked');
+            });
         });
-    });
-</script>
-
-
-
-
-
-
-
-
-
-
-</body>
-{% endblock %}
+    </script>
+    {% endif %}
+    </body>
+    {% endblock %}
