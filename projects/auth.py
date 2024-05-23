@@ -5,8 +5,24 @@ from db.db import db
 from models.models import User
 auth = Blueprint('auth', __name__)
 
-@auth.route('/login')
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        # Get form data
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        # Query the database to find the user
+        user = User.query.filter_by(email=email).first()
+
+        # Check if the user exists and the password is correct
+        if user and check_password_hash(user.password, password):
+            # Log the user in
+            login_user(user)
+
+            # Redirect to the root route
+            return redirect(url_for('main.index'))  # replace 'index' with the actual endpoint for '/'
+
     # Render the login template and pass the current user object
     return render_template('/auth/login.html', user=current_user)
 
