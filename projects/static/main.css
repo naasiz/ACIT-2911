@@ -124,3 +124,9 @@ button {
 .author {
     padding-right: 10px;
 }
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}

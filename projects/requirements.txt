@@ -6,4 +6,5 @@ pytest
 pytest-cov
 flask_wtf
 flask-user
+faker
 

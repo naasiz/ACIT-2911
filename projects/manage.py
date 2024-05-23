@@ -4,11 +4,19 @@ from datetime import datetime, date
 from models.models import User, Thread, Comment, Subheading
 from werkzeug.security import generate_password_hash
 import random
-
+from faker import Faker
+fake=Faker()
 
 def create_User():
-    db.session.add(User(email="tristanjames3131@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Tristan James Torres", description="I am a student at BCIT studying Computer Systems Technology.", date_of_birth=datetime(2020, 7, 31).date()))
-    db.session.add(User(email="mmangilin22@my.bcit.ca", password=generate_password_hash('@Meriel2002', method='pbkdf2:sha256'), name="Meriel Mangilin", description="I am a student at BCIT studying Computer Systems Technology.", date_of_birth=datetime(2020, 2, 22).date()))
+    db.session.add(User(email="tristanjames3131@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Tristan James Torres", description="I am a student at BCIT studying Computer Information Technology.", date_of_birth=datetime(2002, 7, 31).date()))
+    db.session.add(User(email="mmangilin22@my.bcit.ca", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Meriel Mangilin", description="I am a student at BCIT studying Computer Information Technology.", date_of_birth=datetime(2002, 2, 22).date()))
+    for _ in range(30):
+        email = f"user{_}@example.com"
+        name = f"User {_}"
+        description = "I am a user."
+        date_of_birth = datetime(2000, 1, 1).date()
+        user = User(email=email, password=generate_password_hash('Password', method='pbkdf2:sha256'), name=name, description=description, date_of_birth=date_of_birth)
+        db.session.add(user)
     db.session.commit()
 
 def create_Thread():
@@ -17,22 +25,16 @@ def create_Thread():
     db.session.add(Subheading(title="MATH1200"))                              
     db.session.add(Subheading(title="COMM1430"))                              
     db.session.commit()
-    def thread_return(i, user, subhead):
-        if i == 0:
-           thread = Thread(author=user, subheading=subhead, title="What was your favourite course from term 1?", content="I really enjoyed COMP 1002, it was a great introduction to programming!")
-        elif i == 1:
-           thread = Thread(author=user, subheading=subhead, title="Favourite project??", content="I really enjoyed COMP 1002, it was a great introduction to programming!")
-        elif i == 2:
-           thread = Thread(author=user, subheading=subhead, title="MATH1200 is pretty easy!", content="I really enjoyed COMP 1002, it was a great introduction to programming!")
-        elif i == 3:
-           thread = Thread(author=user, subheading=subhead, title="Headings, Bulleted Lists Blah Blah", content="I really enjoyed COMP 1002, it was a great introduction to programming!")
-        
-        return thread
     
-    for i in range(1, 5):
-        user =db.get_or_404(User, random.randint(1,2))
-        subheading =db.get_or_404(Subheading, i)
-        thread = thread_return(i-1,user, subheading)
+    def thread_return(user, subhead):
+        title = fake.sentence(nb_words=6)
+        content = fake.text(max_nb_chars=200)
+        return Thread(author=user, subheading=subhead, title=title, content=content)
+    
+    for i in range(2, 34):
+        user =db.get_or_404(User, random.randint(2,3))
+        subheading =db.get_or_404(Subheading, random.randint(1,4))
+        thread = thread_return(user, subheading)
         db.session.add(thread)
         db.session.commit()
     
@@ -45,7 +47,7 @@ def create_comment():
     db.session.commit()
 
 def create_admin():
-    admin=User(name="Admin", email="Admin@gmail.com", password=generate_password_hash('Admin@', method='pbkdf2:sha256'))
+    admin=User(name="Admin", email="Admin@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'))
     db.session.add(admin)
     db.session.commit()
     

@@ -97,16 +97,21 @@
               <br>
             </p>
             <p class="tagline">
-              The users profile bio would go here, of course. It could be two lines or more or whatever. We should probably limit the amount of characters to ~500 at most though.
+              {{ current_user.description }}
             </p>
           </div>
           <div class="column is-3-tablet is-6-mobile has-text-centered">
-            <p class="stat-val">10</p>
+            <p class="stat-val">{{posts}}</p>
             <p class="stat-key">Post</p>
           </div>
           <div class="column is-3-tablet is-6-mobile has-text-centered">
-            <p class="stat-val">3</p>
+            <p class="stat-val">{{comments}}</p>
+            {% if comments == 1 %}
+            <p class="stat-key">Comment</p>
+            {% else %}
             <p class="stat-key">Comments</p>
+            {% endif %}
+
           </div>
         </div>
       </div>

@@ -2,8 +2,10 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from flask_login import login_required, current_user 
 from db.db import db
 from models.models import User, Thread, Comment, Subheading, Form, User_Thread_Upvotes
-from datetime import datetime, date
-
+from datetime import datetime
+from wtforms import TextAreaField
+from flask_wtf import FlaskForm
+from wtforms.validators import DataRequired
 main = Blueprint('main', __name__)  # Create a Blueprint object named 'main'
 
 # Main Routes
@@ -28,7 +30,14 @@ def index():
 @main.route('/profile')  # Route decorator for the profile route
 @login_required  # Require login to access the profile route
 def profile():
-    return render_template('/auth/profile.html', user=current_user)  # Render the profile.html template with the current user
+    # stmt = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.user_id == current_user.id)  # Check if the current user has upvoted the thread
+    # posts = len(list(db.session.execute(stmt).scalars()))
+    posts = len(list(current_user.threads))
+    comments = len(list(current_user.comments))
+    
+
+    
+    return render_template('/auth/profile.html', user=current_user, posts=posts, comments=comments)  # Render the profile.html template with the current user
 
 @main.route('/thread_detailed/<int:thread_id>')  # Route decorator for the thread_detailed route
 def thread_detailed(thread_id):
@@ -118,6 +127,10 @@ def del_comment(comment_id):
 @login_required  # Require login to access the update route
 def update(id):
     form = Form()  # Create a new instance of the Form class
+    class From(FlaskForm):
+        description = TextAreaField("Description", validators=[DataRequired()], default=f"{current_user.description}")
+
+    form_two = From()    
     name_to_update = db.get_or_404(User, id)  # Get the user with the specified id from the database
     if request.method == "POST":
         dateofbirth = request.form['date_of_birth'].split('-')  # Split the date_of_birth string into year, month, and day
@@ -133,9 +146,9 @@ def update(id):
             return redirect(url_for('main.profile'))  # Redirect to the profile route
         except:
             db.session.commit()
-            return render_template("update.html", form=form, name_to_update=name_to_update, id=id, user=current_user)  # Render the update.html template with the form, name_to_update, id, and current user
+            return render_template("update.html", form=form, form_two=form_two, name_to_update=name_to_update, id=id, user=current_user)  # Render the update.html template with the form, name_to_update, id, and current user
     else:
-        return render_template("update.html", form=form, name_to_update=name_to_update, id=id, user=current_user)  # Render the update.html template with the form, name_to_update, id, and current user
+        return render_template("update.html", form=form, form_two=form_two, name_to_update=name_to_update, id=id, user=current_user)  # Render the update.html template with the form, name_to_update, id, and current user
 
 @main.route('/upvote', methods=['POST'])  # Route decorator for the upvote route
 def upvote():

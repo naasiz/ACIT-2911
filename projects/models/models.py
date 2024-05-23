@@ -52,7 +52,7 @@ class User_Thread_Upvotes(db.Model):
 class Form(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
     email = StringField("Email", validators=[DataRequired()])
-    description = TextAreaField("Description")
+    description = TextAreaField("Description", validators=[DataRequired()])
     date_of_birth = DateField("Date of Birth")
     submit = SubmitField("Submit")
     
