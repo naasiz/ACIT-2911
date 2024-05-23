@@ -127,15 +127,10 @@ def update(id):
         year=int(dateofbirth[0])
         month=int(dateofbirth[1])
         day=int(dateofbirth[2])
-        print(request.form['name'])
-        print(request.form['email'])
         name_to_update.name = request.form['name']
         name_to_update.email =request.form['email']
         name_to_update.description =request.form['description']
         name_to_update.date_of_birth = datetime(year, month, day).date()
-
-        print(name_to_update.description)
-        print(f"{type(name_to_update.date_of_birth)} {name_to_update.date_of_birth}")
         try:
             db.session.commit()
             # flash("User Updated Successfully")
