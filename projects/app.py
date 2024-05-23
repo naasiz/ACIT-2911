@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_login import LoginManager
 from db.db import db
-
+import os 
+port = os.environ.get("PORT", 5000)
 def create_app():
     app = Flask(__name__)
 
@@ -34,4 +35,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True)
+    app.run(debug=False, host="0.0.0.0", port=port )
