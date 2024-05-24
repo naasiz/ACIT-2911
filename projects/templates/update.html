@@ -21,7 +21,7 @@
    {% if id == current_user.id %}
 
    <div class="centered-box">
-        <form action="{{ url_for('main.update', id = current_user.id) }}" method="POST" style="width: 55%; min-width: 320px;" >
+        <form action="{{ url_for('main.update', id = current_user.id) }}" method="POST" style="width: 55%; min-width: 320px;" enctype="multipart/form-data">
             <div class="field has-background-light" style="max-height: 450px; overflow-y: scroll;">
                 <h1 class="is-size-4 has-text-centered"  style="color: #000; padding-top: 5px; font-weight: bold;">Update Profile</h1><br>
                 <div class="box">
@@ -34,6 +34,10 @@
                     {{ form_two.description(style="width: 100%", class='textarea', placeholder=name_to_update.description ,value=name_to_update.description)}}<br>
                     {{ form.date_of_birth.label(class="label") }}
                     {{ form.date_of_birth(style="width: 100%; min-height: 2.5em; max-height: 2.5em", class='textarea datefield', value=name_to_update.date_of_birth) }}<br>
+
+                    {{ form.profile_pic.label(class="label") }}
+                    {{ form.profile_pic(style="width: 100%", class='input', value=name_to_update.profile_pic) }}<br>
+                    
                     {{ form.submit(class='formbold-btn', style="margin-top: 20px") }}
                 </div>
             </div>

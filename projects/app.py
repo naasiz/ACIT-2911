@@ -8,6 +8,9 @@ def create_app():
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 
+    UPLOAD_FOLDER = './static'
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
     db.init_app(app)
 
 

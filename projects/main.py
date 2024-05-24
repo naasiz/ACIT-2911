@@ -6,6 +6,10 @@ from datetime import datetime
 from wtforms import TextAreaField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
+from werkzeug.utils import secure_filename
+from models import Config
+import uuid as uuid
+import os
 main = Blueprint('main', __name__)  # Create a Blueprint object named 'main'
 
 # Main Routes
@@ -141,9 +145,27 @@ def update(id):
         name_to_update.email = request.form['email']
         name_to_update.description = request.form['description']
         name_to_update.date_of_birth = datetime(year, month, day).date()
+        name_to_update.profile_pic = request.files['profile_pic']
+        
+        # Grab the image name
+        pic_filename = secure_filename(name_to_update.profile_pic.filename)
+        # set UUID
+        pic_name = str(uuid.uuid1()) + "_" + pic_filename
+        #Save that image
+        saver = request.files['profile_pic']
+
+        # Change it to a string to save data
+        name_to_update.profile_pic = pic_name
         try:
             db.session.commit()  # Commit the changes to the database
+            saver.save(os.path.join(Config.UPLOAD_FOLDER, pic_name))
+
             return redirect(url_for('main.profile'))  # Redirect to the profile route
+        except ValueError:
+            # Handle the error: the date_of_birth string was not in the correct format
+            print(f'date: {name_to_update.date_of_birth}')
+            flash("Invalid date of birth format. Please enter the date in the format YYYY-MM-DD.")
+            return render_template("update.html", form=form, form_two=form_two, name_to_update=name_to_update, id=id, user=current_user)
         except:
             db.session.commit()
             return render_template("update.html", form=form, form_two=form_two, name_to_update=name_to_update, id=id, user=current_user)  # Render the update.html template with the form, name_to_update, id, and current user

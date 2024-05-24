@@ -8,14 +8,15 @@ from faker import Faker
 fake=Faker()
 
 def create_User():
-    db.session.add(User(email="tristanjames3131@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Tristan James Torres", description="I am a student at BCIT studying Computer Information Technology.", date_of_birth=datetime(2002, 7, 31).date()))
-    db.session.add(User(email="mmangilin22@my.bcit.ca", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Meriel Mangilin", description="I am a student at BCIT studying Computer Information Technology.", date_of_birth=datetime(2002, 2, 22).date()))
+    db.session.add(User(email="tristanjames3131@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Tristan James Torres", description="I am a student at BCIT studying Computer Information Technology.", date_of_birth=datetime(2002, 7, 31).date(), profile_pic="./static/Default-user-icon.svg"))
+    db.session.add(User(email="mmangilin22@my.bcit.ca", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Meriel Mangilin", description="I am a student at BCIT studying Computer Information Technology.", date_of_birth=datetime(2002, 2, 22).date(), profile_pic="./static/Default-user-icon.svg"))
     for _ in range(30):
         email = f"user{_}@example.com"
         name = f"User {_}"
         description = "I am a user."
         date_of_birth = datetime(2000, 1, 1).date()
-        user = User(email=email, password=generate_password_hash('Password', method='pbkdf2:sha256'), name=name, description=description, date_of_birth=date_of_birth)
+        profile_pic = "./static/Default-user-icon.svg"
+        user = User(email=email, password=generate_password_hash('Password', method='pbkdf2:sha256'), name=name, description=description, date_of_birth=date_of_birth, profile_pic = profile_pic)
         db.session.add(user)
     db.session.commit()
 

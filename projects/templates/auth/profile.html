@@ -15,7 +15,11 @@
         <div class="columns is-mobile is-multiline">
           <div class="column is-2">
             <span class="header-icon user-profile-image">
+              {% if current_user.profile_pic %}
+              <img src="{{ url_for('static', filename='images/' + current_user.profile_pic) }}" alt="">
+              {% else %}
               <img src="{{ url_for('static', filename='Default-user-icon.svg') }}" alt="">
+              {% endif %}
             </span>
           </div>
           <div class="column is-4-tablet is-10-mobile name">
@@ -28,6 +32,9 @@
             </p>
             <p class="tagline">
               {{ current_user.description }}
+            </p>
+            <p>
+              {{ current_user.profile_pic }}
             </p>
           </div>
           <div class="column is-3-tablet is-6-mobile has-text-centered">
