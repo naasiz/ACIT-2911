@@ -86,7 +86,10 @@
             <p class="comment-ts">{{comment.date}}</p>
           </div>
           <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
-          <div class="show-replies"></div>
+          <form action="{{ url_for('main.reply_comment', comment_id=comment.id) }}" method="POST">
+            <textarea name="content" placeholder="Write a reply..."></textarea>
+            <button type="submit" class="comment-btns">Reply</button>
+          </form>
           {% if (comment.author.id == current_user.id) or (current_user.id == 1) %}
           <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
             <button type="submit" class="comment-btns">Delete Comment</button>

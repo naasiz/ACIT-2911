@@ -38,9 +38,11 @@ def create_Thread():
         db.session.add(thread)
         db.session.commit()
     
-def create_comment():
+def create_comment(parent_id=None):
     thread=db.get_or_404(Thread, 1)
-    db.session.add(Comment(author=thread.author,thread=thread))
+    print(f"Thread: {thread}")  # print the thread object
+    print(f"Thread ID: {thread.id}")  # print the thread id
+    db.session.add(Comment(author=thread.author,thread=thread, thread_id=thread.id, parent_id=parent_id))
     db.session.commit()
     comment=db.get_or_404(Comment,1)
     comment.content = "SysAdmin was my favourite course!"

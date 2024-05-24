@@ -40,6 +40,9 @@ class Comment(db.Model):
     thread = relationship("Thread", back_populates="comments")
     date = db.Column(DateTime(timezone=True), server_default=func.now())
     content = db.Column(db.String(1000))
+    # For replies
+    parent_id = mapped_column(db.Integer, db.ForeignKey('comment.id'))
+    replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]), lazy='dynamic')  # new field for replies
 
 class User_Thread_Upvotes(db.Model):
     id = db.Column(db.Integer, primary_key=True)

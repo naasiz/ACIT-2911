@@ -151,6 +151,7 @@ def update(id):
         return render_template("update.html", form=form, form_two=form_two, name_to_update=name_to_update, id=id, user=current_user)  # Render the update.html template with the form, name_to_update, id, and current user
 
 @main.route('/upvote', methods=['POST'])  # Route decorator for the upvote route
+@login_required
 def upvote():
     data = request.get_json()
     thread_id = data.get('thread_id')
@@ -170,4 +171,24 @@ def upvote():
         return jsonify({'status': 'success', "upvotes": count})  # Return success status and the number of upvotes
     else:
         return jsonify({'status': 'error', 'message': 'No thread_id provided'}), 400  # Return error status if no thread_id is provided
+    
+# Route for reply comment
+@main.route('/reply_comment/<int:comment_id>', methods=['POST'])
+@login_required
+def reply_comment(comment_id):
+    parent_comment = Comment.query.get_or_404(comment_id)
+    content = request.form.get('content')
+    reply = Comment(content=content, parent=parent_comment, author=current_user, thread_id=parent_comment.thread_id)
+    db.session.add(reply)
+    db.session.commit()
+    return redirect(url_for('main.thread_detailed', thread_id=parent_comment.thread.id))
+
+# # Route for edit comment
+# @main.route('/edit_comment/<int:comment_id>')
+# @login_required
+# def edit_comment(comment_id):
+#     comment = Comment.query.get_or_404(comment_id)
+#     return render_template('thread_detailed.html', thread=comment.thread, user=current_user, edit_comment=True, comment_id=comment_id)
+
+
 
