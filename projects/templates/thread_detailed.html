@@ -1,16 +1,16 @@
 {% extends "base.html" %} {% block content %}
 <!--starts here-->
 <body>
-  <div style="display: flex; flex-direction: column; height: calc(100dvh - 219px); width: 100vw;">
-    <div style="padding: 20px 20px 0px 20px;">
+  <div style="display: flex; flex-direction: column; height: calc(100dvh - 219px); min-width: 100dvw;" >
+    <div style="padding: 20px 20px 0px 20px; min-width: 100dvw;">
       <div class="subforum-row">
         <div class="subforum-icon subforum-column center">
             <i class="fa fa-user center"></i>
         </div>
           {% if (not edit and own) or (not edit and current_user.id==1) %}
         <div class="subforum-description subforum-column">
-            <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
-            <p>{{ thread.content }}</p>
+            <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}" style="word-wrap: break-word;">{{ thread.title }}</a></h4>
+            <p style="word-wrap: break-word;">{{ thread.content }}</p>
             <div style="display: flex;">
               {% if current_user.id != 1 and own %}
               <button class="element-btns"><a href="{{ url_for('main.thread_edit', thread_id=thread.id)}}">Edit Thread</a></button>
@@ -33,7 +33,7 @@
             rows="6"
             name="title"
             id="title"
-            class="formbold-form-input"
+            class="textarea"
             value="{{ thread.title }}"
             placeholder="{{ thread.title }}"
             required
@@ -43,7 +43,7 @@
             rows="6"
             name="content"
             id="content"
-            class="formbold-form-input"
+            class="textarea"
             value="{{ thread.content }}"
             placeholder="{{ thread.content }}"
           >{{ thread.content }}</textarea>
@@ -75,27 +75,30 @@
         </div>
     </div>
       {% for comment in thread.comments %}
-      <div class="comment">
-        <div class="top-comment">
-        {% if comment.author.name %}
-          <p class="user">{{comment.author.name}}</p>
-        {% else %}
-          <p class="user">Anonymous</p>
-        {% endif %}
-          <p class="comment-ts">{{comment.date}}</p>
+      <div class="comment-container opened" id="first-comment">
+        <div class="comment">
+          <div class="top-comment">
+          {% if comment.author.name %}
+            <p class="user">{{comment.author.name}}</p>
+          {% else %}
+            <p class="user">Anonymous</p>
+          {% endif %}
+            <p class="comment-ts">{{comment.date}}</p>
+          </div>
+          <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
+          <div class="show-replies"></div>
+          {% if (comment.author.id == current_user.id) or (current_user.id == 1) %}
+          <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
+            <button type="submit" class="comment-btns">Delete Comment</button>
+          </form>
+          {% endif %}
         </div>
-        <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
-        {% if (comment.author.id == current_user.id) or(current_user.id == 1) %}
-        <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
-          <button type="submit" class="comment-btns">Delete Comment</button>
-        </form>
-        {% endif %}
       </div>
       {% endfor %}
       {% if current_user.is_authenticated %}
       <form action="{{ url_for('main.add_comment', thread_id= thread.id ) }}" method="POST">
-        <textarea id="content" name="content"></textarea>
-        <button type="submit" class="button" style="font-size: smaller ;font-weight: bold; color: #3273dc; box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;">Add Comment</button>
+        <textarea id="content" name="content" class="textarea"></textarea>
+        <button type="submit" class="button" style="font-size: smaller ;font-weight: bold; color: #3273dc; box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; margin: 5px;">Add Comment</button>
       </form>
       {% endif %}
     </div>
@@ -104,18 +107,8 @@
     </footer>
   </div>
   <style>
-    textarea {
-    
-    width: 95%;
-    padding: 13px 22px;
-    border-radius: 5px;
-    border: 1px solid #dde3ec;
-    background: #ffffff;
-    font-weight: 500;
-    font-size: 16px;
-    color: #07074d;
-    outline: none;
-    resize: none;
+    .textarea {
+      max-height: 50px;
     }
   </style>
 </body>

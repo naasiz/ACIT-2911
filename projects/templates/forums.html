@@ -25,8 +25,8 @@
                     <i class="fa fa-user center"></i>
                 </div>
                 <div class="subforum-description subforum-column">
-                    <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
-                    <p>{{ thread.content }}</p>
+                    <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}" style="word-wrap: break-word;">{{ thread.title }}</a></h4>
+                    <p style="word-wrap: break-word;">{{ thread.content }}</p>
                     <div class="subforum-upvote-downvote">
                     {% if thread.upvoted == 1 %}
                         <span class="upvote-btn clicked" data-thread-id="{{ thread.id }}">
