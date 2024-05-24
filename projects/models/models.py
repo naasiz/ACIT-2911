@@ -5,6 +5,7 @@ from flask_login import UserMixin
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, DateField
 from wtforms.validators import DataRequired
+from flask_wtf.file import FileField
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True) 
@@ -57,6 +58,7 @@ class Form(FlaskForm):
     email = StringField("Email", validators=[DataRequired()])
     description = TextAreaField("Description", validators=[DataRequired()])
     date_of_birth = DateField("Date of Birth")
+    profile_pic = FileField('Profile Pic')
     submit = SubmitField("Submit")
     
 
