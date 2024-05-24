@@ -18,13 +18,18 @@ cd projects
 ```bash
 pip install -r requirements.txt
 ```
+3. Run manage.py
 
-3. Run the app:
+```
+py manage.py
+```
+
+4. Run the app:
 
 ```bash
 py app.py
 ```
-4. Click the [link](http://127.0.0.1:5000).
+5. Click the [link](http://127.0.0.1:5000).
 
 ## Contributors
 Tristan James Torres
