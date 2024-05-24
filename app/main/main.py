@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify
 from flask_login import login_required, current_user 
-from db.db import db
-from models.models import User, Thread, Comment, Subheading, Form, User_Thread_Upvotes
+from app.db import db
+from app.main.models import User, Thread, Comment, Subheading, Form, User_Thread_Upvotes
 from datetime import datetime
 from wtforms import TextAreaField
 from flask_wtf import FlaskForm
@@ -23,9 +23,9 @@ def index():
             except:
                 thread.upvotes = db.session.query(User_Thread_Upvotes).filter(User_Thread_Upvotes.thread_id == thread.id).count()  # Count the number of upvotes for each thread
     try:
-        return render_template('forums.html', subheadings=results, user=current_user)  # Render the forums.html template with the subheadings and current user
+        return render_template('index.html', subheadings=results, user=current_user)  # Render the index.html template with the subheadings and current user
     except AttributeError:
-        return render_template('forums.html', subheadings=results)  # If there is no current user, render the forums.html template without the user
+        return render_template('index.html', subheadings=results)  # If there is no current user, render the index.html template without the user
 
 @main.route('/profile')  # Route decorator for the profile route
 @login_required  # Require login to access the profile route

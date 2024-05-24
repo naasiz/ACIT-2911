@@ -1,7 +1,7 @@
 from app import create_app 
-from db.db import db
+from app.db import db
 from datetime import datetime, date  
-from models.models import User, Thread, Comment, Subheading
+from app.main.models import User, Thread, Comment, Subheading
 from werkzeug.security import generate_password_hash
 import random
 from faker import Faker
@@ -31,7 +31,7 @@ def create_Thread():
         content = fake.text(max_nb_chars=200)
         return Thread(author=user, subheading=subhead, title=title, content=content)
     
-    for i in range(2, 34):
+    for i in range(2, 10):
         user =db.get_or_404(User, random.randint(2,3))
         subheading =db.get_or_404(Subheading, random.randint(1,4))
         thread = thread_return(user, subheading)

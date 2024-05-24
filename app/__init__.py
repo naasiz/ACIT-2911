@@ -1,22 +1,19 @@
 from flask import Flask
 from flask_login import LoginManager
-from db.db import db
+from app.db import db
+# from apps.manage import run
 import os 
 port = os.environ.get("PORT", 5000)
 def create_app():
     app = Flask(__name__)
-
-    app.config['SECRET_KEY'] = 'secret-key-goes-here'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-
+    
+    app.config.from_object('config.DevelopmentConfig')
     db.init_app(app)
-
-
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    from models.models import User
+    from app.main.models import User
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -24,11 +21,11 @@ def create_app():
         return db.get_or_404(User, user_id)
 
     # blueprint for auth routes in our app
-    from auth import auth as auth_blueprint
+    from app.main.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
     # blueprint for non-auth parts of app
-    from main import main as main_blueprint
+    from app.main.main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
     return app
