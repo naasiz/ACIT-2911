@@ -74,37 +74,58 @@
             <br>on <small>{{ thread.date }}</small>
         </div>
     </div>
-      {% for comment in thread.comments %}
-      <div class="comment-container opened" id="first-comment">
+    {% for comment in thread.comments %}
+    <div class="comment-container opened" id="first-comment">
         <div class="comment">
-          <div class="top-comment">
-          {% if comment.author.name %}
-            <p class="user">{{comment.author.name}}</p>
-          {% else %}
-            <p class="user">Anonymous</p>
-          {% endif %}
-            <p class="comment-ts">{{comment.date}}</p>
-          </div>
-          <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
-          <form action="{{ url_for('main.reply_comment', comment_id=comment.id) }}" method="POST">
-            <textarea name="content" placeholder="Write a reply..."></textarea>
-            <button type="submit" class="comment-btns">Reply</button>
-          </form>
-          {% if (comment.author.id == current_user.id) or (current_user.id == 1) %}
-          <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
-            <button type="submit" class="comment-btns">Delete Comment</button>
-          </form>
-          {% endif %}
+            <div class="top-comment">
+                <p class="user">{{comment.author.name}}</p>
+                <p class="comment-ts">{{comment.date}}</p>
+            </div>
+            {% if not comment.id == edit_comment_id and (comment.author.id == current_user.id or current_user.id == 1) %}
+                <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
+                <div style="display: flex;">
+                    <button class="element-btns"><a href="{{ url_for('main.comment_edit', comment_id=comment.id)}}">Edit Comment</a></button>
+                    <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
+                        <button class="element-btns" type="submit"><a>Delete Comment</a></button>
+                    </form>
+                </div>
+            {% elif comment.id == edit_comment_id and (comment.author.id == current_user.id or current_user.id == 1) %}
+                <form action="{{ url_for('main.comment_update', comment_id=comment.id)}}" method="POST">
+                    <textarea
+                    rows="6"
+                    name="content"
+                    id="content"
+                    class="textarea"
+                    value="{{ comment.content }}"
+                    placeholder="{{ comment.content }}"
+                    required
+                    >{{ comment.content }}</textarea>
+                    <div style="display: flex;">
+                        <button type="submit" class="element-btns"><a>Save Comment</a></button>
+                    </form>
+                    <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
+                        <button class="element-btns" type="submit"><a>Delete Comment</a></button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="comment-content">{{comment.content}}</div>
+            {% endif %}
+            <!-- Add Reply Form -->
+            {% if current_user.is_authenticated %}
+                <form action="{{ url_for('main.add_reply', comment_id=comment.id) }}" method="POST">
+                    <textarea name="content" placeholder="Write a reply..." class="textarea"></textarea>
+                    <button type="submit" class="comment-btns">Reply</button>
+                </form>
+            {% endif %}
         </div>
-      </div>
-      {% endfor %}
-      {% if current_user.is_authenticated %}
-      <form action="{{ url_for('main.add_comment', thread_id= thread.id ) }}" method="POST">
-        <textarea id="content" name="content" class="textarea"></textarea>
-        <button type="submit" class="button" style="font-size: smaller ;font-weight: bold; color: #3273dc; box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; margin: 5px;">Add Comment</button>
-      </form>
-      {% endif %}
     </div>
+    {% endfor %}
+    {% if current_user.is_authenticated %}
+        <form action="{{ url_for('main.add_comment', thread_id= thread.id ) }}" method="POST">
+            <textarea id="content" name="content" class="textarea"></textarea>
+            <button type="submit" class="button" style="font-size: smaller ;font-weight: bold; color: #3273dc; box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; margin: 5px;">Add Comment</button>
+        </form>
+    {% endif %}
     <footer>
         <span>&copy;  BCIT | All Rights Reserved</span>
     </footer>
