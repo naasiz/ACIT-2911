@@ -86,12 +86,15 @@
           {% if comment.id != edit_comment_id %}
           <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
             {% if current_user.is_authenticated and current_user.id == comment.author.id %}
-            <button class="element-btns"><a href="{{ url_for('main.comment_edit', comment_id=comment.id)}}">Edit Comment</a></button>
+            <div style="display: flex;">
+              <button class="element-btns"><a href="{{ url_for('main.comment_edit', comment_id=comment.id)}}">Edit Comment</a></button>
+        
             {% endif %}
             {% if current_user.is_authenticated and (current_user.id == comment.author.id or current_user.id == 1) %}
               <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
                   <button class="element-btns" type="submit"><a>Delete Comment</a></button>
               </form>
+            </div>
             {% endif %}
           {% elif comment.id == edit_comment_id and current_user == comment.author.id %}
             <div>
