@@ -217,52 +217,22 @@ def upvote():
     else:
         return jsonify({'status': 'error', 'message': 'No thread_id provided'}), 400  # Return error status if no thread_id is provided
     
-# @main.route("/comment_reply/<int:comment_id>", methods=["POST"])  # Route decorator for the add_reply route
-# def add_reply(comment_id):
-#     if request.form["content"] != "":  # Check if the content field is not empty
-#         parent_comment = db.get_or_404(Comment, comment_id)  # Get the parent comment with the specified comment_id from the database
-#         try:
-#             user = db.get_or_404(User, current_user.id)  # Check if there is a current user
-#             db.session.add(Comment(author=user, thread=parent_comment.thread, content=request.form["content"], parent_id=parent_comment.id))  # Create a new reply with the author, thread, content, and parent_id
-#         except AttributeError:
-#             db.session.add(Comment(thread=parent_comment.thread, content=request.form["content"], parent_id=parent_comment.id))  # Create a new reply with the thread, content, and parent_id
-#         db.session.commit()  # Commit the changes to the database
-#     return redirect(url_for('main.thread_detailed', thread_id=parent_comment.thread.id)) # redirect to thread_detailed.html
 
-@main.route("/reply/<int:comment_id>", methods=["POST"])
+
+@main.route("/comment_reply/<int:comment_id>", methods=["POST"])  # Route decorator for the add_reply route
 def add_reply(comment_id):
-    if request.form["content"] != "":
-        comment = db.get_or_404(Comment, comment_id)
-        reply = Comment(content=request.form["content"], author=current_user, thread=comment.thread, parent=comment)
-        db.session.add(reply)
-        db.session.commit()
-    return redirect(url_for('main.thread_detailed', thread_id=comment.thread_id))
+    if request.form["content"] != "":  # Check if the content field is not empty
+        parent_comment = db.get_or_404(Comment, comment_id)  # Get the parent comment with the specified comment_id from the database
+        try:
+            user = db.get_or_404(User, current_user.id)  # Check if there is a current user
+            db.session.add(Comment(author=user, thread=parent_comment.thread, content=request.form["content"], parent_id=parent_comment.id))  # Create a new reply with the author, thread, content, and parent_id
+        except AttributeError:
+            db.session.add(Comment(thread=parent_comment.thread, content=request.form["content"], parent_id=parent_comment.id))  # Create a new reply with the thread, content, and parent_id
+        db.session.commit()  # Commit the changes to the database
+    return redirect(url_for('main.thread_detailed', thread_id=parent_comment.thread.id)) # redirect to thread_detailed.html
 
-
-@main.route('/comment_detailed/<int:comment_id>')  # Route decorator for the comment_detailed route
-def comment_detailed(comment_id):
-    comment = db.get_or_404(Comment, comment_id)  # Get the comment with the specified comment_id from the database
-    comment.count = db.session.query(Comment).filter(Comment.parent_id == comment.id).count()  # Count the number of replies for the comment
-    try:
-        if int(comment.author.id) == int(current_user.id):  # Check if the current user is the author of the comment
-            return render_template("comment_detailed.html", comment=comment, user=current_user, edit=False, own=True)  # Render the comment_detailed.html template with the comment, current user, and edit and own flags
-        else:
-            return render_template("comment_detailed.html", comment=comment, user=current_user, edit=False, own=False)  # Render the comment_detailed.html template with the comment, current user, and edit and own flags
-    except:
-        return render_template("thread_detailed.html", comment=comment, user=current_user, edit=False, own=False)  # Render the comment_detailed.html template with the comment, current user, and edit and own flags
     
-# @main.route('/comment_detailed/edit/<int:comment_id>')  # Route decorator for the comment_edit route
-# def comment_edit(comment_id):
-#     comment = db.get_or_404(Comment, comment_id)  # Get the comment with the specified comment_id from the database
-#     thread = db.get_or_404(Thread, comment.thread_id)
-#     if current_user.id == comment.author.id:
-#         # comment.count = db.session.query(Comment).filter(Comment.parent_id == comment.id).count()  # Count the number of replies for the comment
-#         thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()  # Count the number of comments for the thread
-#         return render_template("thread_detailed.html", thread=thread, user=current_user, edit=False, edit_comment_id=comment_id)  
-#     else:
-#         return redirect(url_for('main.thread_detailed', thread_id = comment.thread.id))
-
-@main.route('/comment_detailed/edit/<int:comment_id>')  # Route decorator for the comment_edit route
+@main.route('/edit/<int:comment_id>')  # Route decorator for the comment_edit route
 def comment_edit(comment_id):
     comment = db.get_or_404(Comment, comment_id)  # Get the comment with the specified comment_id from the database
     comment.count = db.session.query(Comment).filter(Comment.parent_id == comment.id).count()  # Count the number of replies for the comment
@@ -270,19 +240,14 @@ def comment_edit(comment_id):
     thread.count = db.session.query(Comment).filter(Comment.thread_id == thread.id).count()  # Count the number of comments for the thread
     return render_template("thread_detailed.html", thread=thread, comment=comment, user=current_user, edit_comment_id=comment_id)  # Render the thread_detailed.html template with the thread, comment, current user, and edit flag
 
-@main.route("/comment_detailed/editing/<int:comment_id>", methods=["POST"])  # Route decorator for the comment_update route
+@main.route("/update/<int:comment_id>", methods=["POST"])  # Route decorator for the comment_update route
 def comment_update(comment_id):
     comment = db.get_or_404(Comment, comment_id)  # Get the comment with the specified comment_id from the database
-    if current_user.id == comment.author.id:
-        if request.form["content"] == "":  # Check if the content field is not empty
-            # FLASH HERE
-            return redirect(url_for('main.thread_detailed', thread_id=comment.thread.id))  # Redirect to the thread_detailed route
-        elif request.form['content'] != "":
-            comment.content = request.form["content"]  # Update the content of the comment
-        db.session.commit()  # Commit the changes to the database
+    if request.form["content"] == "":  # Check if the content field is not empty
+        return redirect(url_for('main.thread_detailed', thread_id=comment.thread.id))  # Redirect to the thread_detailed route
+    comment.content = request.form["content"]  # Update the content of the comment
+    db.session.commit()  # Commit the changes to the database
     return redirect(url_for('main.thread_detailed', thread_id=comment.thread.id))  # Redirect to the thread_detailed route
-
-
 
 
 
