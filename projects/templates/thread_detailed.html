@@ -7,24 +7,24 @@
         <div class="subforum-icon subforum-column center">
             <i class="fa fa-user center"></i>
         </div>
-          {% if (not edit and own) or (not edit and current_user.id==1) %}
+        <!-- edit was set False as default, because we are url_for the thread_detailed function  -->
+        {% if not edit %} 
         <div class="subforum-description subforum-column">
             <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}" style="word-wrap: break-word;">{{ thread.title }}</a></h4>
             <p style="word-wrap: break-word;">{{ thread.content }}</p>
             <div style="display: flex;">
-              {% if current_user.id != 1 and own %}
+              {% if current_user.is_authenticated and current_user.id == thread.author.id %}
               <button class="element-btns"><a href="{{ url_for('main.thread_edit', thread_id=thread.id)}}">Edit Thread</a></button>
-              {% endif %}
               <form action="{{ url_for('main.del_thread', thread_id=thread.id) }}" method="POST">
                 <button class="element-btns" type="submit"><a>Delete Thread</a></button>
               </form>
+              {% elif current_user.is_authenticated and (current_user.id == thread.author.id or current_user.id == 1) %}
+              <form action="{{ url_for('main.del_thread', thread_id=thread.id) }}" method="POST">
+                <button class="element-btns" type="submit"><a>Delete Thread</a></button>
+              </form>
+              {% endif %}
             </div>
         </div>
-        {% elif not edit and not own%}
-        <div class="subforum-description subforum-column">
-          <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
-          <p>{{ thread.content }}</p>
-      </div>
         {% elif edit %}
         <div class="subforum-description subforum-column">
           <form action="{{ url_for('main.thread_update', thread_id=thread.id)}}" method="POST">
@@ -60,56 +60,63 @@
         <div class="subforum-stats subforum-column center">
             <span>{{ thread.count }} Comment </span>
         </div>
-        {% endif %} {% if thread.count > 1 or thread.count == 0  %}
+        {% endif %} 
+        {% if thread.count > 1 or thread.count == 0  %}
         <div class="subforum-stats subforum-column center">
             <span>{{ thread.count }} Comments </span>
         </div>
         {% endif %}
         <div class="subforum-info subforum-column">
-            {% if thread.author.name %}
-            by <a href="">{{ thread.author.name }}</a> 
-            {% else %}
-            by <a href="">Anonymous</a> 
-            {% endif %}
-            <br>on <small>{{ thread.date }}</small>
+          {% if thread.author.name %}
+          by <a href="">{{ thread.author.name }}</a> 
+          {% else %}
+          by <a href="">Anonymous</a> 
+          {% endif %}
+          <br>on <small>{{ thread.date }}</small>
         </div>
-    </div>
-    {% for comment in thread.comments %}
-    <div class="comment-container opened" id="first-comment">
+      </div>
+      {% for comment in thread.comments %}
+      <div class="comment-container opened" id="first-comment">
         <div class="comment">
-            <div class="top-comment">
-                <p class="user">{{comment.author.name}}</p>
-                <p class="comment-ts">{{comment.date}}</p>
-            </div>
-            {% if not comment.id == edit_comment_id and (comment.author.id == current_user.id or current_user.id == 1) %}
-                <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
-                <div style="display: flex;">
-                    <button class="element-btns"><a href="{{ url_for('main.comment_edit', comment_id=comment.id)}}">Edit Comment</a></button>
-                    <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
-                        <button class="element-btns" type="submit"><a>Delete Comment</a></button>
-                    </form>
-                </div>
-            {% elif comment.id == edit_comment_id and (comment.author.id == current_user.id or current_user.id == 1) %}
-                <form action="{{ url_for('main.comment_update', comment_id=comment.id)}}" method="POST">
-                    <textarea
-                    rows="6"
-                    name="content"
-                    id="content"
-                    class="textarea"
-                    value="{{ comment.content }}"
-                    placeholder="{{ comment.content }}"
-                    required
-                    >{{ comment.content }}</textarea>
-                    <div style="display: flex;">
-                        <button type="submit" class="element-btns"><a>Save Comment</a></button>
-                    </form>
-                    <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
-                        <button class="element-btns" type="submit"><a>Delete Comment</a></button>
-                    </form>
-                </div>
-            {% else %}
-                <div class="comment-content">{{comment.content}}</div>
+          <div class="top-comment">
+            <p class="user">{{comment.author.name}}</p>
+            <p class="comment-ts">{{comment.date}}</p>
+          </div>
+          <!-- if it is comment ==> red, reply ==> black -->
+          {% if comment.id != edit_comment_id %}
+          <div class="comment-content" style="color: rgb(197, 71, 77);">{{comment.content}}</div>
+            {% if current_user.is_authenticated and current_user.id == comment.author.id %}
+            <button class="element-btns"><a href="{{ url_for('main.comment_edit', comment_id=comment.id)}}">Edit Comment</a></button>
             {% endif %}
+            {% if current_user.is_authenticated and (current_user.id == comment.author.id or current_user.id == 1) %}
+              <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
+                  <button class="element-btns" type="submit"><a>Delete Comment</a></button>
+              </form>
+            {% endif %}
+          {% elif comment.id == edit_comment_id and current_user == comment.author.id %}
+            <div>
+              <form action="{{ url_for('main.comment_update', comment_id=comment.id)}}" method="POST">
+                <textarea
+                rows="6"
+                name="content"
+                id="content"
+                class="textarea"
+                value="{{ comment.content }}"
+                placeholder="{{ comment.content }}"
+                required
+                >{{ comment.content }}</textarea>
+                <div style="display: flex;">
+                  <button type="submit" class="element-btns"><a>Save Comment</a></button>
+                </div>
+              </form>
+              <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
+                <button class="element-btns" type="submit"><a>Delete Comment</a></button>
+              </form>
+            </div>
+          </div>
+          {% else %}
+                <div class="comment-content">{{comment.content}}</div>
+          {% endif %}
             <!-- Add Reply Form -->
             {% if current_user.is_authenticated %}
                 <form action="{{ url_for('main.add_reply', comment_id=comment.id) }}" method="POST">
@@ -118,7 +125,7 @@
                 </form>
             {% endif %}
         </div>
-    </div>
+      </div>
     {% endfor %}
     {% if current_user.is_authenticated %}
         <form action="{{ url_for('main.add_comment', thread_id= thread.id ) }}" method="POST">
