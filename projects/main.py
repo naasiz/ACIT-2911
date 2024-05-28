@@ -249,7 +249,3 @@ def comment_update(comment_id):
     db.session.commit()  # Commit the changes to the database
     return redirect(url_for('main.thread_detailed', thread_id=comment.thread.id))  # Redirect to the thread_detailed route
 
-
-
-
-

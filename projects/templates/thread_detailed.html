@@ -76,7 +76,7 @@
         </div>
       </div>
       {% for comment in thread.comments %}
-      <div class="comment-container opened" id="first-comment">
+       <div class="comment-container opened" id="first-comment">
           <div class="comment">
               <div class="top-comment">
                   <p class="user">{{comment.author.name}}</p>
@@ -119,12 +119,7 @@
                   <div class="comment-content">{{comment.content}}</div>
               {% endif %}
               <!-- Add Reply Form -->
-              {% if current_user.is_authenticated %}
-                  <form action="{{ url_for('main.add_reply', comment_id=comment.id) }}" method="POST">
-                      <textarea name="content" placeholder="Write a reply..." class="textarea"></textarea>
-                      <button type="submit" class="comment-btns">Reply</button>
-                  </form>
-              {% endif %}
+            
           </div>
       </div>
       {% endfor %}
