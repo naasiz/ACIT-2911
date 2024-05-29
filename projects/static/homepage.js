@@ -154,30 +154,3 @@ replyButtons.forEach((btn) =>
   })
 );
 
-
-// // Get all the reply buttons
-// const replyButtons = document.querySelectorAll(".show-replies");
-
-// replyButtons.forEach((btn) =>
-//   btn.addEventListener("click", (e) => {
-//     // Get the parent comment container
-//     let parentContainer = e.target.closest(".comment");
-//     // Get the direct reply containers within the parent comment container
-//     let replyContainers = parentContainer.querySelectorAll(".replies").children;
-//     // Toggle the 'opened' class for each reply container
-//     Array.from(replyContainers).forEach((container) => container.classList.toggle("opened"));
-//   })
-// );
-
-// // Get all the reply buttons
-// const replyButtons = document.querySelectorAll(".show-replies");
-
-// replyButtons.forEach((btn) =>
-//   btn.addEventListener("click", (e) => {
-//     // Get the next sibling element (the .replies div)
-//     let repliesDiv = e.target.nextElementSibling;
-//     // Toggle the 'opened' class for the replies div
-//     repliesDiv.classList.toggle("opened");
-//   })
-// );
-
