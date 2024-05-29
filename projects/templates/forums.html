@@ -28,19 +28,25 @@
                     <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}" style="word-wrap: break-word;">{{ thread.title }}</a></h4>
                     <p style="word-wrap: break-word;">{{ thread.content }}</p>
                     <div class="subforum-upvote-downvote">
-                    {% if thread.upvoted == 1 %}
-                        <span class="upvote-btn clicked" data-thread-id="{{ thread.id }}">
-                            <i class="fa fa-arrow-up"></i>
-                        </span>
-                        {% elif thread.upvoted != 1 %}    
-                        <span class="upvote-btn" data-thread-id="{{ thread.id }}">
-                            <i class="fa fa-arrow-up"></i>
-                        </span>
+                        {% if thread.upvoted == 1 %}
+                            <span class="upvote-btn clicked" data-thread-id="{{ thread.id }}">
+                                <i class="fa fa-arrow-up"></i>
+                            </span>
+                        {% elif thread.upvoted != 1 %}
+                            <span class="upvote-btn" data-thread-id="{{ thread.id }}">
+                                <i class="fa fa-arrow-up"></i>
+                            </span>
                         {% endif %}
                         <span class="upvote-count">{{ thread.upvotes }}</span>
-                        <span class="downvote-btn" data-thread-id="{{ thread.id }}">
-                            <i class="fa fa-arrow-down"></i>
-                        </span>
+                        {% if thread.downvoted == 1 %}
+                            <span class="downvote-btn clicked" data-thread-id="{{ thread.id }}">
+                                <i class="fa fa-arrow-down"></i>
+                            </span>
+                        {% elif thread.downvoted != 1 %}
+                            <span class="downvote-btn" data-thread-id="{{ thread.id }}">
+                                <i class="fa fa-arrow-down"></i>
+                            </span>
+                        {% endif %}
                         <span class="downvote-count">{{ thread.downvotes }}</span>
                     </div>
                 </div>
@@ -64,7 +70,7 @@
         </div>
         {% endfor %}
     </div>
-    
+
         </div>
     </div>
     <!-- Forum Info -->
@@ -76,7 +82,7 @@
         <span>Latest post: <b><a href="">Random post</a></b> on Dec 15 2021 By <a href="">RandomUser</a></span>.<br>
         <span>Check <a href="">the latest posts</a> .</span><br>
     </div>
-    
+
     <footer>
         <span>&copy; BCIT | All Rights Reserved</span>
     </footer>
@@ -108,80 +114,38 @@
     </style>
     {% if current_user.is_authenticated %}
     <script>
-        $(document).ready(function() {
-            $('.upvote-btn').click(function() {
-                var upvoteButton = $(this);
-                var upvoteCount = $(this).siblings('.upvote-count');
-                var downvoteButton = $(this).siblings('.downvote-btn');
-                var downvoteCount = $(this).siblings('.downvote-count');
+        const upvoteButtons = document.querySelectorAll(".upvote-btn");
+        const downvoteButtons = document.querySelectorAll(".downvote-btn");
 
-                if (!upvoteButton.hasClass('clicked')) {
-                    // If upvote is not clicked, but downvote is clicked
-                    if (downvoteButton.hasClass('clicked')) {
-                        var downvotes = parseInt(downvoteCount.text() || 0);
-                        downvoteCount.text(downvotes > 0 ? downvotes - 1 : '');
-                    }
-                    upvoteButton.toggleClass('clicked');
-                    downvoteButton.removeClass('clicked');
-                    downvoteCount.text('');
-                } else { // If upvote is already clicked, undo upvote
-                    upvoteCount.text('');
-                    upvoteButton.toggleClass('clicked');
-                }
-            });
+        upvoteButtons.forEach((button) => {
+            button.addEventListener("click", async () => {
+                await fetch("{{ url_for('main.upvote') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        thread_id: button.dataset.threadId
+                    })
+                })
+                window.location.reload();
+            })
+        })
 
-            $('.downvote-btn').click(function() {
-                var downvoteButton = $(this);
-                var downvoteCount = $(this).siblings('.downvote-count');
-                var upvoteButton = $(this).siblings('.upvote-btn');
-                var upvoteCount = $(this).siblings('.upvote-count');
-
-                if (!downvoteButton.hasClass('clicked')) {
-                    // If downvote is not clicked, but upvote is clicked
-                    if (upvoteButton.hasClass('clicked')) {
-                        var upvotes = parseInt(upvoteCount.text() || 0);
-                        upvoteCount.text(upvotes > 0 ? upvotes - 1 : '');
-                    }
-                    downvoteCount.text('1');
-                    downvoteButton.toggleClass('clicked');
-                    upvoteButton.removeClass('clicked');
-                    upvoteCount.text('');
-                } else { // If downvote is already clicked, undo downvote
-                    downvoteCount.text('');
-                    downvoteButton.toggleClass('clicked');
-                }
-            });
-        });
-
-        const likebuttons = document.getElementsByClassName('upvote-btn');
-        Array.from(likebuttons).forEach(likebutton => {
-            likebutton.addEventListener('click', async () => {
-                try {
-                    const response = await fetch('/upvote', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            thread_id: likebutton.dataset.threadId
-                        })
-                    });
-        
-                    if (response.ok) {
-                        const data = await response.json();
-                        likebutton.nextElementSibling.innerHTML = data.upvotes;
-                    } else {
-                        console.error('Response not OK');
-                    }
-                } catch (error) {
-                    console.error(error);
-                }
-            });
-        
-            likebutton.addEventListener('click', async () => {
-                console.log('clicked');
-            });
-        });
+        downvoteButtons.forEach((button) => {
+            button.addEventListener("click", async () => {
+                await fetch("{{ url_for('main.downvote') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        thread_id: button.dataset.threadId
+                    })
+                })
+                window.location.reload();
+            })
+        })
     </script>
     {% endif %}
     </body>
