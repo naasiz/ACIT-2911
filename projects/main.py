@@ -221,8 +221,8 @@ def upvote():
 
 @main.route("/comment_reply/<int:comment_id>", methods=["POST"])  # Route decorator for the add_reply route
 def add_reply(comment_id):
+    parent_comment = db.get_or_404(Comment, comment_id)  # Get the parent comment with the specified comment_id from the database
     if request.form["content"] != "":  # Check if the content field is not empty
-        parent_comment = db.get_or_404(Comment, comment_id)  # Get the parent comment with the specified comment_id from the database
         try:
             user = db.get_or_404(User, current_user.id)  # Check if there is a current user
             db.session.add(Comment(author=user, thread=parent_comment.thread, content=request.form["content"], parent_id=parent_comment.id))  # Create a new reply with the author, thread, content, and parent_id
