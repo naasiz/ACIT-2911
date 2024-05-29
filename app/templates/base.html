@@ -74,9 +74,16 @@
     {% block searchbar %}
     <!--SearchBox Section-->
     <div class="search-box">
-        <div style="display:flex; justify-content: center; align-items: center;">
-            <input type="text" name="q" placeholder="search ..." class="is-fullwidth">
-            <button><i class="fa fa-search"></i></button>
+        <form action="{{ url_for('main.search') }}" method="POST">
+                <div style="display:flex; justify-content: center; align-items: center;">
+                <input type="text" name="word-search" id="word-search" placeholder="search ..." class="is-fullwidth">
+                <select name="filter" id="filter">
+                    <option value="Thread">Thread</option>
+                    <option value="Subheading">Subheading</option>
+                    <option value="Author">Author</option>
+                </select>
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
         </div>
     </div>
     {% endblock %}

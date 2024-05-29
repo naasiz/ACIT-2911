@@ -86,6 +86,54 @@ def index():
             "index.html", subheadings=results, visited=visited
         )  # If there is no current user, render the index.html template without the user
 
+@main.route("/search", methods=["POST"])
+def search():
+    try:
+        if session["visited"] == "true":
+            visited = "true"
+    except KeyError:
+        session["visited"] = "true"
+        visited = "false"   
+        
+    word = request.form['word-search']
+    filter = request.form['filter']
+    search = "%{}%".format(word)
+    subheadings = []
+    
+    if filter == "Thread":
+        stmt = db.select(Thread).where(Thread.title.like(search))
+        results = db.session.execute(stmt).scalars()
+        for item in results:
+            if item.subheading not in subheadings:
+                subheadings.append(item.subheading)   
+    
+    elif filter == "Subheading":
+        stmt = db.select(Subheading).where(Subheading.title.like(search))
+        results = db.session.execute(stmt).scalars()
+        for item in results:
+            subheadings.append(item)
+    
+    elif filter == "Author":
+        stmt = db.select(User).where(User.name.like(search))
+        results = db.session.execute(stmt).scalars()
+        for item in results:
+            for thread in item.threads:
+                if thread.subheading not in subheadings:
+                    subheadings.append(thread.subheading)
+    
+    print("HI")
+        
+    try:
+        return render_template(
+            "index.html", subheadings=subheadings, user=current_user, visited=visited
+        )  # Render the index.html template with the subheadings and current user
+    except AttributeError:
+        return render_template(
+            "index.html", subheadings=subheadings, visited=visited
+        )  # If there is no current user, render the index.html template without the user
+
+    
+
 @main.route('/profile')  # Route decorator for the profile route
 @login_required  # Require login to access the profile route
 def profile():
