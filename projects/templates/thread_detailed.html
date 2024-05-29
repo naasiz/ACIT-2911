@@ -114,8 +114,8 @@
       {% if comment.parent_id == None %}
       {{ render_comment(comment, current_user, edit_comment_id) }}
       {% endif %}
+      {% endfor %}
     </div>
-    {% endfor %}
     {% if current_user.is_authenticated %}
     <form action="{{ url_for('main.add_comment', thread_id=thread.id ) }}" method="POST">
       <textarea id="content" name="content" class="textarea"></textarea>
