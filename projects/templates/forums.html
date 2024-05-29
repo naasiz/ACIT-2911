@@ -22,7 +22,16 @@
             {% for thread in subheading.threads %}
             <div class="subforum-row">
                 <div class="subforum-icon subforum-column center">
-                    <i class="fa fa-user center"></i>
+                    {% if thread.profile_pic and thread.profile_pic != './static/Default-user-icon.svg' %}
+                    <a href="{{ url_for('main.profile', user_id=thread.author.id) }}" class="profile_pic" style="margin-bottom:20px; margin-right: 20px;">
+                        <img src="{{ url_for('static', filename='images/' + thread.profile_pic) }}" alt="User's profile" style="min-height: 75px;
+                        min-width: 75px; object-fit: cover; border-radius: 50%; ">
+                    </a>
+                        {% else %}
+                    <a href="{{ url_for('main.profile', user_id=thread.author.id) }}" class="profile_pic" style="margin-top: 2px;">
+                        <img src="{{ url_for('static', filename='Default-user-icon.svg') }}" alt="Default profile" style="object-fit: cover; border-radius: 70%;">
+                    </a>
+                        {% endif %}
                 </div>
                 <div class="subforum-description subforum-column">
                     <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}" style="word-wrap: break-word;">{{ thread.title }}</a></h4>

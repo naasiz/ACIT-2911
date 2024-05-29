@@ -37,6 +37,7 @@ def index():
             thread.count = (
                 db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
             )  # Count the number of comments for each thread
+            thread.profile_pic = User.query.get(thread.user_id).profile_pic  # Get the profile picture of the user who posted the thread
             try:
                 thread.upvotes = (
                     db.session.query(User_Thread_Upvotes)
@@ -84,17 +85,20 @@ def index():
         )  # If there is no current user, render the forums.html template without the user
 
 
-@main.route("/profile")  # Route decorator for the profile route
+@main.route("/profile/<int:user_id>")  # Route decorator for the profile route
 @login_required  # Require login to access the profile route
-def profile():
+def profile(user_id):
+    user = db.get_or_404(User, user_id)  
     # stmt = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.user_id == current_user.id)  # Check if the current user has upvoted the thread
     # posts = len(list(db.session.execute(stmt).scalars()))
-    posts = len(list(current_user.threads))
-    comments = len(list(current_user.comments))
+    posts = len(list(user.threads))
+    comments = len(list(user.comments))
 
     return render_template(
-        "/auth/profile.html", user=current_user, posts=posts, comments=comments
+        "/auth/profile.html", user=user, posts=posts, comments=comments
     )  # Render the profile.html template with the current user
+
+
 
 
 

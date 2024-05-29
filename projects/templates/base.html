@@ -100,7 +100,7 @@
               href="{{ url_for('main.update', id = current_user.id) }}"
               >Update</a
             >
-            <a class="navbar-item" href="{{ url_for('main.profile') }}"
+            <a class="navbar-item" href="{{ url_for('main.profile', user_id=current_user.id) }}"
               >My Profile</a
             >
             <a class="navbar-item" href="{{ url_for('auth.logout') }}"
@@ -114,7 +114,7 @@
               href="{{ url_for('main.update', id = current_user.id) }}"
               >Update</a
             >
-            <a class="navbar-item" href="{{ url_for('main.profile') }}"
+            <a class="navbar-item" href="{{ url_for('main.profile', user_id=current_user.id) }}"
               >My Profile</a
             >
             <a class="navbar-item" href="{{ url_for('auth.logout') }}"
