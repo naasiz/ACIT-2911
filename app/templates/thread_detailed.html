@@ -1,0 +1,135 @@
+{% macro render_comment(comment, current_user, edit_comment_id) %}
+  <div style="border-left: 2px solid #000; margin-left: '{{ 20 * (comment.depth - 1) }}'px; display: block; z-index: 20;">
+    <div class="comment">
+      <div class="top-comment">
+        <p class="user">{{ comment.author.name }}</p>
+        <p class="comment-ts">{{ comment.date }}</p>
+        {% if comment.replies.count() == 1 %}
+          <button style="background: none; border: none; margin-left: 10px;" class="show-replies">{{ comment.replies.count() }} Reply</button>
+        {% elif comment.replies.count() == 0 or comment.replies.count() > 1 %}
+          <button style="background: none; border: none; margin-left: 10px;" class="show-replies">{{ comment.replies.count() }} Replies</button>
+        {% endif %}
+      </div>
+      {% if not comment.id == edit_comment_id and comment.author.id == current_user.id %}
+        <div class="comment-content" style="color: rgb(197, 71, 77);">{{ comment.content }}</div>
+        <div style="display: flex;">
+          <button class="element-btns"><a href="{{ url_for('main.comment_edit', comment_id=comment.id)}}">Edit Comment</a></button>
+          <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
+            <button class="element-btns" type="submit"><a>Delete Comment</a></button>
+          </form>
+        </div>
+      {% elif not comment.id == edit_comment_id and current_user.id == 1 %}
+        <div class="comment-content" style="color: rgb(197, 71, 77);">{{ comment.content }}</div>
+        <div style="display: flex;">
+          <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
+            <button class="element-btns" type="submit"><a>Delete Comment</a></button>
+          </form>
+        </div>
+      {% elif comment.id == edit_comment_id and (comment.author.id == current_user.id or current_user.id == 1) %}
+        <form action="{{ url_for('main.comment_update', comment_id=comment.id)}}" method="POST">
+          <textarea rows="6" name="content" id="content" class="textarea" value="{{ comment.content }}" placeholder="{{ comment.content }}" required>{{ comment.content }}</textarea>
+          <div style="display: flex;">
+            <button type="submit" class="element-btns"><a>Save Comment</a></button>
+          </div>
+        </form>
+        <form action="{{ url_for('main.del_comment', comment_id=comment.id) }}" method="POST">
+          <button class="element-btns" type="submit"><a>Delete Comment</a></button>
+        </form>
+      {% else %}
+        <div class="comment-content">{{ comment.content }}</div>
+      {% endif %}
+      {% if current_user.is_authenticated %}
+        <form action="{{ url_for('main.add_reply', comment_id=comment.id) }}" method="POST">
+          <input type="text" name="content" id="">
+          <button type="submit" class="comment-btns">Reply</button>
+        </form>
+      {% endif %}
+      <div class="replies">
+        {% for reply in comment.replies %}
+          {{ render_comment(reply, current_user, edit_comment_id) }}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endmacro %}
+
+{% extends "base.html" %}
+{% block content %}
+<div>
+  <div style="display: flex; flex-direction: column; height: calc(100dvh - 219px); min-width: 100dvw;">
+    <div style="padding: 20px 20px 0px 20px; min-width: 100dvw;">
+      <div class="subforum-row">
+        <div class="subforum-icon subforum-column center">
+          <i class="fa fa-user center"></i>
+        </div>
+        {% if not edit %}
+        <div class="subforum-description subforum-column">
+          <h4><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}" style="word-wrap: break-word;">{{ thread.title }}</a></h4>
+          <p style="word-wrap: break-word;">{{ thread.content }}</p>
+          <div style="display: flex;">
+            {% if current_user.is_authenticated and current_user.id == thread.author.id %}
+            <button class="element-btns"><a href="{{ url_for('main.thread_edit', thread_id=thread.id)}}">Edit Thread</a></button>
+            <form action="{{ url_for('main.del_thread', thread_id=thread.id) }}" method="POST">
+              <button class="element-btns" type="submit"><a>Delete Thread</a></button>
+            </form>
+            {% elif current_user.is_authenticated and (current_user.id == thread.author.id or current_user.id == 1) %}
+            <form action="{{ url_for('main.del_thread', thread_id=thread.id) }}" method="POST">
+              <button class="element-btns" type="submit"><a>Delete Thread</a></button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+        {% elif edit %}
+        <div class="subforum-description subforum-column">
+          <form action="{{ url_for('main.thread_update', thread_id=thread.id)}}" method="POST">
+            <h4 id ="title" name="title"><a href="{{ url_for('main.thread_detailed', thread_id=thread.id)}}">{{ thread.title }}</a></h4>
+            <textarea rows="6" name="title" id="title" class="textarea" value="{{ thread.title }}" placeholder="{{ thread.title }}" required>{{ thread.title }}</textarea>
+            <p id="content" name="content">{{ thread.content }}</p>
+            <textarea rows="6" name="content" id="content" class="textarea" value="{{ thread.content }}" placeholder="{{ thread.content }}">{{ thread.content }}</textarea>
+            <div style="display: flex;">
+              <button type="submit" class="element-btns"><a>Save Thread</a></button>
+            </div>
+          </form>
+          <form action="{{ url_for('main.del_thread', thread_id=thread.id) }}" method="POST">
+            <button class="element-btns" type="submit"><a>Delete Thread</a></button>
+          </form>
+        </div>
+        {% endif %}
+        {% if thread.count == 1 %}
+        <div class="subforum-stats subforum-column center">
+          <span>{{ thread.count }} Comment</span>
+        </div>
+        {% endif %}
+        {% if thread.count > 1 or thread.count == 0 %}
+        <div class="subforum-stats subforum-column center">
+          <span>{{ thread.count }} Comments</span>
+        </div>
+        {% endif %}
+        <div class="subforum-info subforum-column">
+          by <a href="">{{ thread.author.name }}</a> 
+          <br>on <small>{{ thread.date }}</small>
+        </div>
+      </div>
+      {% for comment in thread.comments %}
+      {% if comment.parent_id == None %}
+      {{ render_comment(comment, current_user, edit_comment_id) }}
+      {% endif %}
+      {% endfor %}
+    </div>
+    {% if current_user.is_authenticated %}
+    <form action="{{ url_for('main.add_comment', thread_id=thread.id ) }}" method="POST">
+      <textarea id="content" name="content" class="textarea"></textarea>
+      <button type="submit" class="button" style="font-size: smaller; font-weight: bold; color: #3273dc; box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; margin: 5px;">Add Comment</button>
+    </form>
+    {% endif %}
+    <footer>
+      <span>&copy; BCIT | All Rights Reserved</span>
+    </footer>
+  </div>
+  <style>
+    .textarea {
+      max-height: 50px;
+    }
+  </style>
+</div>
+{% endblock %}

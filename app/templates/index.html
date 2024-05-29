@@ -32,17 +32,27 @@
                             <span class="upvote-btn clicked" data-thread-id="{{ thread.id }}">
                                 <i class="fa fa-arrow-up"></i>
                             </span>
-                        {% elif thread.upvoted != 1 %}
+                        {% elif thread.upvoted != 1 and thread.downvoted != 1 %}
                             <span class="upvote-btn" data-thread-id="{{ thread.id }}">
                                 <i class="fa fa-arrow-up"></i>
                             </span>
                         {% endif %}
+                        {% if thread.downvoted == 1 and thread.upvoted != 1 %}
+                        <span class="upvote-btn" style="pointer-events: none;" data-thread-id="{{ thread.id }}">
+                            <i class="fa fa-arrow-up" style="pointer-events: none;"></i>
+                        </span>
+                        {% endif %}
                         <span class="upvote-count">{{ thread.upvotes }}</span>
+                        {% if thread.upvoted == 1 and thread.downvoted != 1 %}
+                        <span class="downvote-btn" style="pointer-events: none;" data-thread-id="{{ thread.id }}">
+                            <i class="fa fa-arrow-down" style="pointer-events: none;"></i>
+                        </span>
+                        {% endif %}
                         {% if thread.downvoted == 1 %}
                             <span class="downvote-btn clicked" data-thread-id="{{ thread.id }}">
                                 <i class="fa fa-arrow-down"></i>
                             </span>
-                        {% elif thread.downvoted != 1 %}
+                        {% elif thread.downvoted != 1 and thread.upvoted != 1 %}
                             <span class="downvote-btn" data-thread-id="{{ thread.id }}">
                                 <i class="fa fa-arrow-down"></i>
                             </span>

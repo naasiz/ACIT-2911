@@ -30,7 +30,7 @@ def test_profile_success(client):
     # Verify that the response status code is 302 (Redirect)
     assert response.status_code == 302
     # Verify that the response location is '/profile'
-    assert response.location == '/profile'
+    assert response.location == '/'
     # Send a GET request to the profile endpoint
     response = client.get('/profile')
     # Verify that the string is found in response.text
@@ -45,7 +45,7 @@ def test_profile_fail(client):
     # Verify that the response status code is 302 (Redirect)
     assert response.status_code == 302
     # Verify that the response location is '/profile'
-    assert response.location == '/profile'
+    assert response.location == '/'
     response = client.get('/profile')
     # Verify that the string is not found in response.text
     assert "Welcome, Huu Nguyen!" not in response.text

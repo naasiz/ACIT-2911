@@ -1,22 +1,21 @@
 from app import create_app 
-from db.db import db
+from app.db import db
 from datetime import datetime, date  
-from models.models import User, Thread, Comment, Subheading
+from app.main.models import User, Thread, Comment, Subheading
 from werkzeug.security import generate_password_hash
 import random
 from faker import Faker
 fake=Faker()
 
 def create_User():
-    db.session.add(User(email="tristanjames3131@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Tristan James Torres", description="I am a student at BCIT studying Computer Information Technology.", date_of_birth=datetime(2002, 7, 31).date(), profile_pic="./static/Default-user-icon.svg"))
-    db.session.add(User(email="mmangilin22@my.bcit.ca", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Meriel Mangilin", description="I am a student at BCIT studying Computer Information Technology.", date_of_birth=datetime(2002, 2, 22).date(), profile_pic="./static/Default-user-icon.svg"))
+    db.session.add(User(email="tristanjames3131@gmail.com", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Tristan James Torres", description="I am a student at BCIT studying Computer Information Technology.", date_of_birth=datetime(2002, 7, 31).date()))
+    db.session.add(User(email="mmangilin22@my.bcit.ca", password=generate_password_hash('Password', method='pbkdf2:sha256'), name="Meriel Mangilin", description="I am a student at BCIT studying Computer Information Technology.", date_of_birth=datetime(2002, 2, 22).date()))
     for _ in range(30):
         email = f"user{_}@example.com"
         name = f"User {_}"
         description = "I am a user."
         date_of_birth = datetime(2000, 1, 1).date()
-        profile_pic = "./static/Default-user-icon.svg"
-        user = User(email=email, password=generate_password_hash('Password', method='pbkdf2:sha256'), name=name, description=description, date_of_birth=date_of_birth, profile_pic = profile_pic)
+        user = User(email=email, password=generate_password_hash('Password', method='pbkdf2:sha256'), name=name, description=description, date_of_birth=date_of_birth)
         db.session.add(user)
     db.session.commit()
 
@@ -32,18 +31,16 @@ def create_Thread():
         content = fake.text(max_nb_chars=200)
         return Thread(author=user, subheading=subhead, title=title, content=content)
     
-    for i in range(2, 34):
+    for i in range(2, 10):
         user =db.get_or_404(User, random.randint(2,3))
         subheading =db.get_or_404(Subheading, random.randint(1,4))
         thread = thread_return(user, subheading)
         db.session.add(thread)
         db.session.commit()
     
-def create_comment(parent_id=None):
+def create_comment():
     thread=db.get_or_404(Thread, 1)
-    print(f"Thread: {thread}")  # print the thread object
-    print(f"Thread ID: {thread.id}")  # print the thread id
-    db.session.add(Comment(author=thread.author,thread=thread, thread_id=thread.id, parent_id=parent_id))
+    db.session.add(Comment(author=thread.author,thread=thread))
     db.session.commit()
     comment=db.get_or_404(Comment,1)
     comment.content = "SysAdmin was my favourite course!"

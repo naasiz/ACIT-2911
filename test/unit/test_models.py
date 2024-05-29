@@ -1,5 +1,5 @@
 import pytest
-from models.models import User, Subheading, Thread, Comment 
+from app.main.models import User, Subheading, Thread, Comment 
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # Test the User model

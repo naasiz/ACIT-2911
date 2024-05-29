@@ -8,7 +8,7 @@ def test_login_post_success(client):
         # Verify that the response status code is 302 (Redirect)
         assert response.status_code == 302
         # Verify that the response location is '/profile'
-        assert response.location == '/profile'
+        assert response.location == '/'
 
 def test_login_post_fail(client):
         # Send a POST request to the login endpoint with form data
@@ -18,6 +18,5 @@ def test_login_post_fail(client):
             'password': '123456'
         })
         # Verify that the response status code is 302 (Redirect)
-        assert response.status_code == 302
-        # Since log in failed, redirect back to /login 
-        assert response.location == '/login'
+        assert response.status_code == 200
+

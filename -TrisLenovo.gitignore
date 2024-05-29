@@ -25,9 +25,7 @@ __pycache__/
 projects/__pycache__/
 projects/.pytest_cache/
 myenv/
-.venv/
 .coverage
-
 
 # Logs and databases #
 ######################
