@@ -21,9 +21,13 @@ def create_User():
 
 def create_Thread():
     db.session.add(Subheading(title="General Discussion"))                              
+    db.session.add(Subheading(title="ACIT1420"))                              
+    db.session.add(Subheading(title="ACIT1515"))                              
+    db.session.add(Subheading(title="ACIT1620"))                              
     db.session.add(Subheading(title="ACIT1630"))                              
-    db.session.add(Subheading(title="MATH1200"))                              
-    db.session.add(Subheading(title="COMM1430"))                              
+    db.session.add(Subheading(title="COMM1116"))                              
+    db.session.add(Subheading(title="MATH1310"))                              
+    db.session.add(Subheading(title="ORGB1100"))                              
     db.session.commit()
     
     def thread_return(user, subhead):
@@ -31,9 +35,9 @@ def create_Thread():
         content = fake.text(max_nb_chars=200)
         return Thread(author=user, subheading=subhead, title=title, content=content)
     
-    for i in range(2, 10):
+    for i in range(30):
         user =db.get_or_404(User, random.randint(2,3))
-        subheading =db.get_or_404(Subheading, random.randint(1,4))
+        subheading =db.get_or_404(Subheading, random.randint(1,7))
         thread = thread_return(user, subheading)
         db.session.add(thread)
         db.session.commit()

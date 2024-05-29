@@ -101,20 +101,20 @@ def search():
     subheadings = []
     
     if filter == "Thread":
-        stmt = db.select(Thread).where(Thread.title.like(search))
+        stmt = db.select(Thread).where(Thread.title.like(search)).order_by(Thread.title)
         results = db.session.execute(stmt).scalars()
         for item in results:
             if item.subheading not in subheadings:
                 subheadings.append(item.subheading)   
     
     elif filter == "Subheading":
-        stmt = db.select(Subheading).where(Subheading.title.like(search))
+        stmt = db.select(Subheading).where(Subheading.title.like(search)).order_by(Subheading.title)
         results = db.session.execute(stmt).scalars()
         for item in results:
             subheadings.append(item)
     
     elif filter == "Author":
-        stmt = db.select(User).where(User.name.like(search))
+        stmt = db.select(User).where(User.name.like(search)).order_by(User.name)
         results = db.session.execute(stmt).scalars()
         for item in results:
             for thread in item.threads:
