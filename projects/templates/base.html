@@ -137,22 +137,34 @@
       {% block searchbar %}
       <!--SearchBox Section-->
       <div class="search-box">
-        <div
-          style="display: flex; justify-content: center; align-items: center"
-        >
+        <form id="search-form" action="#" class="is-fullwidth">
           <input
             type="text"
-            name="q"
+            id="search"
+            value="{{ search }}"
+            name="search"
             placeholder="search ..."
             class="is-fullwidth"
           />
-          <button><i class="fa fa-search"></i></button>
-        </div>
+          <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
       </div>
       {% endblock %}
     </header>
     <body>
       {% block content %}{% endblock %}
+      <script>
+        const form = document.querySelector("#search-form");
+        form.addEventListener("submit", (ev) => {
+          ev.preventDefault();
+          const formData = new FormData(form);
+          const destination = new URL("/", window.location.href);
+          destination.searchParams.set("search", formData.get("search"));
+          // Use history api to avoid intro animation
+          window.history.pushState({}, "", destination);
+          window.history.go();
+        });
+      </script>
       <script>
         let intro = document.querySelector(".intro");
         let logo = document.querySelector(".logo-header");
@@ -160,7 +172,7 @@
 
         const reloaded = window.performance
           .getEntriesByType("navigation")
-          .some((nav) => nav.type === "reload");
+          .some((nav) => nav.type === "reload" || nav.type === "back_forward");
 
         if (reloaded) {
           intro.style.top = "-100vh";
