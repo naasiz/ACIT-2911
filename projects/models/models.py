@@ -47,11 +47,16 @@ class Comment(db.Model):
     date = db.Column(DateTime(timezone=True), server_default=func.now())
     content = db.Column(db.String(1000))
     # For replies
-    parent_id = mapped_column(db.Integer, db.ForeignKey("comment.id"))
-    replies = db.relationship(
-        "Comment", backref=db.backref("parent", remote_side=[id]), lazy="dynamic"
-    )  # new field for replies
-
+    parent_id = mapped_column(db.Integer, db.ForeignKey('comment.id'))
+    replies = db.relationship('Comment', backref=db.backref('parent', remote_side=[id]), lazy='dynamic')  # new field for replies
+    @property
+    def depth(self):
+        depth = 0
+        parent = self.parent
+        while parent is not None:
+            depth += 1
+            parent = parent.parent
+        return depth
 
 class User_Thread_Upvotes(db.Model):
     id = db.Column(db.Integer, primary_key=True)

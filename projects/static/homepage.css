@@ -524,3 +524,16 @@ form {
 }
 
 
+/* add comment-template */
+
+.replies {
+    display: none;
+}
+
+.replies.opened {
+    display: block;
+}
+
+.show-replies:hover {
+    cursor: pointer;
+}
