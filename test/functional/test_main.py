@@ -29,12 +29,19 @@ def test_profile_success(client):
     })
     # Verify that the response status code is 302 (Redirect)
     assert response.status_code == 302
-    # Verify that the response location is '/profile'
-    assert response.location == '/'
-    # Send a GET request to the profile endpoint
-    response = client.get('/profile')
+
+    # Extract the user ID from the database or define it if known
+    user_id = 1  # Assuming user ID 1 for this example, adjust as necessary
+
+    # Verify that the response location is '/profile/<user_id>'
+    assert response.location == f'/profile/{user_id}'
+
+    # Send a GET request to the profile endpoint with the user_id
+    response = client.get(f'/profile/{user_id}')
+
     # Verify that the string is found in response.text
     assert '<div class="section profile-heading">' in response.text
+
 
 def test_profile_fail(client):
     # Send a POST request to the login endpoint with form data
