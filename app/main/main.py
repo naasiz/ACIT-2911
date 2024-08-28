@@ -242,28 +242,80 @@ def del_comment(comment_id):
 @login_required  # Require login to access the update route
 def update(id):
     form = Form()  # Create a new instance of the Form class
-    class From(FlaskForm):
-        description = TextAreaField("Description", validators=[DataRequired()], default=f"{current_user.description}")
 
-    form_two = From()    
-    name_to_update = db.get_or_404(User, id)  # Get the user with the specified id from the database
+    class From(FlaskForm):
+        description = TextAreaField(
+            "Description",
+            validators=[DataRequired()],
+            default=f"{current_user.description}",
+        )
+
+    form_two = From()
+    name_to_update = db.get_or_404(
+        User, id
+    )  # Get the user with the specified id from the database
     if request.method == "POST":
-        dateofbirth = request.form['date_of_birth'].split('-')  # Split the date_of_birth string into year, month, and day
+        dateofbirth = request.form["date_of_birth"].split(
+            "-"
+        )  # Split the date_of_birth string into year, month, and day
         year = int(dateofbirth[0])
         month = int(dateofbirth[1])
         day = int(dateofbirth[2])
-        name_to_update.name = request.form['name']  # Update the name, email, description, and date_of_birth of the user
-        name_to_update.email = request.form['email']
-        name_to_update.description = request.form['description']
+        name_to_update.name = request.form[
+            "name"
+        ]  # Update the name, email, description, and date_of_birth of the user
+        name_to_update.email = request.form["email"]
+        name_to_update.description = request.form["description"]
         name_to_update.date_of_birth = datetime(year, month, day).date()
+        name_to_update.profile_pic = request.files["profile_pic"]
+
+        # Grab the image name
+        pic_filename = secure_filename(name_to_update.profile_pic.filename)
+        # set UUID
+        pic_name = str(uuid.uuid1()) + "_" + pic_filename
+        # Save that image
+        saver = request.files["profile_pic"]
+
+        # Change it to a string to save data
+        name_to_update.profile_pic = pic_name
         try:
             db.session.commit()  # Commit the changes to the database
-            return redirect(url_for('main.profile'))  # Redirect to the profile route
+            saver.save(os.path.join(Config.UPLOAD_FOLDER, pic_name))
+
+            return redirect(url_for("main.profile"))  # Redirect to the profile route
+        except ValueError:
+            # Handle the error: the date_of_birth string was not in the correct format
+            print(f"date: {name_to_update.date_of_birth}")
+            flash(
+                "Invalid date of birth format. Please enter the date in the format YYYY-MM-DD."
+            )
+            return render_template(
+                "update.html",
+                form=form,
+                form_two=form_two,
+                name_to_update=name_to_update,
+                id=id,
+                user=current_user,
+            )
         except:
             db.session.commit()
-            return render_template("update.html", form=form, form_two=form_two, name_to_update=name_to_update, id=id, user=current_user)  # Render the update.html template with the form, name_to_update, id, and current user
+            return render_template(
+                "update.html",
+                form=form,
+                form_two=form_two,
+                name_to_update=name_to_update,
+                id=id,
+                user=current_user,
+            )  # Render the update.html template with the form, name_to_update, id, and current user
     else:
-        return render_template("update.html", form=form, form_two=form_two, name_to_update=name_to_update, id=id, user=current_user)  # Render the update.html template with the form, name_to_update, id, and current user
+        return render_template(
+            "update.html",
+            form=form,
+            form_two=form_two,
+            name_to_update=name_to_update,
+            id=id,
+            user=current_user,
+        )  # Render the update.html template with the form, name_to_update, id, and current user
 
 @main.route("/upvote", methods=["POST"])  # Route decorator for the upvote route
 @login_required

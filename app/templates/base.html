@@ -59,7 +59,8 @@
                     
                     
                     {% elif current_user.id == 1%}
-                    <p class="navbar-item" >Admin</p>
+                    <a class="navbar-item" href="{{ url_for('main.update', id = current_user.id) }}">Update</a>
+                    <a class="navbar-item" href="{{ url_for('main.profile') }}">Admin</a>
                     <a class="navbar-item" href="{{ url_for('auth.users') }}">List of Users</a>
                     <a class="navbar-item" href="{{ url_for('auth.logout') }}">Log Out</a>
 
