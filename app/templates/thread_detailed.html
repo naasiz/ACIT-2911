@@ -60,7 +60,17 @@
     <div style="padding: 20px 20px 0px 20px; min-width: 100dvw;">
       <div class="subforum-row">
         <div class="subforum-icon subforum-column center">
-          <i class="fa fa-user center"></i>
+          <!-- <i class="fa fa-user center"></i> -->
+          {% if thread.author.profile_pic and thread.author.profile_pic != './static/Default-user-icon.svg' %}
+          <a href="{{ url_for('main.profile', user_id=thread.author.id) }}" class="profile_pic" style="margin-bottom:20px; margin-right: 20px;">
+              <img src="{{ url_for('static', filename='images/' + thread.author.profile_pic) }}" alt="User's profile" style="min-height: 75px;
+              min-width: 75px; max-height: 75px; object-fit: cover; border-radius: 50%; border: 2px solid #000;">
+          </a>
+              {% else %}
+          <a href="{{ url_for('main.profile', user_id=thread.author.id) }}" class="profile_pic" style="margin-top: 2px;">
+              <img src="{{ url_for('static', filename='Default-user-icon.svg') }}" alt="Profile_pic" style="border-radius: 50%; object-fit: cover; min-height: 75px;">
+          </a>
+              {% endif %}
         </div>
         {% if not edit %}
         <div class="subforum-description subforum-column">
@@ -117,8 +127,8 @@
       {% endfor %}
     </div>
     {% if current_user.is_authenticated %}
-    <form action="{{ url_for('main.add_comment', thread_id=thread.id ) }}" method="POST">
-      <textarea id="content" name="content" class="textarea"></textarea>
+    <form action="{{ url_for('main.add_comment', thread_id=thread.id ) }}" method="POST" style="width: 97%; margin-left: 15px;">
+      <textarea id="content" name="content" class="textarea" style="margin-top: 10px; margin-bottom: 10px;"></textarea>
       <button type="submit" class="button" style="font-size: smaller; font-weight: bold; color: #3273dc; box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; margin: 5px;">Add Comment</button>
     </form>
     {% endif %}

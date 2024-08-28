@@ -15,19 +15,28 @@
         <div class="columns is-mobile is-multiline">
           <div class="column is-2">
             <span class="header-icon user-profile-image">
-              <img src="{{ url_for('static', filename='Default-user-icon.svg') }}" alt="">
+              {% if user.profile_pic and user.profile_pic != './static/Default-user-icon.svg' %}
+              <img src="{{ url_for('static', filename='images/' + user.profile_pic) }}" alt="Profile_pic" style="border-radius: 50%; object-fit: cover; height: 168px; width: 168px; border: 2px solid #000; max-height: 100%; max-width: 100%;">
+              {% else %}
+              <img src="{{ url_for('static', filename='Default-user-icon.svg') }}" alt="Profile_pic" style="border-radius: 50%; object-fit: cover; height: 168px; width: 168px; max-height: 100%; max-width: 100%;">
+              {% endif %}
             </span>
           </div>
           <div class="column is-4-tablet is-10-mobile name">
             <p>
-              <span class="title is-bold" style="margin-bottom: 10px;">{{ current_user.name }}</span>
+              <span class="title is-bold" style="margin-bottom: 10px;">{{ user.name }}</span>
               <br>
-              <a id="edit-preferences" class="button is-primary is-outlined" href=" {{ url_for('main.update', id = current_user.id) }} " style="margin: 10px 0">Edit Preferences</a>
+              {% if current_user.is_authenticated and current_user.id == user.id %}
+              <a id="edit-preferences" class="button is-primary is-outlined" href=" {{ url_for('main.update', id = user.id) }} " style="margin: 10px 0">Edit Preferences</a>
               <a class="button is-primary is-outlined" href="{{ url_for('auth.logout')}}" style="margin: 10px 0">Log out</a>
               <br>
+              {% endif %}
             </p>
             <p class="tagline">
-              {{ current_user.description }}
+              {{ user.description }}
+            </p>
+            <p>
+              {{ user.date_of_birth }}
             </p>
           </div>
           <div class="column is-3-tablet is-6-mobile has-text-centered">

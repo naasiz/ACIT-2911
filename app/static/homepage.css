@@ -61,6 +61,10 @@ h1{
     grid-template-columns: 7% 60% 13% 20%;
 }
 
+.subforum-row > *:not(.subforum-icon){
+    min-height: 8em;
+}
+
 .subforum-column{
     padding: 10px;
     margin:4px;
@@ -78,12 +82,14 @@ h1{
     align-items: center;
 }
 
-.subforum-icon i{
-    font-size: 45px;
+.subforum-icon{
+    border-radius: 50%;
+    max-height: 5em;
+    max-width: 5em;
 }
 
 .subforum-devider{
-    display: none;   
+    display: none;
 }
 
 
@@ -109,8 +115,6 @@ h1{
         height: 1px;
         background-image: linear-gradient(to right, rgba(190, 190, 190, 0), rgba(255, 255, 255, 0.75), rgba(190, 190, 190, 0));
     }
-
-    
 
   }
 
@@ -165,7 +169,7 @@ div#navbarBasicExample.navbar-menu {
 
 .navbar-brand {
     align-items: center;
-}  
+}
 
 .navbar-item {
     font-size: 20px;
@@ -224,11 +228,11 @@ a.navbar-burger {
     animation: slideUp 0.5s ease;
     display: block !important;
     }
-    
+
     .navbar-menu {
     display: block !important;
     }
-    
+
     .is-active .navbar-item:not(.brand),
     .is-active .navbar-item:not(.brand):hover,
     .is-active div.navbar-end {
@@ -239,7 +243,7 @@ a.navbar-burger {
     border-bottom: none;
     font-size: 1.1rem;
     }
-    
+
     @keyframes slideUp {
     0% {
     max-height: 200px;
@@ -250,7 +254,7 @@ a.navbar-burger {
     }
     }
 
-    @keyframes slideDown {    
+    @keyframes slideDown {
     0% {
     max-height: 0;
     }
@@ -297,16 +301,18 @@ a.navbar-burger {
 .search-box{
     margin-top: 20px;
     padding: 20px;
+    display: flex;
     justify-content: center;
 }
 
-.search-box select{
-    padding: 10px;
+.search-box form{
+    width: 100%;
+    max-width: 768px;
+    display: flex;
 }
 
 .search-box input{
-    padding: 10px;
-    width: 70%;
+    width: 100%;
 }
 
 .search-box button{
@@ -326,7 +332,7 @@ a.navbar-burger {
     .search-box input, .search-box button, .search-box select{
         min-width: 300px;
         margin-top: 5px;
-    }    
+    }
 
 }
 
@@ -467,40 +473,40 @@ div.comment .comment-content {
     border: solid 1px #000000;
 }
 
-/* Profile.html */ 
+/* Profile.html */
 body {
     background: #F5F7FA
   }
-  
+
   .stat-val {
     font-size: 3em;
     padding-top: 20px;
     font-weight: bold;
   }
-  
+
   .stat-key {
     font-size: 1.4em;
     font-weight: 200
   }
-  
+
   .section.profile-heading .column.is-2-tablet.has-text-centered + .has-text-centered {
     border-left: 1px dotted rgba(0, 0, 0, .2);
   }
-  
+
   .container.profile {
     margin-top: 1%;
   }
-  
+
   .control.is-pulled-left span.select {
     margin-right: 5px;
     border-radius: 2px;
   }
-  
+
   .modal-card .content h1 {
     padding: 40px 10px 10px;
     border-bottom: 1px solid #dadada
   }
-  
+
   .container.profile .profile-options .tabs ul li.link a {
     margin-bottom: 20px;
     padding: 20px;
@@ -524,3 +530,54 @@ form {
 }
 
 
+/* add comment-template */
+
+.replies {
+    display: none;
+}
+
+.replies.opened {
+    display: block;
+}
+
+.show-replies:hover {
+    cursor: pointer;
+}
+
+
+/* Avartar */
+
+.profile_pic {
+    width: 3.5em;
+    height: 3.5em;
+    border-radius: 50%;
+}
+
+.profile-row{
+    display: grid;
+    grid-template-columns: 7% 55% 13% 20% 5%;
+    align-items: center;
+    padding: 0 10px;
+}
+
+
+.profile-row > *:not(form){
+    min-height: 4em;
+}
+
+@media screen and (max-width: 1024px) {
+
+    .profile-row{
+        display: grid;
+        grid-template-columns: 30% auto;
+        grid-template-rows: auto auto;
+        overflow: auto;
+    }
+    .profile-row > *:not(form){
+        min-height: 5.5em;
+    }
+    form {
+        margin-bottom: 1em;
+        margin-left: 10px;
+    }
+}

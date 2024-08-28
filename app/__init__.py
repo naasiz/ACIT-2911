@@ -9,6 +9,8 @@ def create_app():
     
     app.config.from_object('config.DevelopmentConfig')
     app.secret_key = 'BAD_SECRET_KEY'
+    UPLOAD_FOLDER = './static'
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     db.init_app(app)
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'

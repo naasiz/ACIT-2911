@@ -54,12 +54,13 @@
 
                     {% if current_user.is_authenticated and current_user.id != 1%} 
                     <a class="navbar-item" href="{{ url_for('main.update', id = current_user.id) }}">Update</a>
-                    <a class="navbar-item" href="{{ url_for('main.profile') }}">{{current_user.name}}</a>
+                    <a class="navbar-item" href="{{ url_for('main.profile', user_id = current_user.id) }}">{{current_user.name}}</a>
                     <a class="navbar-item" href="{{ url_for('auth.logout') }}">Log Out</a>
                     
                     
                     {% elif current_user.id == 1%}
-                    <p class="navbar-item" >Admin</p>
+                    <a class="navbar-item" href="{{ url_for('main.update', id = current_user.id) }}">Update</a>
+                    <a class="navbar-item" href="{{ url_for('main.profile', user_id = current_user.id) }}">Admin</a>
                     <a class="navbar-item" href="{{ url_for('auth.users') }}">List of Users</a>
                     <a class="navbar-item" href="{{ url_for('auth.logout') }}">Log Out</a>
 
@@ -74,10 +75,10 @@
     {% block searchbar %}
     <!--SearchBox Section-->
     <div class="search-box">
-        <form action="{{ url_for('main.search') }}" method="POST">
-                <div style="display:flex; justify-content: center; align-items: center;">
-                <input type="text" name="word-search" id="word-search" placeholder="search ..." class="is-fullwidth">
-                <select name="filter" id="filter">
+        <form action="{{ url_for('main.search') }}" method="POST" style="flex-direction: column;">
+                <div style="display:flex; justify-content: center;">
+                <input type="text" name="word-search" id="word-search" placeholder="search ..." class="is-fullwidth" style="padding: 10px;">
+                <select name="filter" id="filter" style="padding: 10px;">
                     <option value="Thread">Thread</option>
                     <option value="Subheading">Subheading</option>
                     <option value="Author">Author</option>
@@ -87,6 +88,9 @@
         </div>
     </div>
     {% endblock %}
+    {% if not current_user.is_authenticated %}
+    <p style="padding: 10px; background-color: rgb(255, 166, 166); border: solid 3px rgb(0, 0, 0); display: flex; justify-content: space-around; font-weight: bold;">Please log in/sign up to access more features! (Comment, upvote, downvote, ...)</p>
+    {% endif %}
 </header>
 <body>
     {% block content %}{% endblock %}

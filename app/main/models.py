@@ -19,7 +19,7 @@ class User(UserMixin, db.Model):
     comments = relationship("Comment", cascade="all, delete")
     profile_pic = db.Column(db.String(), nullable=True)
 
-
+    
 class Subheading(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     threads = relationship("Thread", cascade="all, delete")
@@ -84,4 +84,9 @@ class Form(FlaskForm):
     profile_pic = FileField("Profile Pic")
     submit = SubmitField("Submit")
     
+    # class for config the app.config for both app.py and main.py
+class Config(object):
+    SECRET_KEY = "secret-key-goes-here"
+    SQLALCHEMY_DATABASE_URI = "sqlite:///db.sqlite"
+    UPLOAD_FOLDER = "./static/images"
 
