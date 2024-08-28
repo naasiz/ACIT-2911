@@ -15,6 +15,7 @@ from wtforms import TextAreaField
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
 from werkzeug.utils import secure_filename
+from app.main.models import Config
 import uuid as uuid
 import os
 main = Blueprint('main', __name__)  # Create a Blueprint object named 'main'
@@ -40,6 +41,7 @@ def index():
             thread.count = (
                 db.session.query(Comment).filter(Comment.thread_id == thread.id).count()
             )  # Count the number of comments for each thread
+            thread.profile_pic = User.query.get(thread.user_id).profile_pic  # Get the profile picture of the user who posted the thread
             try:
                 thread.upvotes = (
                     db.session.query(User_Thread_Upvotes)
@@ -134,14 +136,13 @@ def search():
 
     
 
-@main.route('/profile')  # Route decorator for the profile route
+@main.route('/profile/<int:user_id>')  # Route decorator for the profile route
 @login_required  # Require login to access the profile route
-def profile():
-    # stmt = db.select(User_Thread_Upvotes).where(User_Thread_Upvotes.user_id == current_user.id)  # Check if the current user has upvoted the thread
-    # posts = len(list(db.session.execute(stmt).scalars()))
-    posts = len(list(current_user.threads))
-    comments = len(list(current_user.comments))
-    return render_template('/auth/profile.html', user=current_user, posts=posts, comments=comments)  # Render the profile.html template with the current user
+def profile(user_id):
+    user = db.get_or_404(User, user_id)  # Get the user by user_id, or 404 if not found
+    posts = len(list(user.threads))
+    comments = len(list(user.comments))
+    return render_template('/auth/profile.html', user=user, posts=posts, comments=comments)  # Render the profile.html template with the selected user
 
 @main.route('/thread_detailed/<int:thread_id>')  # Route decorator for the thread_detailed route
 def thread_detailed(thread_id):
@@ -153,7 +154,7 @@ def thread_detailed(thread_id):
     #     else:
     #         return render_template("thread_detailed.html", thread=thread, user=current_user, edit=False, own=False)  # Render the thread_detailed.html template with the thread, current user, and edit and own flags
     # except:
-    #     return render_template("thread_detailed.html", thread=thread, user=current_user, edit=False, own=False)  # Render the thread_detailed.html template with the thread, current user, and edit and own flags
+    #     return render_template("thread_detailed.html", thread=thread, user=current_user, edit=False, own=False)  # Render the thread_detailed.html template with the thread, current user, and edit and own flagsf
     if current_user.is_authenticated:
         # if using login account, allow to have ability to edit thread and comment (Just ability, specifically when they can use will be on different function)
         return render_template("thread_detailed.html", thread=thread, edit=False, edit_comment_id = None)
@@ -418,4 +419,7 @@ def comment_update(comment_id):
     comment.content = request.form["content"]  # Update the content of the comment
     db.session.commit()  # Commit the changes to the database
     return redirect(url_for('main.thread_detailed', thread_id=comment.thread.id))  # Redirect to the thread_detailed route
+
+
+
 

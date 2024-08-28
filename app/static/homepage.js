@@ -123,3 +123,33 @@ class Meteor {
 
 window.addEventListener("DOMContentLoaded", init);
 window.addEventListener("resize", resizeReset);
+
+
+
+// // Get all the reply buttons
+// const replyButtons = document.querySelectorAll(".show-replies");
+
+// replyButtons.forEach((btn) =>
+//   btn.addEventListener("click", (e) => {
+//     // Get the parent comment container
+//     let parentContainer = e.target.closest("[class^='comment']");
+//     // Get all the reply containers within the parent comment container
+//     let replyContainers = parentContainer.querySelector("[class^='replies']");
+//     // Toggle the 'opened' class for each reply container
+//     replyContainers.forEach((container) => container.classList.toggle("opened"));
+//   })
+// );
+
+// Get all the reply buttons
+const replyButtons = document.querySelectorAll(".show-replies");
+
+replyButtons.forEach((btn) =>
+  btn.addEventListener("click", (e) => {
+    // Get the parent comment container
+    let parentContainer = e.target.closest(".comment");
+    // Get only the direct child reply containers within the parent comment container
+    let replyContainers = parentContainer.querySelectorAll(":scope > .replies");
+    // Toggle the 'opened' class for each reply container
+    replyContainers.forEach((container) => container.classList.toggle("opened"));
+  })
+);
