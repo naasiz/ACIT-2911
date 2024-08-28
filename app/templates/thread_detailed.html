@@ -64,7 +64,7 @@
           {% if thread.author.profile_pic and thread.author.profile_pic != './static/Default-user-icon.svg' %}
           <a href="{{ url_for('main.profile', user_id=thread.author.id) }}" class="profile_pic" style="margin-bottom:20px; margin-right: 20px;">
               <img src="{{ url_for('static', filename='images/' + thread.author.profile_pic) }}" alt="User's profile" style="min-height: 75px;
-              min-width: 75px; object-fit: cover; border-radius: 50%; border: 2px solid #000;">
+              min-width: 75px; max-height: 75px; object-fit: cover; border-radius: 50%; border: 2px solid #000;">
           </a>
               {% else %}
           <a href="{{ url_for('main.profile', user_id=thread.author.id) }}" class="profile_pic" style="margin-top: 2px;">
